@@ -8,26 +8,27 @@ const productModel = require("./product.js");
 const categoryModel = require("./category.js");
 const cartModel = require("./cart.js");
 const orderModel = require("./order.js");
+const shoppingCartModel = require("./shoppingCart.js")
+
+userModel.hasMany(reviewModel);
+reviewModel.belongsTo(userModel);
 
 userModel.hasMany(addressModel);
 addressModel.belongsTo(userModel);
 
-reviewModel.hasOne(userModel);
-
-cartModel.hasOne(userModel);
-cartModel.hasMany(productModel);
-
 userModel.hasMany(orderModel);
 orderModel.belongsTo(userModel);
 
-cartModel.hasOne(cartModel);
+userModel.hasOne(cartModel);
+
+categoryModel.belongsToMany(productModel, {through: productCategoriesModel});
+productModel.belongsToMany(categoryModel, {through: productCategoriesModel});
+
+cartModel.belongsToMany(productModel, {through: shoppingCartModel});
+productModel.belongsToMany(cartModel, {through: shoppingCartModel});
 
 productModel.hasMany(reviewModel);
-
-cartModel.hasMany(productModel);
-
-productModel.belongsToMany(categoryModel, {through: productCategoriesModel});
-categoryModel.belongsToMany(productModel, {through: productCategoriesModel});
+reviewModel.belongsTo(productModel);
 
 module.exports = {
     db,
