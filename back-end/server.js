@@ -1,5 +1,7 @@
 const express = require("express");
 const { db } = require("./models");
+const router = express.Router();
+const routes = require("./routes");
 
 const app = express();
 
@@ -18,6 +20,9 @@ app.get("/reset", async (req, res) => {
     }
 });
 
+router.use("/api", routes);
+
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
+
