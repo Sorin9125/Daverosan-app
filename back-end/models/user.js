@@ -16,7 +16,7 @@ const userModel = db.define("user", {
         allowNull: false,
     },
     phoneNumber: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING,
         allowNull:false,
     },
 

@@ -1,10 +1,8 @@
 const express = require("express");
 const { db } = require("./models");
-const router = express.Router();
 const routes = require("./routes");
-
 const app = express();
-
+app.use(express.json());
 const port = 1234;
 
 app.get("/", async (req, res) => {
@@ -20,7 +18,7 @@ app.get("/reset", async (req, res) => {
     }
 });
 
-router.use("/api", routes);
+app.use("/api", routes);
 
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
