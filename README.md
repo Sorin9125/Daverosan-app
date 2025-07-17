@@ -1,2 +1,3 @@
 # E-commerce-shop
-Website that simulates an e-commerce shop with admin users and google auth implementation
+Application for the company I work at to register the commands
+
