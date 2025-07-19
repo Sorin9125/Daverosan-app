@@ -1,43 +1,34 @@
-const { DataTypes } = require("sequelize");
 const db = require("../config/db.js");
 const userModel = require("./user.js");
-const addressModel = require("./address.js");
-const reviewModel = require("./review.js");
-const productCategoriesModel = require("./productCategories.js");
-const productModel = require("./product.js");
-const categoryModel = require("./category.js");
-const cartModel = require("./cart.js");
+const offerRequestModel = require("./offerRequest.js");
+const clientModel = require("./client.js");
+const offerModel = require("./offer.js");
 const orderModel = require("./order.js");
-const shoppingCartModel = require("./shoppingCart.js")
+const productionNoteModel = require("./productionNote.js");
+const productionNoteDetailModel = require("./productionNoteDetail.js");
 
-userModel.hasMany(reviewModel);
-reviewModel.belongsTo(userModel);
+clientModel.hasMany(offerRequestModel);
+offerRequestModel.belongsTo(clientModel);
 
-userModel.hasMany(addressModel);
-addressModel.belongsTo(userModel);
+offerRequestModel.hasOne(offerModel);
+offerModel.belongsTo(offerRequestModel);
 
-userModel.hasMany(orderModel);
-orderModel.belongsTo(userModel);
+offerModel.hasOne(orderModel);
+orderModel.belongsTo(offerModel);
 
-userModel.hasOne(cartModel);
+offerModel.hasOne(productionNoteModel);
+productionNoteModel.belongsTo(offerModel);
 
-categoryModel.belongsToMany(productModel, {through: productCategoriesModel});
-productModel.belongsToMany(categoryModel, {through: productCategoriesModel});
-
-cartModel.belongsToMany(productModel, {through: shoppingCartModel});
-productModel.belongsToMany(cartModel, {through: shoppingCartModel});
-
-productModel.hasMany(reviewModel);
-reviewModel.belongsTo(productModel);
+productionNoteModel.hasMany(productionNoteDetailModel);
+productionNoteDetailModel.belongsTo(productionNoteModel);
 
 module.exports = {
     db,
     userModel,
-    addressModel,
-    reviewModel,
-    productCategoriesModel,
-    productModel,
-    categoryModel,
-    cartModel,
+    offerRequestModel,
+    clientModel,
+    offerModel,
     orderModel,
+    productionNoteModel,
+    productionNoteDetailModel,
 };

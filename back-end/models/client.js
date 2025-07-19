@@ -1,25 +1,29 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const orderModel = db.define("order", {
+const clientModel = db.define("client", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    deadline: {
-        type: DataTypes.DATE,
+    name: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
-    description: {
+    phoneNumber: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+    },
+    address: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    observations: {
-        type: DataTypes.STRING,
+    mail: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
-    status: {
+    site: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -29,4 +33,4 @@ const orderModel = db.define("order", {
     }
 );
 
-module.exports = orderModel;
+module.exports = clientModel;

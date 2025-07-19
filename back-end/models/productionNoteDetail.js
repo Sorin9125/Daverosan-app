@@ -1,25 +1,29 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const orderModel = db.define("order", {
+const productionNoteDetailModel = db.define("productionNoteDetail", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    deadline: {
-        type: DataTypes.DATE,
-        allowNull: false,
+    reper: {
+        type: DataTypes.STRING,
+        allowNull:false,
     },
-    description: {
+    port: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    observations: {
+    scheme: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    status: {
+    pieces: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+    },
+    stage: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -29,4 +33,4 @@ const orderModel = db.define("order", {
     }
 );
 
-module.exports = orderModel;
+module.exports = productionNoteDetailModel;
