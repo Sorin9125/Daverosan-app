@@ -1,6 +1,7 @@
 const {Sequelize} = require("sequelize");
+const env = require("dotenv");
 
-const db = new Sequelize("daverosan_app", "root", "", {
+const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: "localhost",
     dialect: "mysql",
     define: {
