@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require("../config/db");
 
-const offerRequestModel = db.define("offerRequest", {
+const requestModel = db.define("request", {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -25,4 +25,4 @@ const offerRequestModel = db.define("offerRequest", {
     }
 );
 
-module.exports = offerRequestModel;
+module.exports = requestModel;

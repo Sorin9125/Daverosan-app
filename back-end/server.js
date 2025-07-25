@@ -1,10 +1,12 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const { db } = require("./models");
 const routes = require("./routes");
 const app = express();
 app.use(express.json());
-const port = 1234;
+dotenv.config();
 
+const port = process.env.PORT;
 app.get("/", async (req, res) => {
     res.status(200).send("Salut!");
 });
