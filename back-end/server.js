@@ -3,6 +3,8 @@ const express = require("express");
 const { db } = require("./models");
 const routes = require("./routes");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 app.use(express.json());
 dotenv.config();
 
@@ -17,6 +19,7 @@ app.post("/reset", async (req, res) => {
         res.status(200).send("Database reset succeeded");
     } catch (err) {
         console.log(err);
+        res.status(500).send("eroare");
     }
 });
 
