@@ -7,20 +7,24 @@ const orderModel = db.define("order", {
         autoIncrement: true,
         primaryKey: true,
     },
-    deadline: {
-        type: DataTypes.DATE,
+    quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    unit: {
+        type: DataTypes.ENUM("buc", "kg"),
         allowNull: false,
     },
     description: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    observations: {
-        type: DataTypes.STRING,
+    isCompleted: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
-    status: {
-        type: DataTypes.STRING,
+    deadline: {
+        type: DataTypes.DATE,
         allowNull: false,
     },
 },

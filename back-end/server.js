@@ -2,9 +2,7 @@ const dotenv = require("dotenv");
 const express = require("express");
 const { db } = require("./models");
 const routes = require("./routes");
-const app = express();
-const dotenv = require("dotenv");
-dotenv.config();
+const app = express()
 app.use(express.json());
 dotenv.config();
 

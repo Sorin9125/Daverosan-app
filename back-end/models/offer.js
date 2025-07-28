@@ -7,10 +7,6 @@ const offerModel = db.define("offer", {
         autoIncrement: true,
         primaryKey: true,
     },
-    responsible: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
     deadline: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -19,14 +15,10 @@ const offerModel = db.define("offer", {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    description: {
-        type: DataTypes.STRING,
+    isAccepted: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-    },
-    observation: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
+    }
 },
     {
         freezeTableName: true,

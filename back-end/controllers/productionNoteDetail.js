@@ -4,7 +4,7 @@ const productionNoteDetailController = {
     createProductionNoteDetail: (req, res) => {
         try {
 
-        } catch(err) {
+        } catch (err) {
             return res.status(500).send("eroare");
         }
     }

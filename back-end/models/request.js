@@ -7,10 +7,6 @@ const requestModel = db.define("request", {
             autoIncrement: true,
             primaryKey: true,
         },
-        registrationNumber: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         sentAt : {
             type: DataTypes.DATE,
             allowNull: false,

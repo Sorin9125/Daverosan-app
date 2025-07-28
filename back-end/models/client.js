@@ -8,22 +8,10 @@ const clientModel = db.define("client", {
         primaryKey: true,
     },
     name: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    phoneNumber: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-    },
-    address: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    mail: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    site: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
     },

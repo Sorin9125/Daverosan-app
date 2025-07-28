@@ -1,17 +1,118 @@
-const { clientModel } = require("../models");
+const { clientModel, requestModel } = require("../models");
 
-const clientModel = {
-    createClient: async(req, res) => {
-        const client = req.body;
-        if(!(client.name && client.phoneNumber && client.address && client.mail && client.site)) {
-            return res.status(400).send("Completeaza toate campurile printule");
+const clientController = {
+    createClient: async (req, res) => {
+        try {
+            const client = req.body;
+            if (!(client.name && client.email)) {
+                return res.status(400).send("Completeaza toate campurile printule");
+            }
+            if (!(/^[A-z ]{3,}$/gm).test(client.name)) {
+                return res.status(400).send("Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere");
+            }
+            if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(client.email)) {
+                return res.status(400).send("Email-ul nu este valid");
+            }
+            if (await clientModel.findOne({
+                where: {
+                    name: client.name,
+                },
+            })) {
+                return res.status(400).send("Acest client este deja existent");
+            }
+            await clientModel.create(client);
+            return res.status(200).send("Clientul a fost creat cu succes");
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
         }
-        if(!(/^[A-z ]{3,}$/gm).test(client.name)) {
-            return res.status(400).send("Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere");
+
+    },
+    getAllClients: async (req, res) => {
+        try {
+            const clients = await clientModel.findAll();
+            if (!clients) {
+                return res.status(400).send("Nu exista clienti");
+            }
+            return res.status(200).json(clients);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
         }
-        if(!(/^[0-9]{10}$/gm).test(client.phoneNumber)) {
-            return res.status(400).send("Numarul de telefon nu este valid");
+    },
+    getClientById: async (req, res) => {
+        try {
+            const clientId = req.params.id;
+            const client = await clientModel.findByPk(clientId);
+            if (!client) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            return res.status(200).json(client);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
         }
-        if()
+    },
+    updateClient: async (req, res) => {
+        try {
+            const clientId = req.params.id;
+            const client = await clientModel.findByPk(clientId);
+            if (!client) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            const newClient = req.body;
+            if (!(newClient.name && newClient.email)) {
+                return res.status(400).send("Completeaza toate campurile printule");
+            }
+            if (!(/^[A-z ]{3,}$/gm).test(newClient.name)) {
+                return res.status(400).send("Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere");
+            }
+            if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(newClient.email)) {
+                return res.status(400).send("Email-ul nu este valid");
+            }
+            await client.update(newClient);
+            return res.status(200).send(`Clientul cu id-ul ${clientId} a fost actualizat cu succes`);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
+    },
+    deleteClient: async (req, res) => {
+        try {
+            const clientId = req.params.id;
+            const client = await clientModel.findByPk(clientId);
+            if (!client) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            await clientModel.destroy({
+                where: {
+                    id: clientId,
+                },
+            });
+            return res.status(200).send(`clientul cu id-ul ${clientId} a fost sters cu succes`);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
+    },
+    getClientRequests: async (req, res) => {
+        try {
+            const clientId = req.params.id;
+            const clientRequests = await clientModel.findByPk(clientId, {
+                include: [requestModel],
+            });
+            if (clientRequests === null) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            if (clientRequests.requests === null) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio cerere de oferta`);
+            }
+            return res.status(200).json(clientRequests.requests);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
     }
 }
+
+module.exports = clientController;
