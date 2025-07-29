@@ -12,7 +12,7 @@ const requestController = {
             if (!(request.sentAt && request.description)) {
                 return res.status(400).send("Completeaza toate campurile printule");
             }
-            if(!(/^[A-Za-z0-9\-_!@#$%<>?/":;\[\]\{\}\\|]+$/gm).test(request.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;| ]+$/gm).test(request.description)) {
                 return res.status(400).send("Introduceti o descriere valida");
             }
             await client.createRequest(request);
@@ -57,6 +57,9 @@ const requestController = {
             const newRequest = req.body;
             if (!(newRequest.sentAt && newRequest.description)) {
                 return res.status(400).send("Completeaza toate campurile printule");
+            }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;| ]+$/gm).test(newRequest.description)) {
+                return res.status(400).send("Introduceti o descriere valida");
             }
             await request.update(newRequest);
             return res.status(200).send(`Cererea de oferta cu id-ul ${requestId} a fost actualizata cu succes`);

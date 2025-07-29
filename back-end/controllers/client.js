@@ -101,7 +101,7 @@ const clientController = {
             const clientRequests = await clientModel.findByPk(clientId, {
                 include: [requestModel],
             });
-            if (clientRequests === null) {
+            if (!clientRequests) {
                 return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
             }
             if (clientRequests.requests === null) {

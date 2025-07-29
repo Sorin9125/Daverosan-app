@@ -5,7 +5,6 @@ const clientModel = require("./client.js");
 const offerModel = require("./offer.js");
 const orderModel = require("./order.js");
 const productionNoteModel = require("./productionNote.js");
-const productionNoteDetailModel = require("./productionNoteDetail.js");
 
 clientModel.hasMany(requestModel);
 requestModel.belongsTo(clientModel);
@@ -16,11 +15,8 @@ offerModel.belongsTo(requestModel);
 offerModel.hasOne(orderModel);
 orderModel.belongsTo(offerModel);
 
-orderModel.hasOne(productionNoteModel);
+orderModel.hasMany(productionNoteModel);
 productionNoteModel.belongsTo(orderModel);
-
-productionNoteModel.hasMany(productionNoteDetailModel);
-productionNoteDetailModel.belongsTo(productionNoteModel);
 
 module.exports = {
     db,
@@ -30,5 +26,4 @@ module.exports = {
     offerModel,
     orderModel,
     productionNoteModel,
-    productionNoteDetailModel,
 };

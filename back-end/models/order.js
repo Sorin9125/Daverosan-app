@@ -7,9 +7,17 @@ const orderModel = db.define("order", {
         autoIncrement: true,
         primaryKey: true,
     },
+    number: {
+        type: DataTypes.STRING,
+        allowNull:false,
+    },
     quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
+    },
+    remainingQuantity: {
+        type: DataTypes.INTEGER,
+        allowNull:false,
     },
     unit: {
         type: DataTypes.ENUM("buc", "kg"),
