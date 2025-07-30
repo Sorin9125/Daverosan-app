@@ -25,7 +25,6 @@ const offerController = {
             if(!(/^[0-9]{1,}$/).test(offer.price)) {
                 return res.status(400).send("Introduceti o valoare valida");
             }
-            offer.isAccepted = false;
             await request.createOffer(offer);
             return res.status(200).send(`Oferta pentru cererea cu id-ul ${requestId} fost creata cu succes`);
         } catch (err) {
@@ -76,7 +75,6 @@ const offerController = {
             if(!(/^[0-9]{1,}$/).test(newOffer.price)) {
                 return res.status(400).send("Introduceti o valoare valida");
             }
-            newOffer.isAccepted = false;
             await offer.update(newOffer);
             return res.status(200).send(`Oferta cu id-ul ${offerId} a fost actualizata cu succes`);
         } catch (err) {

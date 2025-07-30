@@ -30,6 +30,7 @@ const orderModel = db.define("order", {
     isCompleted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
     },
     deadline: {
         type: DataTypes.DATE,

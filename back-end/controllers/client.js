@@ -1,4 +1,4 @@
-const { clientModel, requestModel } = require("../models");
+const { clientModel, requestModel, offerModel, orderModel } = require("../models");
 
 const clientController = {
     createClient: async (req, res) => {
@@ -104,10 +104,57 @@ const clientController = {
             if (!clientRequests) {
                 return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
             }
-            if (clientRequests.requests === null) {
+            if (!clientRequests.requests) {
                 return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio cerere de oferta`);
             }
             return res.status(200).json(clientRequests.requests);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
+    },
+    getClientOffers: async (req, res) => {
+        try {
+            const clientId = req.params.id;
+            const clientOffers = await clientModel.findByPk(clientId, {
+                include: [{
+                    model: requestModel,
+                    include: [offerModel],
+                }],
+            })
+            if(!clientOffers) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            const offers = clientOffers.requests.map((x) => x.offer).filter((x) => x);
+            if(!offers) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio oferta primita`);
+            }
+            return res.status(200).json(offers);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
+    },
+    getClientOrders: async (req, res) => {
+        try {
+            const clientId= req.params.id;
+            const clientOrders = await clientModel.findByPk(clientId, {
+                include: [{
+                    model: requestModel,
+                    include: [{
+                        model: offerModel,
+                        include: [orderModel]
+                    }]
+                }]
+            })
+            if(!clientOrders) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            }
+            const orders = clientOrders.requests.map((x) => x.offer).filter((x) => x).map((x) => x.order).filter((x) => x);
+            if(!orders) {
+                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio comanda`);
+            }
+            return res.status(200).json(orders);
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");

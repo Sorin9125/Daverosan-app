@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const db = require("../config/db");
 
-const productionNoteModel = db.define("production-note", {
+const productionNoteModel = db.define("productionNote", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -23,16 +23,18 @@ const productionNoteModel = db.define("production-note", {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    pieces: {
+    weight: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
     isFinished: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: false
     },
 },
     {
+        tableName: "production-note",
         freezeTableName: true,
     }
 );

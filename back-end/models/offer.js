@@ -18,6 +18,7 @@ const offerModel = db.define("offer", {
     isAccepted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
     }
 },
     {

@@ -5,23 +5,28 @@ const productionNoteController = {
         try {
             const orderId = req.params.id;
             const order = await orderModel.findByPk(orderId);
-            if(!order) {
+            if (!order) {
                 return res.status(400).send(`Comanda cu id-ul ${orderId} nu exista`);
             }
             const productionNote = req.body;
-            if(!(productionNote.reper && productionNote.scheme && productionNote.pieces && productionNote.quantity)) {
+            if (order.unit === "buc") {
+                productionNote.weight = 1;
+            }
+            if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
                 return res.status(400).send("Completeaza toate campurile printule");
             }
-            if(!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
+            if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
                 return res.status(400).send("Introduceti o denumire valida");
             }
-            if(!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
+            if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
                 return res.status(400).send("Introduceti un desen valid");
             }
-            if(!(/^[0-9]{1,}/).test(productionNote.pieces)) {
-                return res.status(400).send("Introduceti un numar de piese valid");
+            if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
+                return res.status(400).send("Introduceti o greutate valida");
             }
-            productionNote.isFinished = false;
+            if(!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
+                return res.status(400).send("Introduceti o cantitate valida");
+            }
             await order.createProductionNote(productionNote);
             return res.status(200).send("Nota de productie a fost creata cu succes");
         } catch (err) {
@@ -32,7 +37,7 @@ const productionNoteController = {
     getAllProductionNotes: async (req, res) => {
         try {
             const productionNotes = await productionNoteModel.findAll();
-            if(!productionNotes) {
+            if (!productionNotes) {
                 return res.status(400).send("Nu exista note de productie");
             }
             return res.status(200).json(productionNotes);
@@ -45,7 +50,7 @@ const productionNoteController = {
         try {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
-            if(!productionNote) {
+            if (!productionNote) {
                 return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
             }
             return res.status(200).json(productionNote);
@@ -58,22 +63,23 @@ const productionNoteController = {
         try {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
-            if(!productionNote) {
+            if (!productionNote) {
                 return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
             }
             const newProductionNote = req.body;
-            if(!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.pieces && newProductionNote.quantity)) {
+            if (!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.weight && newProductionNote.quantity)) {
                 return res.status(400).send("Completeaza toate campurile printule");
             }
-            if(!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(newProductionNote.reper)) {
+            if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(newProductionNote.reper)) {
                 return res.status(400).send("Introduceti o denumire valida");
             }
-            if(!(/^[0-9A-z ]{1,}$/).test(newProductionNote.scheme)) {
+            if (!(/^[0-9A-z ]{1,}$/).test(newProductionNote.scheme)) {
                 return res.status(400).send("Introduceti un desen valid");
             }
-            if(!(/^[0-9]{1,}/).test(newProductionNote.pieces)) {
-                return res.status(400).send("Introduceti un numar de piese valid");
+            if (!(/^[0-9]{1,}/).test(newProductionNote.cantitate)) {
+                return res.status(400).send("Introduceti o cantitate valida");
             }
+            if(!(/^[0-9]{1,}/))
             await productionNote.update(newProductionNote);
             return res.status(200).send(`Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes`);
         } catch (err) {
@@ -85,7 +91,7 @@ const productionNoteController = {
         try {
             const productionNoteId = req.params.id;
             const productioNote = await productionNoteModel.findByPk(productionNoteId);
-            if(!productioNote) {
+            if (!productioNote) {
                 return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
             }
             await productionNoteModel.destroy({
@@ -99,28 +105,28 @@ const productionNoteController = {
             return res.status(500).send(err);
         }
     },
-    completeProductionNote: async (req, res) => {
+    finishProductionNote: async (req, res) => {
         try {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
-            if(!productionNote) {
+            if (!productionNote) {
                 return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
             }
-            productionNote.isFinished = true;
-            order = await orderModel(productionNote.orderId);
-            if(order.unit === "kg") {
-                order.update({
-                    remainingQuantity: order.remainingQuantity - productionNote.pieces * productionNote.quantity
-                })
-            } else {
-                order.update({
-                    remainingQuantity: order.remainingQuantity - productionNote.pieces
-                })
+            if(productionNote.isCompleted === true) {
+                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} este deja finalizata`);
             }
-            if(order.remainingQuantity == 0) {
+            await productionNote.update({
+                isFinished: true 
+            })
+            order = await orderModel.findByPk(productionNote.orderId);
+            await order.update({
+                remainingQuantity: order.remainingQuantity - productionNote.weight * productionNote.quantity
+            })
+            if (order.remainingQuantity == 0) {
                 order.update({
                     isCompleted: true,
                 })
+                return res.status(200).send(`Comanda cu id-ul ${productionNote.orderId} a fost finalizata`);
             }
             return res.status(200).send(`Nota de productie cu id-ul ${productionNoteId} a fost finalizata cu succes`);
         } catch (err) {
@@ -130,4 +136,4 @@ const productionNoteController = {
     }
 }
 
-module.exports =productionNoteController;
+module.exports = productionNoteController;
