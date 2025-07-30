@@ -1,7 +1,9 @@
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 const excelFiler = (req, file, cb) => {
-    if(file.mimetype.includes("excel") || file.mimetype.include("spreadsheetml")) {
+    if(file.mimetype.includes("excel") || file.mimetype.includes("spreadsheetml")) {
         cb(null, true);
     } else {
         cb("Only excel file allowed", false)
@@ -10,10 +12,13 @@ const excelFiler = (req, file, cb) => {
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
+        const dir = path.join(__dirname, "..", "files", "uploads");
+        if(!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
         cb(null, "./files/uploads")
     },
     filename: (req, file, cb) => {
-        console.log(file.originalname);
         cb(null, `${Date.now()}-${file.originalname}`);
     },
 })
