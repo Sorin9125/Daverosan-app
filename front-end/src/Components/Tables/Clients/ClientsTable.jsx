@@ -1,32 +1,47 @@
-import { Fragment, useEffect, useState } from "react";
-import "./Clients.css"
+import { Fragment, useCallback, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "./ClientsTable.css"
 import axios from "axios"
-import script from "./Client";
+import Modal from "../../Modal/Modal";
 
 
 
-function Clients() {
+function ClientsTable() {
     const [clientData, setClientData] = useState([]);
     const [extraData, setExtraData] = useState({});
-    useEffect(() => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        description: "",
+        date: ""
+    });
+    const [selectedId, setSelectedId] = useState(null);
+
+    const fetchClients = useCallback(() => {
         const getClients = async () => {
             try {
-                const clients = await axios.get(`${import.meta.env.VITE_API}/client/getAllClients`);
+                const clients = await axios.get(`${import.meta.env.VITE_API}/client/getAllClients`, {
+                    withCredentials: true,
+                });
                 setClientData(clients.data);
             } catch (err) {
                 console.error(err);
             }
         };
         getClients();
-    }, [])
+    }, []);
+
+    useEffect(fetchClients,
+        [fetchClients]);
 
     const clientRequests = async (id) => {
         try {
-            const requests = await script.generateRequests(id);
+            const requests = await axios.get(`${import.meta.env.VITE_API}/client/getClientRequests/${id}`, {
+                withCredentials: true,
+            });
             setExtraData({
                 id,
                 type: "cereri de ofertă",
-                data: requests
+                data: requests.data
             });
         } catch (err) {
             console.error(err);
@@ -35,11 +50,13 @@ function Clients() {
 
     const clientOffers = async (id) => {
         try {
-            const offers = await script.generateOffers(id);
+            const offers = await axios.get(`${import.meta.env.VITE_API}/client/getClientOffers/${id}`, {
+                withCredentials: true,
+            });
             setExtraData({
                 id,
                 type: "oferte",
-                data: offers,
+                data: offers.data,
             });
         } catch (err) {
             console.error(err);
@@ -48,14 +65,41 @@ function Clients() {
 
     const clientOrders = async (id) => {
         try {
-            const offers = await script.generateOrders(id);
+            const offers = await axios.get(`${import.meta.env.VITE_API}/client/getClientOrders/${id}`, {
+                withCredentials: true,
+            });
             setExtraData({
                 id,
                 type: "comenzi",
-                data: offers,
+                data: offers.data,
             });
         } catch (err) {
             console.error(err);
+        }
+    }
+
+    const handleChange = async (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    const handleSubmit = async (id) => {
+        try {
+            const respone = await axios.post(`${import.meta.env.VITE_API}/request/createRequest/${id}`, {
+                description: formData.description,
+                sentAt: formData.date,
+            }, {
+                withCredentials: true
+            });
+            toast.success(respone.data);
+            setFormData({
+                description: "",
+                date: ""
+            })
+            setIsModalOpen(false);
+            c
+        } catch (err) {
+            toast.error("Eroare la crearea unei cereri");
         }
     }
 
@@ -71,6 +115,7 @@ function Clients() {
                             <td>Cereri</td>
                             <td>Oferte</td>
                             <td>Comenzi</td>
+                            <td>Creează o cerere</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,18 +127,22 @@ function Clients() {
                                         <td>{client.name}</td>
                                         <td>{client.email}</td>
                                         <td>
-                                            <button onClick={() => clientRequests(client.id)}>Generează</button>
+                                            <button className="table-button" onClick={() => clientRequests(client.id)}>Generează</button>
                                         </td>
                                         <td>
-                                            <button onClick={() => clientOffers(client.id)}>Generează</button>
+                                            <button className="table-button" onClick={() => clientOffers(client.id)}>Generează</button>
                                         </td>
                                         <td>
-                                            <button onClick={() => clientOrders(client.id)}>Generează</button>
+                                            <button className="table-button" onClick={() => clientOrders(client.id)}>Generează</button>
+                                        </td>
+                                        <td>
+                                            <button className="table-button" onClick={() => { setSelectedId(client.id); setIsModalOpen(true) }}>Adaugă o cerere de ofertă</button>
+
                                         </td>
                                     </tr>
                                     {extraData.id === client.id && (
                                         <tr className="extra-data-row">
-                                            <td colSpan="6">
+                                            <td colSpan="7">
                                                 <strong>{extraData.type.toUpperCase()}</strong>
 
                                                 {extraData.type === "cereri de ofertă" && (
@@ -128,12 +177,12 @@ function Clients() {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {extraData.data.map((offers)=> (
+                                                            {extraData.data.map((offers) => (
                                                                 <tr key={offers.id}>
                                                                     <td>{offers.id}</td>
                                                                     <td>{offers.price}</td>
                                                                     <td>{new Date(offers.deadline).toLocaleDateString()}</td>
-                                                                    <td>{offers.isAccepted? "Acceptată" : "Neacceptată"}</td>
+                                                                    <td>{offers.isAccepted ? "Acceptată" : "Neacceptată"}</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -153,14 +202,14 @@ function Clients() {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {extraData.data.map((order)=> (
+                                                            {extraData.data.map((order) => (
                                                                 <tr key={order.id}>
                                                                     <td>{order.id}</td>
                                                                     <td>{order.number}</td>
                                                                     <td>{`${order.quantity} ${order.unit}`}</td>
                                                                     <td>{order.description}</td>
                                                                     <td>{new Date(order.deadline).toLocaleDateString()}</td>
-                                                                    <td>{order.isCompleted? "Finalizată" : "Nefinalizată"}</td>
+                                                                    <td>{order.isCompleted ? "Finalizată" : "Nefinalizată"}</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -175,10 +224,40 @@ function Clients() {
                     </tbody>
                 </table>
             </div>
-
-
+            <Modal isOpen={isModalOpen} isClosed={() => setIsModalOpen(false)}>
+                <h2>Adaugă o cerere</h2>
+                <div className="form">
+                    <form action={handleSubmit}>
+                        <div className="field">
+                            <label>Data în care a fost trimisă cererea
+                                <input
+                                    type="date"
+                                    name="date"
+                                    value={formData.date}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                        </div>
+                        <div className="field">
+                            <label>Descrierea cererii
+                                <input
+                                    type="text"
+                                    name="description"
+                                    placeholder="Introduceți descrierea"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                        </div>
+                        <button type="submit" onClick={(e) => {
+                            e.preventDefault();
+                            handleSubmit(selectedId);
+                        }}>Creează</button>
+                    </form>
+                </div>
+            </Modal>
         </>
     )
 }
 
-export default Clients;
+export default ClientsTable;

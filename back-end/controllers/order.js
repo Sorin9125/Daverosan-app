@@ -25,7 +25,7 @@ const orderController = {
             if (!(/[buc]|[kg]/).test(order.unit)) {
                 return res.status(400).send("Unitatile de masura valide sunt buc si kg");
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;| ]{1,}$/).test(order.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]{1,}$/).test(order.description)) {
                 return res.status(400).send("Introduceti o descriere valida");
             }
             if (!(/^[A-z0-9]{1,}$/).test(order.number)) {
@@ -88,7 +88,7 @@ const orderController = {
             if (!(/[buc]|[kg]/).test(newOrder.unit)) {
                 return res.status(400).send("Unitatile de masura valide sunt buc si kg");
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;| ]{1,}$/).test(newOrder.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]{1,}$/).test(newOrder.description)) {
                 return res.status(400).send("Introduceti o descriere valida");
             }
             if (!(/^[A-z0-9]{1,}$/).test(newOrder.number)) {

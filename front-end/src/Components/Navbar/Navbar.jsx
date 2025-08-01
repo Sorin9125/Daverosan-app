@@ -5,16 +5,16 @@ function Navbar() {
     return (
         <>
             <nav className="navbar">
-                <h2>Daverosan-manager de comenzi</h2>
-                <li className="navbar-items">
-                    <ul><Link to="/clienti">Clienți</Link></ul>
-                    <ul><Link to="/cereri">Cereri de ofertă</Link></ul>
-                    <u><Link to="/oferte">Oferte</Link></u>
-                    <ul><Link to="/comenzi">Comenzi</Link></ul>
-                </li>
+                <div className="navbar-items">
+                    <Link to="/">Homepage</Link>
+                    <Link to="/clienti">Clienți</Link>
+                    <Link to="/cereri">Cereri de ofertă</Link>
+                    <Link to="/oferte">Oferte</Link>
+                    <Link to="/comenzi">Comenzi</Link>
+                </div>
             </nav>
         </>
     )
 }
 
-export default Navbar;
+export default Navbar;1

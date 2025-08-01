@@ -24,7 +24,7 @@ const orderModel = db.define("order", {
         allowNull: false,
     },
     description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(5000),
         allowNull: false,
     },
     isCompleted: {
