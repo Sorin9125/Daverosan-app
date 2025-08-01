@@ -15,7 +15,7 @@ function App() {
         </Routes>
       </main>
       <ToastContainer position="top-right" autoClose={3000}/>
-      <Footer></Footer>
+      <Footer />
     </>
   )
 }
