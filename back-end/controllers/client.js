@@ -5,23 +5,23 @@ const clientController = {
         try {
             const client = req.body;
             if (!(client.name && client.email)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z ]{3,}$/gm).test(client.name)) {
-                return res.status(400).send("Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere");
+                return res.status(400).json({ message: "Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere" });
             }
             if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(client.email)) {
-                return res.status(400).send("Email-ul nu este valid");
+                return res.status(400).json({ message: "Email-ul nu este valid" });
             }
             if (await clientModel.findOne({
                 where: {
                     name: client.name,
                 },
             })) {
-                return res.status(400).send("Acest client este deja existent");
+                return res.status(400).json({ message: "Acest client este deja existent" });
             }
             await clientModel.create(client);
-            return res.status(200).send("Clientul a fost creat cu succes");
+            return res.status(200).json({ message: "Clientul a fost creat cu succes" });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -32,7 +32,7 @@ const clientController = {
         try {
             const clients = await clientModel.findAll();
             if (!clients) {
-                return res.status(400).send("Nu exista clienti");
+                return res.status(400).json({ message: "Nu exista clienti" });
             }
             return res.status(200).json(clients);
         } catch (err) {
@@ -45,7 +45,7 @@ const clientController = {
             const clientId = req.params.id;
             const client = await clientModel.findByPk(clientId);
             if (!client) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             return res.status(200).json(client);
         } catch (err) {
@@ -58,20 +58,20 @@ const clientController = {
             const clientId = req.params.id;
             const client = await clientModel.findByPk(clientId);
             if (!client) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             const newClient = req.body;
             if (!(newClient.name && newClient.email)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z ]{3,}$/gm).test(newClient.name)) {
-                return res.status(400).send("Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere");
+                return res.status(400).json({ message: "Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere" });
             }
             if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(newClient.email)) {
-                return res.status(400).send("Email-ul nu este valid");
+                return res.status(400).json({ message: "Email-ul nu este valid" });
             }
             await client.update(newClient);
-            return res.status(200).send(`Clientul cu id-ul ${clientId} a fost actualizat cu succes`);
+            return res.status(200).json({ message: `Clientul cu id-ul ${clientId} a fost actualizat cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -82,14 +82,14 @@ const clientController = {
             const clientId = req.params.id;
             const client = await clientModel.findByPk(clientId);
             if (!client) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             await clientModel.destroy({
                 where: {
                     id: clientId,
                 },
             });
-            return res.status(200).send(`clientul cu id-ul ${clientId} a fost sters cu succes`);
+            return res.status(200).json({ message: `clientul cu id-ul ${clientId} a fost sters cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -102,10 +102,10 @@ const clientController = {
                 include: [requestModel],
             });
             if (!clientRequests) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             if (!clientRequests.requests) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio cerere de oferta`);
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu are nicio cerere de oferta` });
             }
             return res.status(200).json(clientRequests.requests);
         } catch (err) {
@@ -122,12 +122,12 @@ const clientController = {
                     include: [offerModel],
                 }],
             })
-            if(!clientOffers) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            if (!clientOffers) {
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             const offers = clientOffers.requests.map((x) => x.offer).filter((x) => x);
-            if(!offers) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio oferta primita`);
+            if (!offers) {
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu are nicio oferta primita` });
             }
             return res.status(200).json(offers);
         } catch (err) {
@@ -137,7 +137,7 @@ const clientController = {
     },
     getClientOrders: async (req, res) => {
         try {
-            const clientId= req.params.id;
+            const clientId = req.params.id;
             const clientOrders = await clientModel.findByPk(clientId, {
                 include: [{
                     model: requestModel,
@@ -147,12 +147,12 @@ const clientController = {
                     }]
                 }]
             })
-            if(!clientOrders) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+            if (!clientOrders) {
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             const orders = clientOrders.requests.map((x) => x.offer).filter((x) => x).map((x) => x.order).filter((x) => x);
-            if(!orders) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu are nicio comanda`);
+            if (!orders) {
+                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu are nicio comanda` });
             }
             return res.status(200).json(orders);
         } catch (err) {

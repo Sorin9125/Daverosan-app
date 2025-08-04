@@ -14,6 +14,10 @@ function Client() {
     const [deleteModal, setDeleteModal] = useState(false);
     const [clientId, setClientId] = useState(null);
     const [updateModal, setUpdateModal] = useState(false);
+    const [updateData, setUpdateData] = useState({
+        name: "",
+        email: ""
+    })
 
     const fetchClients = useCallback(() => {
         const getClients = async () => {
@@ -28,7 +32,7 @@ function Client() {
             } catch (err) {
                 console.error(err);
             }
-        };
+        }
         getClients();
     }, []);
 
@@ -51,19 +55,15 @@ function Client() {
                     withCredentials: true,
                 }
             );
-            if (respone.status == 200) {
-                toast.success(respone.data);
+                toast.success(respone.data.message);
                 setClientModal(false);
                 setFormData({
                     name: "",
                     email: "",
                 });
                 fetchClients();
-            } else {
-                toast.error(respone.data);
-            }
         } catch (err) {
-            console.error(err);
+            toast.error(err.response.data.message);
         }
     };
 
@@ -77,14 +77,12 @@ function Client() {
             const respone = await axios.delete(`${import.meta.env.VITE_API}/client/deleteClient/${clientId}`, {
                 withCredentials: true,
             });
-            if (respone.status == 200) {
-                toast.success(respone.data);
+                toast.success(respone.data.message);
                 setDeleteModal(false);
                 setClientId(null);
                 fetchClients();
-            }
         } catch (err) {
-            console.error(err);
+            console.error(err.response.data.message);
         }
     }
 
@@ -94,26 +92,23 @@ function Client() {
     }
 
     const onUpdateClick = (client) => {
-        console.log("Clientul: " + client);
-        setFormData({
+        setUpdateData({
             name: client.name,
             email: client.email,
         })
         setClientId(client.id);
         setUpdateModal(true);
-        console.log(formData)
     }
 
     const updateClient = async () => {
         try {
             const response = await axios.put(`${import.meta.env.VITE_API}/client/updateClient/${clientId}`, {
-                name: formData.name,
-                email: formData.email,
+                name: updateData.name,
+                email: updateData.email,
             }, {
                 withCredentials: true,
             });
-            if (response.status == 200) {
-                toast.success(response.data);
+                toast.success(response.data.message);
                 setUpdateModal(false);
                 setClientId(null);
                 setFormData({
@@ -121,16 +116,15 @@ function Client() {
                     email: ""
                 })
                 fetchClients();
-            }
         } catch (err) {
-            console.log(err);
+            console.error(err.respone.data.message);
         }
     }
     return (
         <>
             <h1>Clienți</h1>
             <button onClick={() => setClientModal(true)}>Adaugă un client</button>
-            <ClientsTable clients={clientData} openDeleteModal={openDeleteModal} openUpdateModal={openUpdateModal} onUpdateClick={onUpdateClick}/>
+            <ClientsTable clients={clientData} openDeleteModal={openDeleteModal} openUpdateModal={openUpdateModal} onUpdateClick={onUpdateClick} />
             {/* Modala pentru creatClient */}
             <Modal isOpen={clientModal} isClosed={() => setClientModal(false)}>
                 <h2>Adaugă un client</h2>
@@ -177,20 +171,20 @@ function Client() {
                 <h2>Confirmare ștergere client</h2>
                 <p>Sunteți sigur că vreți sa ștergeți acest client?</p>
                 <button onClick={deleteClient}>Da</button>
-                <button onClick={() => setDeleteModal(false)}>Anulează</button>
+                <button className="cancel-button" onClick={() => setDeleteModal(false)}>Anulează</button>
             </Modal>
             {/* Modala pentru updateClient  */}
             <Modal isOpen={updateModal} isClosed={() => setUpdateModal(false)}>
                 <h2>Actualizare client</h2>
                 <div className="form">
-                    <form action="updateClient">
+                    <form action={updateClient}>
                         <div className="field">
                             <label>
                                 Introduceți numele clientului
                                 <input
                                     type="text"
                                     name="name"
-                                    value={formData.name}
+                                    value={updateData.name}
                                     onChange={handleChange}
                                 />
                             </label>
@@ -199,12 +193,12 @@ function Client() {
                                 <input
                                     type="text"
                                     name="email"
-                                    value={formData.email}
+                                    value={updateData.email}
                                     onChange={handleChange}
                                 />
                             </label>
                         </div>
-                        <button onClick={(e) => { e.preventDefault(); updateClient() }}>Salvează</button>
+                        <button type="submit" onClick={(e) => { e.preventDefault(); updateClient() }}>Salvează</button>
                     </form>
                 </div>
             </Modal>

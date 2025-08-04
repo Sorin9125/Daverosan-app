@@ -1,4 +1,4 @@
-const { requestModel, clientModel } = require("../models");
+const { requestModel, clientModel, offerModel } = require("../models");
 
 const requestController = {
     createRequest: async (req, res) => {
@@ -6,17 +6,17 @@ const requestController = {
             const clientId = req.params.id;
             const client = await clientModel.findByPk(clientId);
             if (!client) {
-                return res.status(400).send(`Clientul cu id-ul ${clientId} nu exista`);
+                return res.status(400).josn({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             const request = req.body;
             if (!(request.sentAt && request.description)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]+$/gm).test(request.description)) {
-                return res.status(400).send("Introduceti o descriere valida");
+                return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await client.createRequest(request);
-            return res.status(200).send(`Cererea clientului ${client.name} a fost creata cu succes`);
+            return res.status(200).json({ message: `Cererea clientului ${client.name} a fost creata cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -26,7 +26,7 @@ const requestController = {
         try {
             const requests = await requestModel.findAll();
             if (!requests) {
-                return res.status(400).send("Nu exista cereri de oferta");
+                return res.status(400).json({ message: "Nu exista cereri de oferta" });
             }
             return res.status(200).json(requests);
         } catch (err) {
@@ -39,7 +39,7 @@ const requestController = {
             const requestId = req.params.id;
             const request = await requestModel.findByPk(requestId);
             if (!request) {
-                return res.status(400).send(`Cererea de oferta cu id-ul ${requestId} nu exista`);
+                return res.status(400).json({ message: `Cererea de oferta cu id-ul ${requestId} nu exista` });
             }
             return res.status(200).json(request)
         } catch (err) {
@@ -52,17 +52,17 @@ const requestController = {
             const requestId = req.params.id;
             const request = await requestModel.findByPk(requestId);
             if (!request) {
-                return res.status(400).send(`Cererea de oferta cu id-ul ${requestId} nu exista`);
+                return res.status(400).json({ message: `Cererea de oferta cu id-ul ${requestId} nu exista` });
             }
             const newRequest = req.body;
             if (!(newRequest.sentAt && newRequest.description)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]+$/gm).test(newRequest.description)) {
-                return res.status(400).send("Introduceti o descriere valida");
+                return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await request.update(newRequest);
-            return res.status(200).send(`Cererea de oferta cu id-ul ${requestId} a fost actualizata cu succes`);
+            return res.status(200).json({ message: `Cererea de oferta cu id-ul ${requestId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -73,14 +73,32 @@ const requestController = {
             const requestId = req.params.id;
             const request = await requestModel.findByPk(requestId);
             if (!request) {
-                return res.status(400).send(`Cererea de oferta cu id-ul ${requestId} nu exista`);
+                return res.status(400).json({ message: `Cererea de oferta cu id-ul ${requestId} nu exista` });
             }
             await requestModel.destroy({
                 where: {
                     id: requestId,
                 },
             });
-            return res.status(200).send(`Cererea de oferta cu id-ul ${requestId} a fost stersa cu succes`);
+            return res.status(200).json({ message: `Cererea de oferta cu id-ul ${requestId} a fost stersa cu succes` });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send("Eroare");
+        }
+    },
+    getRequestOffer: async (req, res) => {
+        try {
+            const requestId = req.params.id;
+            const request = await requestModel.findByPk(requestId, {
+                include: [offerModel],
+            });
+            if (!request) {
+                return res.status(400).json({ message: `Cererea de oferta cu id-ul ${requestId} nu exista` });
+            }
+            if (!request.offer) {
+                return res.status(400).json({ message: `Nu exista oferta pentru cererea cu id-ul ${requestId}` })
+            }
+            return res.status(200).json(request.offer);
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");

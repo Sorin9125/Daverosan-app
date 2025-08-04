@@ -8,29 +8,29 @@ const productionNoteController = {
             const orderId = req.params.id;
             const order = await orderModel.findByPk(orderId);
             if (!order) {
-                return res.status(400).send(`Comanda cu id-ul ${orderId} nu exista`);
+                return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
             const productionNote = req.body;
             if (order.unit === "buc") {
                 productionNote.weight = 1;
             }
             if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
-                return res.status(400).send("Introduceti o denumire valida");
+                return res.status(400).json({ message: "Introduceti o denumire valida" });
             }
             if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
-                return res.status(400).send("Introduceti un desen valid");
+                return res.status(400).json({ message: "Introduceti un desen valid" });
             }
             if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
-                return res.status(400).send("Introduceti o greutate valida");
+                return res.status(400).json({ message: "Introduceti o greutate valida" });
             }
             if (!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
-                return res.status(400).send("Introduceti o cantitate valida");
+                return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
             await order.createProductionNote(productionNote);
-            return res.status(200).send("Nota de productie a fost creata cu succes");
+            return res.status(200).json({ message: "Nota de productie a fost creata cu succes" });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare!");
@@ -40,7 +40,7 @@ const productionNoteController = {
         try {
             const productionNotes = await productionNoteModel.findAll();
             if (!productionNotes) {
-                return res.status(400).send("Nu exista note de productie");
+                return res.status(400).josn({ message: "Nu exista note de productie" });
             }
             return res.status(200).json(productionNotes);
         } catch (err) {
@@ -53,7 +53,7 @@ const productionNoteController = {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
             if (!productionNote) {
-                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
+                return res.status(400).josn({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
             return res.status(200).json(productionNote);
         } catch (err) {
@@ -66,24 +66,24 @@ const productionNoteController = {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
             if (!productionNote) {
-                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
+                return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
             const newProductionNote = req.body;
             if (!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.weight && newProductionNote.quantity)) {
-                return res.status(400).send("Completeaza toate campurile printule");
+                return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(newProductionNote.reper)) {
-                return res.status(400).send("Introduceti o denumire valida");
+                return res.status(400).json({ message: "Introduceti o denumire valida" });
             }
             if (!(/^[0-9A-z ]{1,}$/).test(newProductionNote.scheme)) {
-                return res.status(400).send("Introduceti un desen valid");
+                return res.status(400).json({ message: "Introduceti un desen valid" });
             }
             if (!(/^[0-9]{1,}/).test(newProductionNote.cantitate)) {
-                return res.status(400).send("Introduceti o cantitate valida");
+                return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
             if (!(/^[0-9]{1,}/))
                 await productionNote.update(newProductionNote);
-            return res.status(200).send(`Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes`);
+            return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -94,14 +94,14 @@ const productionNoteController = {
             const productionNoteId = req.params.id;
             const productioNote = await productionNoteModel.findByPk(productionNoteId);
             if (!productioNote) {
-                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
+                return res.status(400).json({ mesage: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
             await productionNoteModel.destroy({
                 where: {
                     id: productionNoteId,
                 },
             });
-            return res.status(200).send(`Nota de productie cu id-ul ${productionNoteId} a fost stearsa cu succes`);
+            return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost stearsa cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send(err);
@@ -112,10 +112,10 @@ const productionNoteController = {
             const productionNoteId = req.params.id;
             const productionNote = await productionNoteModel.findByPk(productionNoteId);
             if (!productionNote) {
-                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} nu exista`);
+                return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
             if (productionNote.isCompleted === true) {
-                return res.status(400).send(`Nota de productie cu id-ul ${productionNoteId} este deja finalizata`);
+                return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} este deja finalizata` });
             }
             await productionNote.update({
                 isFinished: true
@@ -128,9 +128,9 @@ const productionNoteController = {
                 order.update({
                     isCompleted: true,
                 })
-                return res.status(200).send(`Comanda cu id-ul ${productionNote.orderId} a fost finalizata`);
+                return res.status(200).json({ message: `Comanda cu id-ul ${productionNote.orderId} a fost finalizata` });
             }
-            return res.status(200).send(`Nota de productie cu id-ul ${productionNoteId} a fost finalizata cu succes`);
+            return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost finalizata cu succes` });
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");
@@ -139,7 +139,7 @@ const productionNoteController = {
     uploadFromFile: async (req, res) => {
         try {
             if (req.file == undefined) {
-                return res.status(400).send("Trebuie sa incarci un fisier");
+                return res.status(400).json({ message: "Trebuie sa incarci un fisier" });
             }
             console.log(req.file)
             const orderId = req.params.id;
@@ -161,24 +161,24 @@ const productionNoteController = {
                         productionNote.weight = 1;
                     }
                     if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
-                        return res.status(400).send("Completeaza toate campurile printule");
+                        return res.status(400).josn({ message: "Completeaza toate campurile printule" });
                     }
                     if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
-                        return res.status(400).send("Introduceti o denumire valida");
+                        return res.status(400).json({ message: "Introduceti o denumire valida" });
                     }
                     if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
-                        return res.status(400).send("Introduceti un desen valid");
+                        return res.status(400).json({ message: "Introduceti un desen valid" });
                     }
                     if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
-                        return res.status(400).send("Introduceti o greutate valida");
+                        return res.status(400).json({ message: "Introduceti o greutate valida" });
                     }
                     if (!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
-                        return res.status(400).send("Introduceti o cantitate valida");
+                        return res.status(400).json({ message: "Introduceti o cantitate valida" });
                     }
                     productionNotes.push(productionNote);
                 }
                 productionNoteModel.bulkCreate(productionNotes).then(() => {
-                    return res.status(200).send(`Notele de productie pentru comanda ${orderId} au fost adaugate cu succes`);
+                    return res.status(200).json({ message: `Notele de productie pentru comanda ${orderId} au fost adaugate cu succes` });
                 }).catch((err) => {
                     console.log(err);
                     return res.status(500).send("Eroare")

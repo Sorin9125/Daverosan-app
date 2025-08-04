@@ -1,10 +1,10 @@
 import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
-import "./ClientsTable.css";
+import "../Table.css";
 import axios from "axios";
 import Modal from "../../Modal/Modal";
 
-function ClientsTable({ clients, openDeleteModal, onUpdateClick}) {
+function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
     const [extraData, setExtraData] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -84,14 +84,14 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick}) {
                     withCredentials: true,
                 }
             );
-            toast.success(respone.data);
-            setFormData({
-                description: "",
-                date: "",
-            });
-            setIsModalOpen(false);
+                toast.success(respone.data.message);
+                setFormData({
+                    description: "",
+                    date: "",
+                });
+                setIsModalOpen(false);
         } catch (err) {
-            toast.error("Eroare la crearea unei cereri");
+            console.log(err.respone.data.message);
         }
     };
 
@@ -101,14 +101,14 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick}) {
                 <table className="client-table">
                     <thead>
                         <tr>
-                            <td>Id</td>
-                            <td>Nume</td>
-                            <td>Email</td>
-                            <td>Cereri</td>
-                            <td>Oferte</td>
-                            <td>Comenzi</td>
-                            <td>Creează o cerere</td>
-                            <td style={{ textAlign: "center" }}>Opțiuni</td>
+                            <th>Id</th>
+                            <th>Nume</th>
+                            <th>Email</th>
+                            <th>Cereri</th>
+                            <th>Oferte</th>
+                            <th>Comenzi</th>
+                            <th>Creează o cerere</th>
+                            <th>Opțiuni</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -155,7 +155,7 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick}) {
                                     </td>
                                     <td>
                                         <div className="button-container">
-                                            <button className="table-button" onClick={() => onUpdateClick(client)}>Actualizare client</button>
+                                            <button type="submit" className="table-button" onClick={() => onUpdateClick(client)}>Actualizare client</button>
                                             <button className="table-button" onClick={() => openDeleteModal(client.id)}>Ștergere client</button>
                                         </div>
                                     </td>
