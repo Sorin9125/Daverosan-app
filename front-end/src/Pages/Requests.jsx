@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import RequestTable from "../Components/Tables/Request/RequestTable";
+import RequestsTable from "../Components/Tables/RequestsTable";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Modal from "../Components/Modal/Modal";
@@ -10,7 +10,7 @@ function Request() {
     const [updateModal, setUpdateModal] = useState(false);
     const [updateData, setUpdateData] = useState({
         description: "",
-        sentAt: ""
+        sentAt: new Date()
     })
     const [deleteModal, setDeleteModal] = useState(false);
 
@@ -30,12 +30,12 @@ function Request() {
 
     useEffect(fetchRequests, [fetchRequests]);
 
-    const handleChange = async (e) => {
-        const {name, value} = e.target;
-        setUpdateData((prev) => ({...prev, [name]: value }));
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUpdateData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const openUpdateModal = async (request) => {
+    const openUpdateModal = (request) => {
         setUpdateData({
             description: request.description,
             sentAt: request.sentAt,
@@ -53,10 +53,15 @@ function Request() {
                 withCredentials: true,
             });
             toast.success(response.data.message);
-            fetchRequests();
+            setRequestData(prev => prev.map((request) =>
+                request.id == requestId ? {
+                    ...request,
+                    description: updateData.description,
+                    sentAt: updateData.sentAt,
+                } : request))
             setUpdateData({
-                price: null,
-                deadline: ""
+                sentAt: new Date(),
+                description: ""
             });
             setUpdateModal(false);
         } catch (err) {
@@ -64,7 +69,7 @@ function Request() {
         }
     }
 
-    const openDeleteModal = async (id) => {
+    const openDeleteModal = (id) => {
         setRequestId(id);
         setDeleteModal(true);
     }
@@ -76,50 +81,52 @@ function Request() {
             fetchRequests();
             setDeleteModal(false);
         } catch (err) {
-            toast.error (err.response.data.message);
+            toast.error(err.response.data.message);
         }
     }
 
     return (
         <>
             <h1>Cereri de ofertă</h1>
-            <RequestTable requests={requestData} updateModal={openUpdateModal} deleteModal={openDeleteModal}/>
+            <RequestsTable requests={requestData} updateModal={openUpdateModal} deleteModal={openDeleteModal} />
             {/* Modal pentru actualizat cereri de oferta */}
             <Modal isOpen={updateModal} isClosed={() => setUpdateModal(false)}>
                 <h2>Actualizare cerere de ofertă</h2>
                 <div className="form">
                     <form action={updateRequest}>
                         <div className="field">
-                            <label >Introduceți data la care a fost trimisă cererea
-                                <input 
-                                type="date"
-                                name="sentAt"
-                                value={updateData.sentAt}
-                                onChange={handleChange}
-                                />
+                            <label>
+                                Introduceți descrierea
+                                <textarea
+                                    name="description"
+                                    id="description"
+                                    value={updateData.description}
+                                    onChange={handleChange}
+                                    rows="5"
+                                >
+                                </textarea>
                             </label>
                         </div>
                         <div className="field">
-                            <label>
-                                Introduceți descrierea
-                                <input 
-                                type="text"
-                                name="description"
-                                value={updateData.description}
-                                onChange={handleChange}
+                            <label >Introduceți data la care a fost trimisă cererea
+                                <input
+                                    type="date"
+                                    name="sentAt"
+                                    value={new Date(updateData.sentAt).toISOString().split("T")[0]}
+                                    onChange={handleChange}
                                 />
                             </label>
                         </div>
-                        <button type="submit" onClick={(e) => { e.preventDefault(); updateRequest();  }}>Salvează</button>
+                        <button type="submit" onClick={(e) => { e.preventDefault(); updateRequest(); }}>Salvează</button>
                     </form>
                 </div>
             </Modal>
             {/* Modala pentru sters cereri de oferta */}
             <Modal isOpen={deleteModal} isClosed={() => setDeleteModal(false)}>
-                <h2>Ștergere cerere de ofertă</h2>
+                <h2>Ștergere cererea de ofertă</h2>
                 <p>Sunteți sigur ca vreți să ștergeți această cerere de ofertă?</p>
                 <button onClick={(e) => { e.preventDefault(); deleteRequest(); }}>Da</button>
-                <button className="cancel-button" onClick={(e) => { setDeleteModal(false); }}>Anulează</button>
+                <button className="cancel-button" onClick={() => { setDeleteModal(false); }}>Anulează</button>
             </Modal>
         </>
     )

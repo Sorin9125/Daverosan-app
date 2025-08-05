@@ -24,7 +24,12 @@ const requestController = {
     },
     getAllRequests: async (req, res) => {
         try {
-            const requests = await requestModel.findAll();
+            const requests = await requestModel.findAll({
+                include: {
+                    model: clientModel,
+                    attributes: ["name"]
+                }
+            });
             if (!requests) {
                 return res.status(400).json({ message: "Nu exista cereri de oferta" });
             }

@@ -1,17 +1,17 @@
 import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
-import "../Table.css";
+import "./Table.css";
 import axios from "axios";
-import Modal from "../../Modal/Modal";
+import Modal from "../Modal/Modal";
 
-function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
+function ClientsTable({ clients, openDeleteModal, openUpdateModal }) {
     const [extraData, setExtraData] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [requestModal, setRequestModal] = useState(false);
     const [formData, setFormData] = useState({
         description: "",
         date: "",
     });
-    const [selectedId, setSelectedId] = useState(null);
+    const [clientId, setClientId] = useState(null);
 
     const clientRequests = async (id) => {
         try {
@@ -67,12 +67,12 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
         }
     };
 
-    const handleChange = async (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (id) => {
+    const createRequest = async (id) => {
         try {
             const respone = await axios.post(
                 `${import.meta.env.VITE_API}/request/createRequest/${id}`,
@@ -84,14 +84,14 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                     withCredentials: true,
                 }
             );
-                toast.success(respone.data.message);
-                setFormData({
-                    description: "",
-                    date: "",
-                });
-                setIsModalOpen(false);
+            toast.success(respone.data.message);
+            setFormData({
+                description: "",
+                date: "",
+            });
+            setRequestModal(false);
         } catch (err) {
-            console.log(err.respone.data.message);
+            toast.error(err.response.data.message);
         }
     };
 
@@ -101,7 +101,7 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                 <table className="client-table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Nume</th>
                             <th>Email</th>
                             <th>Cereri</th>
@@ -146,8 +146,8 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                                         <button
                                             className="table-button"
                                             onClick={() => {
-                                                setSelectedId(client.id);
-                                                setIsModalOpen(true);
+                                                setClientId(client.id);
+                                                setRequestModal(true);
                                             }}
                                         >
                                             Adaugă o cerere de ofertă
@@ -155,7 +155,7 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                                     </td>
                                     <td>
                                         <div className="button-container">
-                                            <button type="submit" className="table-button" onClick={() => onUpdateClick(client)}>Actualizare client</button>
+                                            <button type="submit" className="table-button" onClick={() => openUpdateModal(client)}>Actualizare client</button>
                                             <button className="table-button" onClick={() => openDeleteModal(client.id)}>Ștergere client</button>
                                         </div>
                                     </td>
@@ -263,13 +263,27 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                     </tbody>
                 </table>
             </div>
-            <Modal isOpen={isModalOpen} isClosed={() => setIsModalOpen(false)}>
+            <Modal isOpen={requestModal} isClosed={() => setRequestModal(false)}>
                 <h2>Adaugă o cerere</h2>
                 <div className="form">
-                    <form action={handleSubmit}>
+                    <form action={createRequest}>
+
                         <div className="field">
                             <label>
-                                Data în care a fost trimisă cererea
+                                Descrierea cererii
+                                <textarea
+                                    name="description"
+                                    id="description"
+                                    placeholder="Introduceți descrierea"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    rows="5"
+                                ></textarea>
+                            </label>
+                        </div>
+                        <div className="field">
+                            <label>
+                                Data la care a fost trimisă cererea
                                 <input
                                     type="date"
                                     name="date"
@@ -278,23 +292,11 @@ function ClientsTable({ clients, openDeleteModal, onUpdateClick }) {
                                 />
                             </label>
                         </div>
-                        <div className="field">
-                            <label>
-                                Descrierea cererii
-                                <input
-                                    type="text"
-                                    name="description"
-                                    placeholder="Introduceți descrierea"
-                                    value={formData.description}
-                                    onChange={handleChange}
-                                />
-                            </label>
-                        </div>
                         <button
                             type="submit"
                             onClick={(e) => {
                                 e.preventDefault();
-                                handleSubmit(selectedId);
+                                createRequest(clientId);
                             }}
                         >
                             Creează

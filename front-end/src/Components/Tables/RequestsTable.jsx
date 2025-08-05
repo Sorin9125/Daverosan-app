@@ -1,16 +1,16 @@
-import "../Table.css"
+import "./Table.css"
 import { Fragment, useState } from "react";
 import axios from "axios";
-import Modal from "../../Modal/Modal";
+import Modal from "../Modal/Modal";
 import { toast } from "react-toastify";
 
-function RequestTable({ requests, deleteModal, updateModal}) {
+function RequestsTable({ requests, deleteModal, updateModal }) {
     const [extraData, setExtraData] = useState([]);
-    const [isModalOpan, setIsModalOpen] = useState(false);
+    const [offerModal, setOfferModal] = useState(false);
     const [requestId, setRequestId] = useState(null);
     const [formData, setFromData] = useState({
-        price: null,
-        deadline: ""
+        price: 0,
+        deadline: new Date()
     });
 
     const requestOffer = async (id) => {
@@ -33,7 +33,7 @@ function RequestTable({ requests, deleteModal, updateModal}) {
         setFromData((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleSubmit = async (id) => {
+    const createOffer = async (id) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API}/offer/createOffer/${id}`, {
                 deadline: formData.deadline,
@@ -41,16 +41,13 @@ function RequestTable({ requests, deleteModal, updateModal}) {
             }, {
                 withCredentials: true,
             });
-            if (response.status == 200) {
-                toast.success(response.data);
-                setFromData({
-                    price: null,
-                    deadline: ""
-                })
-                setIsModalOpen(false);
-            } else {
-                toast.error(response.data);
-            }
+            toast.success(response.data.message);
+            setFromData({
+                price: 0,
+                deadline: new Date()
+            })
+            setOfferModal(false);
+
         } catch (err) {
             toast.error(err.response.data.message);
         }
@@ -65,6 +62,7 @@ function RequestTable({ requests, deleteModal, updateModal}) {
                             <th>ID</th>
                             <th>Descriere</th>
                             <th>Dată primtă</th>
+                            <th>Client</th>
                             <th>Ofertă</th>
                             <th>Creează o ofertă</th>
                             <th>Opțiuni</th>
@@ -77,19 +75,19 @@ function RequestTable({ requests, deleteModal, updateModal}) {
                                     <td>{request.id}</td>
                                     <td>{request.description}</td>
                                     <td>{new Date(request.sentAt).toLocaleDateString()}</td>
+                                    <td>{request.client.name}</td>
                                     <td><button className="table-button" onClick={() => requestOffer(request.id)}>Generează</button></td>
-                                    <td><button className="table-button" onClick={() => { setIsModalOpen(true); setRequestId(request.id) }}>Adaugă o ofertă</button></td>
+                                    <td><button className="table-button" onClick={() => { setOfferModal(true); setRequestId(request.id) }}>Adaugă o ofertă</button></td>
                                     <td>
                                         <div className="button-container">
                                             <button className="table-button" onClick={() => updateModal(request)}>Actualizare cerere</button>
                                             <button className="table-button" onClick={() => deleteModal(request.id)}>Șterge cerere</button>
                                         </div>
-
                                     </td>
                                 </tr>
                                 {extraData.id === request.id && (
                                     <tr className="extra-data-row">
-                                        <td colSpan="6">
+                                        <td colSpan="7">
                                             <strong>OFERTĂ</strong>
                                             <table className="nested-table">
                                                 <thead>
@@ -111,17 +109,16 @@ function RequestTable({ requests, deleteModal, updateModal}) {
                                             </table>
                                         </td>
                                     </tr>
-                                )
-                                }
+                                )}
                             </Fragment>
                         ))}
                     </tbody>
                 </table>
             </div>
-            <Modal isOpen={isModalOpan} isClosed={() => setIsModalOpen(false)}>
+            <Modal isOpen={offerModal} isClosed={() => setOfferModal(false)}>
                 <h2>Adaugă o ofertă</h2>
                 <div className="form">
-                    <form action={handleSubmit}>
+                    <form action={createOffer}>
                         <div className="field">
                             <label>Introduceți valoarea ofertei (în euro)
                                 <input
@@ -143,7 +140,7 @@ function RequestTable({ requests, deleteModal, updateModal}) {
                                 />
                             </label>
                         </div>
-                        <button type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(requestId) }}>Creează</button>
+                        <button type="submit" onClick={(e) => { e.preventDefault(); createOffer(requestId) }}>Creează</button>
                     </form>
                 </div>
             </Modal>
@@ -151,4 +148,4 @@ function RequestTable({ requests, deleteModal, updateModal}) {
     )
 };
 
-export default RequestTable;
+export default RequestsTable;

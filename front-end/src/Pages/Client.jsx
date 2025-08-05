@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import ClientsTable from "../Components/Tables/Clients/ClientsTable";
+import ClientsTable from "../Components/Tables/ClientsTable";
 import Modal from "../Components/Modal/Modal";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -7,12 +7,12 @@ import axios from "axios";
 function Client() {
     const [clientData, setClientData] = useState([]);
     const [clientModal, setClientModal] = useState(false);
+    const [clientId, setClientId] = useState(null);
     const [formData, setFormData] = useState({
         email: "",
         name: "",
     });
     const [deleteModal, setDeleteModal] = useState(false);
-    const [clientId, setClientId] = useState(null);
     const [updateModal, setUpdateModal] = useState(false);
     const [updateData, setUpdateData] = useState({
         name: "",
@@ -38,10 +38,15 @@ function Client() {
 
     useEffect(fetchClients, [fetchClients]);
 
-    const handleChange = async (e) => {
+    const handleFormChange = async (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const handleUpdateChange = async (e) => {
+        const { name, value } = e.target;
+        setUpdateData((prev) => ({ ...prev, [name]: value }));
+    }
 
     const createClient = async () => {
         try {
@@ -55,13 +60,13 @@ function Client() {
                     withCredentials: true,
                 }
             );
-                toast.success(respone.data.message);
-                setClientModal(false);
-                setFormData({
-                    name: "",
-                    email: "",
-                });
-                fetchClients();
+            toast.success(respone.data.message);
+            setClientModal(false);
+            setFormData({
+                name: "",
+                email: "",
+            });
+            fetchClients();
         } catch (err) {
             toast.error(err.response.data.message);
         }
@@ -77,26 +82,21 @@ function Client() {
             const respone = await axios.delete(`${import.meta.env.VITE_API}/client/deleteClient/${clientId}`, {
                 withCredentials: true,
             });
-                toast.success(respone.data.message);
-                setDeleteModal(false);
-                setClientId(null);
-                fetchClients();
+            toast.success(respone.data.message);
+            setDeleteModal(false);
+            setClientId(null);
+            fetchClients();
         } catch (err) {
             console.error(err.response.data.message);
         }
     }
 
-    const openUpdateModal = (id) => {
-        setClientId(id);
-        setUpdateModal(true);
-    }
-
-    const onUpdateClick = (client) => {
+    const openUpdateModal = (client) => {
+        setClientId(client.id);
         setUpdateData({
             name: client.name,
             email: client.email,
         })
-        setClientId(client.id);
         setUpdateModal(true);
     }
 
@@ -108,23 +108,29 @@ function Client() {
             }, {
                 withCredentials: true,
             });
-                toast.success(response.data.message);
-                setUpdateModal(false);
-                setClientId(null);
-                setFormData({
-                    name: "",
-                    email: ""
-                })
-                fetchClients();
+            toast.success(response.data.message);
+            setClientData(prev => prev.map((client) =>
+                client.id == clientId ? {
+                    ...client,
+                    name: updateData.name,
+                    email: updateData.email,
+                } : client
+            ))
+            setUpdateModal(false);
+            setUpdateData({
+                name: "",
+                email: ""
+            })
         } catch (err) {
             console.error(err.respone.data.message);
         }
     }
+
     return (
         <>
             <h1>Clienți</h1>
             <button onClick={() => setClientModal(true)}>Adaugă un client</button>
-            <ClientsTable clients={clientData} openDeleteModal={openDeleteModal} openUpdateModal={openUpdateModal} onUpdateClick={onUpdateClick} />
+            <ClientsTable clients={clientData} openDeleteModal={openDeleteModal} openUpdateModal={openUpdateModal} />
             {/* Modala pentru creatClient */}
             <Modal isOpen={clientModal} isClosed={() => setClientModal(false)}>
                 <h2>Adaugă un client</h2>
@@ -138,7 +144,7 @@ function Client() {
                                     name="name"
                                     placeholder="Introduceți numele"
                                     value={formData.name}
-                                    onChange={handleChange}
+                                    onChange={handleFormChange}
                                 />
                             </label>
                         </div>
@@ -150,7 +156,7 @@ function Client() {
                                     name="email"
                                     placeholder="client@firma.ro"
                                     value={formData.email}
-                                    onChange={handleChange}
+                                    onChange={handleFormChange}
                                 />
                             </label>
                         </div>
@@ -185,7 +191,7 @@ function Client() {
                                     type="text"
                                     name="name"
                                     value={updateData.name}
-                                    onChange={handleChange}
+                                    onChange={handleUpdateChange}
                                 />
                             </label>
                             <label>
@@ -194,7 +200,7 @@ function Client() {
                                     type="text"
                                     name="email"
                                     value={updateData.email}
-                                    onChange={handleChange}
+                                    onChange={handleUpdateChange}
                                 />
                             </label>
                         </div>
