@@ -69,7 +69,7 @@ const productionNoteController = {
                 return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
             const newProductionNote = req.body;
-            if (!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.weight && newProductionNote.quantity)) {
+            if (!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.quantity)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(newProductionNote.reper)) {
@@ -78,11 +78,13 @@ const productionNoteController = {
             if (!(/^[0-9A-z ]{1,}$/).test(newProductionNote.scheme)) {
                 return res.status(400).json({ message: "Introduceti un desen valid" });
             }
-            if (!(/^[0-9]{1,}/).test(newProductionNote.cantitate)) {
+            if (!(/^[0-9]{1,}/).test(newProductionNote.quantity)) {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
-            if (!(/^[0-9]{1,}/))
-                await productionNote.update(newProductionNote);
+            if (!(/^[0-9]{1,}/).test(newProductionNote.weight)) {
+                return res.status(400).json({ message: "Introduceti o cantintate valida"})
+            }
+            await productionNote.update(newProductionNote);
             return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);

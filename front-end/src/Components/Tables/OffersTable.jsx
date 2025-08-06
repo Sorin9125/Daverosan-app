@@ -9,7 +9,7 @@ function OffersTable({ offers, openUpdateModal, openDeleteModal }) {
     const [formData, setFormaData] = useState({
         number: "",
         quantity: 0,
-        unit: "",
+        unit: "buc",
         description: "",
         deadline: new Date().toISOString().split("T")[0]
     })
@@ -51,11 +51,11 @@ function OffersTable({ offers, openUpdateModal, openDeleteModal }) {
             setExtraData({
                 number: null,
                 quantity: null,
-                unit: "",
+                unit: "buc",
                 description: "",
                 deadline: new Date()
             })
-
+            setOrderModal(false);
         } catch (err) {
             toast.error(err.response.data.message);
         }
@@ -64,7 +64,7 @@ function OffersTable({ offers, openUpdateModal, openDeleteModal }) {
     return (
         <>
             <div className="table-container">
-                <table className="client-table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -98,7 +98,7 @@ function OffersTable({ offers, openUpdateModal, openDeleteModal }) {
                                         extraData.id === offer.id && (
                                             <tr className="extra-data-row">
                                                 <td colSpan="7">
-                                                    <strong>COMANDĂ</strong>
+                                                    <strong className="extra-data-title">COMANDĂ</strong>
                                                     <table className="nested-table">
                                                         <thead>
                                                             <tr>

@@ -98,7 +98,7 @@ function ClientsTable({ clients, openDeleteModal, openUpdateModal }) {
     return (
         <>
             <div className="table-container">
-                <table className="client-table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -163,7 +163,7 @@ function ClientsTable({ clients, openDeleteModal, openUpdateModal }) {
                                 {extraData.id === client.id && (
                                     <tr className="extra-data-row">
                                         <td colSpan="8">
-                                            <strong>{extraData.type.toUpperCase()}</strong>
+                                            <strong className="extra-data-title">{extraData.type.toUpperCase()}</strong>
 
                                             {extraData.type === "cereri de ofertă" && (
                                                 <table className="nested-table">

@@ -15,7 +15,9 @@ offerModel.belongsTo(requestModel);
 offerModel.hasOne(orderModel);
 orderModel.belongsTo(offerModel);
 
-orderModel.hasMany(productionNoteModel);
+orderModel.hasMany(productionNoteModel, {
+    onDelete: 'CASCADE',
+});
 productionNoteModel.belongsTo(orderModel);
 
 module.exports = {

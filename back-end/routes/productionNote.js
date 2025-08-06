@@ -8,7 +8,7 @@ router.get("/getAllProductionNotes", productionNoteController.getAllProductionNo
 router.get("/getProductionNoteById/:id", productionNoteController.getProductionNoteById);
 router.put("/updateProductionNote/:id", productionNoteController.updateProductionNote);
 router.delete("/deleteProductionNote/:id", productionNoteController.deleteProductionNote);
-router.post("/finishProductionNote/:id", productionNoteController.finishProductionNote)
+router.patch("/finishProductionNote/:id", productionNoteController.finishProductionNote)
 router.post("/uploadExcel/:id", uploadExcel.single("file"), productionNoteController.uploadFromFile);
 
 module.exports = router;

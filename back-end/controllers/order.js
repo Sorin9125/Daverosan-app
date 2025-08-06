@@ -133,7 +133,7 @@ const orderController = {
             if (!orderProductionNotes) {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
-            const productionNotes = orderProductionNotes.productionNote;
+            const productionNotes = orderProductionNotes.productionNotes;
             if (!productionNotes) {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu are note de productie` });
             }

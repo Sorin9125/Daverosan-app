@@ -56,7 +56,7 @@ function RequestsTable({ requests, deleteModal, updateModal }) {
     return (
         <>
             <div className="table-container">
-                <table className="client-table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -88,7 +88,7 @@ function RequestsTable({ requests, deleteModal, updateModal }) {
                                 {extraData.id === request.id && (
                                     <tr className="extra-data-row">
                                         <td colSpan="7">
-                                            <strong>OFERTĂ</strong>
+                                            <strong className="extra-data-title">OFERTĂ</strong>
                                             <table className="nested-table">
                                                 <thead>
                                                     <tr>

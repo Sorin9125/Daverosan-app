@@ -13,7 +13,6 @@ const productionNoteModel = db.define("productionNote", {
     },
     port: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     scheme: {
         type: DataTypes.STRING,
@@ -25,10 +24,9 @@ const productionNoteModel = db.define("productionNote", {
     },
     weight: {
         type: DataTypes.INTEGER,
-        allowNull: false,
     },
     isFinished: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
     },
