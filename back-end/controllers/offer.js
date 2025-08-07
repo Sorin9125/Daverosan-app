@@ -26,6 +26,9 @@ const offerController = {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             await request.createOffer(offer);
+            await request.update({
+                isOffered: true,
+            });
             return res.status(200).json({ message: `Oferta pentru cererea cu id-ul ${requestId} fost creata cu succes` });
         } catch (err) {
             console.log(err);

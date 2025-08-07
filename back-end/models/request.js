@@ -15,6 +15,11 @@ const requestModel = db.define("request", {
             type: DataTypes.STRING(5000),
             allowNull: false,
         },
+        isOfferd: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        }
 },
     {
         freezeTableName: true,

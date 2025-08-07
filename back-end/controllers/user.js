@@ -1,10 +1,10 @@
 const { userModel } = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const hashPassword = async (pasword) => {
   const rounds = 10;
   const salt = await bcrypt.genSalt(rounds);
-  console.log(salt);
   const hashedPassword = await bcrypt.hash(pasword, salt);
 
   return hashedPassword;
@@ -19,7 +19,6 @@ const userController = {
         !(
           user.firstName &&
           user.lastName &&
-          user.phoneNumber &&
           user.password &&
           user.email
         )
@@ -31,9 +30,6 @@ const userController = {
       }
       if (!(/^[A-z]{3,}$/gm).test(user.lastName)) {
         return res.status(400).json({ message: "Numele trebuie sa contina doar litere" });
-      }
-      if (!(/^[0-9]{10}$/gm).test(user.phoneNumber)) {
-        return res.status(400).josn({ message: "Numarul de telefon nu este valid" });
       }
       if (
         !(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/gm).test(user.password)
@@ -61,7 +57,20 @@ const userController = {
       }
       user.password = await hashPassword(user.password);
       await userModel.create(user);
-      res.status(200).json({ message: "Utilizatorul a fost creat cu succes" });
+      jwt.sign({ email: user.email },
+        process.env.JWT_SECRET,
+        (err, token) => {
+          if(err) {
+            return res.status(400).json({ message: "Eroare la generare jwt "});
+          }
+          res.cookie("token", token, {
+            httpOnly: true,
+            expiresIn: process.env.COOKIE_AGE,
+          })
+          res.status(200).json(user);
+        }
+      )
+      return res.status(200).json({ message: "Utilizatorul a fost creat cu succes" });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -108,7 +117,6 @@ const userController = {
         !(
           newUser.firstName &&
           newUser.lastName &&
-          newUser.phoneNumber &&
           newUser.password &&
           newUser.email
         )
@@ -130,9 +138,6 @@ const userController = {
       if (!newUser.lastName.match(/^[A-z]{3,}$/gm)) {
         res.status(400).json({ message: "Numele trebuie sa contina doar litere" });
       }
-      if (!newUser.phoneNumber.match(/^[0-9]{10}$/gm)) {
-        return res.status(400).josn({ message: "Numarul de telefon nu este valid" });
-      }
       if (
         !newUser.password.match(
           /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/gm
@@ -142,7 +147,6 @@ const userController = {
           .status(400)
           .json({
             message:
-
               "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
           });
       }
@@ -190,7 +194,6 @@ const userController = {
           .status(400)
           .json({
             message:
-
               `User-ul cu mail-ul ${user.email} nu exista. Va rog sa va inregistrati`
           });
       }
@@ -198,11 +201,29 @@ const userController = {
         user.password,
         existingUser.password
       );
-      if (isCorrect) {
-        return res.status(200).json({ message: "Autentifcare efectuata cu succes" });
+      if (!isCorrect) {
+        return res.status(400).json({ message: "Parola incorecta" });
+      } else {
+        jwt.sign(
+          {email: existingUser.email},
+          process.env.JWT_SECRET,
+          (err, token) => {
+            if(err) {
+              console.log(err);
+              return res.status(400).json({message: "Eroare la generarea jwt"})
+            }
+            res.cookie("token", token, {
+              httpOnly: true,
+              expiresIn: process.env.COOKIE_AGE
+            })
+            return res.staus(200).json(existingUser);
+          }
+        )
+        return res.status(200).json({ message: "Autentifcare efectuata cu succes"  });
       }
-      return res.status(400).json({ message: "Parola incorecta" });
+
     } catch (err) {
+      console.log(err);
       return res.status(500).send("Eroare");
     }
   },
