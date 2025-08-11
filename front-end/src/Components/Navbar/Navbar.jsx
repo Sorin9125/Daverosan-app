@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 function Navbar() {
     const { user } = useContext(userContext);
+    console.log(user);
 
     return (
         <>
@@ -16,8 +17,7 @@ function Navbar() {
                     <Link to="/comenzi">Comenzi</Link>
                 </div>
                 <div>
-                    {user && user.name(
-                        <span>Welcome, {user.name}</span>)}
+                    {user && <span>Welcome, {user.firstName}</span>}
                 </div>
             </nav>
         </>

@@ -8,28 +8,10 @@ const BACKEND_URL = import.meta.env.VITE_API
 
 function Context(props) {
   const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const req = await axios.get(`${BACKEND_URL}/user/getCurrentUser`, {
-          withCredentials: true,
-        });
-        const user = req.data.user;
-        if (user && Object.keys(user).length != 0) {
-          setUserData(user);
-        }
-      } catch (err) {
-        toast.error(err.response.data.message);
-      }
-
-    };
-
-    loadUser();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   return (
-    <userContext.Provider value={{ user: userData, setUser: setUserData }}>
+    <userContext.Provider value={{ user: userData, setUser: setUserData, loading, setLoading }}>
       {props.children}
     </userContext.Provider>
   );

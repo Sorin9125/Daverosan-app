@@ -1,9 +1,10 @@
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import userApi from "../../Utils/User";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { userContext } from "../../Context";
+import { useContext } from "react";
 
 function Login() {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ function Login() {
         email: "",
         password: ""
     })
+    const { setUser, setLoading} = useContext(userContext);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,12 +21,16 @@ function Login() {
 
     const login = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            const response = await userApi.loginUser(formData); 
-            toast.success(response.data.message);
+            const response = await userApi.loginUser(formData);
+            setUser(response.data.user); 
             navigate("/clienti");
         } catch (err) {
+            console.log(err);
             toast.error(err.response.data.message);
+        } finally {
+            setLoading(false);
         }
     }
 

@@ -23,7 +23,7 @@ const userController = {
           user.email
         )
       ) {
-        return res.status(400).josn({ message: "Completeaza toate campurile printule!" });
+        return res.status(400).json({ message: "Completeaza toate campurile printule!" });
       }
       if (!(/^[A-z]{3,}$/gm).test(user.firstName)) {
         return res.status(400).json({ message: "Prenumele trebuie sa contina doar litere" });
@@ -53,23 +53,30 @@ const userController = {
       ) {
         return res
           .status(400)
-          .josn({ message: `Utilizatorul cu email-ul ${user.email} deja exista` });
+          .json({ message: `Utilizatorul cu email-ul ${user.email} deja exista` });
       }
       user.password = await hashPassword(user.password);
       await userModel.create(user);
-      jwt.sign({ email: user.email },
-        process.env.JWT_SECRET,
-        (err, token) => {
-          if(err) {
-            return res.status(400).json({ message: "Eroare la generare jwt "});
+      jwt.sign(
+          {email: user.email},
+          process.env.JWT_SECRET,
+          (err, token) => {
+            if(err) {
+              console.log(err);
+              return res.status(400).json({message: "Eroare la generarea jwt"})
+            }
+            res.cookie("token", token, {
+              httpOnly: true,
+              maxAge: process.env.COOKIE_AGE
+            })
+            return res.status(200).json({ user: {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email
+            }});
           }
-          res.cookie("token", token, {
-            httpOnly: true,
-            expiresIn: process.env.COOKIE_AGE,
-          })
-          res.status(200).json(user);
-        }
-      )
+        )
       return res.status(200).json({ message: "Utilizatorul a fost creat cu succes" });
     } catch (err) {
       console.log(err);
@@ -155,7 +162,7 @@ const userController = {
       }
       newUser.password = await hashPassword(newUser.password);
       await user.update(newUser);
-      return res.status(200).josn({ message: "Utilizatorul a fost actualizat cu succes" });
+      return res.status(200).json({ message: "Utilizatorul a fost actualizat cu succes" });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -214,7 +221,7 @@ const userController = {
             }
             res.cookie("token", token, {
               httpOnly: true,
-              expiresIn: process.env.COOKIE_AGE
+              maxAge: process.env.COOKIE_AGE
             })
             return res.status(200).json({ user: {
               id: existingUser.id,
