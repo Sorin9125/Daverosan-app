@@ -1,8 +1,9 @@
-import "./Table.css"
+// import "./Table.css"
 import { Fragment, useState } from "react";
 import axios from "axios";
-import Modal from "../Modal/Modal";
+import Modal from "../../Modal/Modal";
 import { toast } from "react-toastify";
+import requestAPI from "../../../Utils/Request";
 
 function RequestsTable({ requests, deleteModal, updateModal }) {
     const [extraData, setExtraData] = useState([]);

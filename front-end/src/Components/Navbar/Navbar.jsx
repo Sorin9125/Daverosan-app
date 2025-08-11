@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import "./Navbar.css"
-import userStore from "../../Store/userStore";
+import { userContext } from "../../Context";
+import { useContext } from "react";
 
 function Navbar() {
-    const { user } = userStore();
+    const { user } = useContext(userContext);
+
     return (
         <>
             <nav className="navbar">
@@ -13,12 +15,9 @@ function Navbar() {
                     <Link to="/oferte">Oferte</Link>
                     <Link to="/comenzi">Comenzi</Link>
                 </div>
-                <div className="navbar-items">
-                    {
-                        user ? (
-                            <span>Bine ai venit <strong>{user.firstName} {user.lastName}</strong></span>
-                        ) : <></>
-                    }
+                <div>
+                    {user && user.name(
+                        <span>Welcome, {user.name}</span>)}
                 </div>
             </nav>
         </>

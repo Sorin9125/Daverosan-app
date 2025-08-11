@@ -5,8 +5,6 @@ const routes = require("./routes");
 const app = express()
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-app.use(express.json());
-app.use(cookieParser());
 dotenv.config();
 
 app.use(cors({
@@ -15,9 +13,33 @@ app.use(cors({
     allowedHeaders: [
         "Content-Type",
         "Authorization",
-        "Acces-Control-Allow-Methods",
-        "Acces-Control-Request-Headers",
-        "Acces-Control-Allow-Origin"
+        "Access-Control-Allow-Methods",
+        "Access-Control-Request-Headers",
+        "Access-Control-Allow-Origin"
+    ],
+    methods: [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+    ]
+})
+);
+
+app.use(express.json());
+app.use(cookieParser());
+
+
+app.use(cors({
+    origin: [process.env.ORIGIN_SITE],
+    credentials: true,
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "Access-Control-Allow-Methods",
+        "Access-Control-Request-Headers",
+        "Access-Control-Allow-Origin"
     ],
     methods: [
         "GET",

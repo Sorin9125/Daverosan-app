@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import RequestsTable from "../Components/Tables/RequestsTable";
+import RequestsTable from "../Components/Tables/RequestTable/RequestsTable";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Modal from "../Components/Modal/Modal";

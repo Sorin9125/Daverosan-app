@@ -216,17 +216,57 @@ const userController = {
               httpOnly: true,
               expiresIn: process.env.COOKIE_AGE
             })
-            return res.staus(200).json(existingUser);
+            return res.status(200).json({ user: {
+              id: existingUser.id,
+              firstName: existingUser.firstName,
+              lastName: existingUser.lastName,
+              email: existingUser.email
+            }});
           }
         )
-        return res.status(200).json({ message: "Autentifcare efectuata cu succes"  });
       }
-
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare");
     }
   },
+  getCurrentUser: async (req, res) => {
+    try {
+      console.log(req.cookies);
+      const token = req.cookies.token;
+      if(!token) {
+        return res.status(400).json({ message: "Schimba semaforul "});
+      }
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+          if(err) {
+            return res.status(400).json({ message: "De unde l-ai luat?" });
+          }
+          const user = await userModel.findOne({
+            where: {
+              email: decoded.email,
+            },
+            attributes: ["id", "firstName", "lastName", "email" ],
+          });
+          if(!user) {
+            return res.status(400).json({ message: "User-ul nu exista" });
+          }
+          return res.status(200).json(user);
+        }
+      )
+    } catch (err) {
+      return res.status(500).send("Eroare")
+    }
+  },
+  logoutUser: async (req, res) => {
+    try {
+      res.clearCookie("token", {
+        httpOnly: true,
+      })
+      return res.status(200).json({ message: "Delogarea efectuată cu succes "});
+    } catch (err) {
+      return res.status(500).send("Eroare");
+    }
+  }
 };
 
 module.exports = userController;
