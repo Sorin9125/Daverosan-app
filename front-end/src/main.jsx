@@ -8,13 +8,19 @@ import Context from './Context'
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#4096dbff',
+    background: {
+      default: '#4096db',
+      paper: '#fff',
     },
-    secondary: {
-      main: '#ffffffde'
-    }
-  }
+    primary: {
+      main: '#000000',
+      contrastText: '#ffffff',
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#ffffff',
+    },
+  },
 })
 
 createRoot(document.getElementById('root')).render(

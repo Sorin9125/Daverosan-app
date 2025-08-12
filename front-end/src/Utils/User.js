@@ -26,6 +26,12 @@ const userApi = {
         });
         return response;
     },
+    logoutUser: async () => {
+        const response = await axios.get(`${BACKEND_URL}/user/logoutUser`, {
+            withCredentials: true,
+        });
+        return response;
+    }
 }
 
 export default userApi;

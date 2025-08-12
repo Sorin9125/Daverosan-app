@@ -14,7 +14,6 @@ const userController = {
   createUser: async (req, res) => {
     try {
       const user = req.body;
-      console.log(user);
       if (
         !(
           user.firstName &&
@@ -41,7 +40,7 @@ const userController = {
               "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
           });
       }
-      if (!(/^[A-z1-9]+@daverosan.ro$/gm).test(user.email)) {
+      if (!(/^[A-z1-9./-_]+@daverosan.ro$/gm).test(user.email)) {
         return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
       }
       if (
@@ -67,7 +66,7 @@ const userController = {
             }
             res.cookie("token", token, {
               httpOnly: true,
-              maxAge: process.env.COOKIE_AGE
+              maxAge: Number(process.env.COOKIE_AGE)
             })
             return res.status(200).json({ user: {
               id: user.id,
@@ -77,7 +76,6 @@ const userController = {
             }});
           }
         )
-      return res.status(200).json({ message: "Utilizatorul a fost creat cu succes" });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -221,7 +219,7 @@ const userController = {
             }
             res.cookie("token", token, {
               httpOnly: true,
-              maxAge: process.env.COOKIE_AGE
+              maxAge: Number(process.env.COOKIE_AGE)
             })
             return res.status(200).json({ user: {
               id: existingUser.id,

@@ -6,13 +6,11 @@ import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { userContext } from "../Context";
 import { useContext } from "react";
 
-function Register() {
+function LoginPage() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
-        password: "",
-        firstName: "",
-        lastName: ""
+        password: ""
     })
     const { setUser, setLoading } = useContext(userContext);
 
@@ -21,10 +19,10 @@ function Register() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const register = async (e) => {
+    const login = async (e) => {
         e.preventDefault();
         try {
-            const response = await userApi.createUser(formData);
+            const response = await userApi.loginUser(formData);
             setUser(response.data.user);
             setLoading(true);
             navigate("/clienti");
@@ -64,63 +62,9 @@ function Register() {
                             color: 'primary.main'
                         }}
                     >
-                        Înregistrare
+                        Autentificare
                     </Typography>
-                    <form onSubmit={register}>
-                        <TextField
-                            variant="outlined"
-                            label="Nume"
-                            name="lastName"
-                            type="test"
-                            fullWidth
-                            margin="normal"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            required
-                            slotProps={{
-                                inputLabel: {
-                                    sx: {
-                                        position: 'relative',
-                                        transform: 'none',
-                                        fontSize: '1.1rem',
-                                        color: 'primary.main',
-                                        mb: 1,
-                                    },
-                                },
-                                input: {
-                                    color: '#000',
-                                    fontSize: '1.1rem',
-                                    padding: '12.5px 14px',
-                                }
-                            }}
-                        />
-                        <TextField
-                            variant="outlined"
-                            label="Prenume"
-                            name="firstName"
-                            type="text"
-                            fullWidth
-                            margin="normal"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            required
-                            slotProps={{
-                                inputLabel: {
-                                    sx: {
-                                        position: 'relative',
-                                        transform: 'none',
-                                        fontSize: '1.1rem',
-                                        color: 'primary.main',
-                                        mb: 1,
-                                    },
-                                },
-                                input: {
-                                    color: '#000',
-                                    fontSize: '1.1rem',
-                                    padding: '12.5px 14px',
-                                }
-                            }}
-                        />
+                    <form onSubmit={login}>
                         <TextField
                             variant="outlined"
                             label="Email"
@@ -181,13 +125,23 @@ function Register() {
                             fullWidth
                             sx={{ mt: 2 }}
                         >
-                            Înregistrare
+                            Autentificare
                         </Button>
                     </form>
+                    <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+                        Nu ai cont?
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            onClick={() => {navigate("/inregistrare")}}
+                        >
+                            Înregistrează-te
+                        </Button>
+                    </Typography>
                 </Paper>
             </Box>
         </>
     )
 }
 
-export default Register;
+export default LoginPage;
