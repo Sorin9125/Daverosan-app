@@ -4,8 +4,8 @@ import './index.css'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import App from './App'
-import Context from './Context'
-
+import { CookiesProvider } from 'react-cookie'
+import { ToastContainer } from 'react-toastify'
 const theme = createTheme({
   palette: {
     background: {
@@ -27,9 +27,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Context>
-        <App />
-      </Context>
+        <CookiesProvider>
+            <ToastContainer />
+            <App />
+        </CookiesProvider>
     </ThemeProvider>
   </StrictMode>,
 )

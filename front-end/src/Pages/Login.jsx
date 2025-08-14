@@ -1,35 +1,35 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userApi from "../Utils/User";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
-import { userContext } from "../Context";
-import { useContext } from "react";
+import { toast } from "react-toastify";
+import { AuthContext } from "../Context";
 
 function LoginPage() {
+    const { login, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
-    const { setUser, setLoading } = useContext(userContext);
+
+    useEffect(() => {
+        if(user) {
+            navigate("/clienti");
+        }
+    }, [user, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const login = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await userApi.loginUser(formData);
-            setUser(response.data.user);
-            setLoading(true);
-            navigate("/clienti");
+            await login(formData);
         } catch (err) {
-            toast.error(err.response.data.message);
-        } finally {
-            setLoading(false);
+            toast.error(err);
         }
     }
 
@@ -64,7 +64,7 @@ function LoginPage() {
                     >
                         Autentificare
                     </Typography>
-                    <form onSubmit={login}>
+                    <form onSubmit={handleLogin}>
                         <TextField
                             variant="outlined"
                             label="Email"

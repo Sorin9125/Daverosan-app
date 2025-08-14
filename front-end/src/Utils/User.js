@@ -31,6 +31,13 @@ const userApi = {
             withCredentials: true,
         });
         return response;
+    },
+    getCurrentUser: async () => {
+        const response = await axios.get(`${BACKEND_URL}/user/getCurrentUser`, {
+            withCredentials: true,
+        })
+        console.log(response);
+        return response;
     }
 }
 

@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import userApi from "../Utils/User";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
-import { userContext } from "../Context";
 import { useContext } from "react";
 
 function Register() {
@@ -14,7 +13,6 @@ function Register() {
         firstName: "",
         lastName: ""
     })
-    const { setUser, setLoading } = useContext(userContext);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

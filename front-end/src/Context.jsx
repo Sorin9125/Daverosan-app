@@ -1,42 +1,56 @@
-import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import userApi from "./Utils/User";
 import { toast } from "react-toastify";
 
-export const userContext = createContext({});
+export const AuthContext = createContext();
 
-const BACKEND_URL = import.meta.env.VITE_API
-
-function Context(props) {
-  const [userData, setUserData] = useState(null);
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = document.cookie.split("; ").some(row => row.startsWith("token="));
-    if(!token) {
-      setUserData(null);
-      setLoading(false);
-      return
-    }
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/user/getCurrentUser`, {
-          withCredentials: true,
-        });
-        setUserData(response.data.user);
+        const response = await userApi.getCurrentUser();
+        console.log(response);
+        setUser(response.data);
       } catch (err) {
-        setUserData(null)
+        setUser(null);
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchUser();
-  }, [])
+  }, []);
 
-  return (
-    <userContext.Provider value={{ user: userData, setUser: setUserData, loading, setLoading }}>
-      {props.children}
-    </userContext.Provider>
-  );
+  const login = async (userData) => {
+    setLoading(true);
+    try {
+      const response = await userApi.loginUser(userData);
+      setUser(response.data);
+    } catch (err) {
+      toast.error(err.response.data.message);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const response = await userApi.logoutUser();
+      console.log(response);
+      setUser(null);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return(
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
-export default Context;
+export default AuthProvider

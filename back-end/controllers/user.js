@@ -57,25 +57,28 @@ const userController = {
       user.password = await hashPassword(user.password);
       await userModel.create(user);
       jwt.sign(
-          {email: user.email},
-          process.env.JWT_SECRET,
-          (err, token) => {
-            if(err) {
-              console.log(err);
-              return res.status(400).json({message: "Eroare la generarea jwt"})
-            }
-            res.cookie("token", token, {
-              httpOnly: true,
-              maxAge: Number(process.env.COOKIE_AGE)
-            })
-            return res.status(200).json({ user: {
+        { email: user.email },
+        process.env.JWT_SECRET,
+        (err, token) => {
+          if (err) {
+            console.log(err);
+            return res.status(400).json({ message: "Eroare la generarea jwt" })
+          }
+          res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: process.env.COOKIE_AGE,
+            sameSite: "none"
+          })
+          return res.status(200).json({
+            user: {
               id: user.id,
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email
-            }});
-          }
-        )
+            }
+          });
+        }
+      )
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -210,23 +213,25 @@ const userController = {
         return res.status(400).json({ message: "Parola incorecta" });
       } else {
         jwt.sign(
-          {email: existingUser.email},
+          { email: existingUser.email },
           process.env.JWT_SECRET,
           (err, token) => {
-            if(err) {
+            if (err) {
               console.log(err);
-              return res.status(400).json({message: "Eroare la generarea jwt"})
+              return res.status(400).json({ message: "Eroare la generarea jwt" })
             }
             res.cookie("token", token, {
               httpOnly: true,
-              maxAge: Number(process.env.COOKIE_AGE)
+              maxAge: process.env.COOKIE_AGE,
             })
-            return res.status(200).json({ user: {
-              id: existingUser.id,
-              firstName: existingUser.firstName,
-              lastName: existingUser.lastName,
-              email: existingUser.email
-            }});
+            return res.status(200).json({
+              user: {
+                id: existingUser.id,
+                firstName: existingUser.firstName,
+                lastName: existingUser.lastName,
+                email: existingUser.email
+              }
+            });
           }
         )
       }
@@ -237,27 +242,21 @@ const userController = {
   },
   getCurrentUser: async (req, res) => {
     try {
-      console.log(req.cookies);
       const token = req.cookies.token;
-      if(!token) {
-        return res.status(400).json({ message: "Schimba semaforul "});
+      if (!token) {
+        return res.status(400).json({ message: "Schimba semaforul " });
       }
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-          if(err) {
-            return res.status(400).json({ message: "De unde l-ai luat?" });
-          }
-          const user = await userModel.findOne({
-            where: {
-              email: decoded.email,
-            },
-            attributes: ["id", "firstName", "lastName", "email" ],
-          });
-          if(!user) {
-            return res.status(400).json({ message: "User-ul nu exista" });
-          }
-          return res.status(200).json(user);
-        }
-      )
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await userModel.findOne({
+        where: {
+          email: decoded.email,
+        },
+        attributes: ["id", "firstName", "lastName", "email"],
+      });
+      if (!user) {
+        return res.status(400).json({ message: "User-ul nu exista" });
+      }
+      return res.status(200).json(user.toJSON());
     } catch (err) {
       return res.status(500).send("Eroare")
     }
@@ -267,7 +266,7 @@ const userController = {
       res.clearCookie("token", {
         httpOnly: true,
       })
-      return res.status(200).json({ message: "Delogarea efectuată cu succes "});
+      return res.status(200).json({ message: "Delogarea efectuată cu succes " });
     } catch (err) {
       return res.status(500).send("Eroare");
     }

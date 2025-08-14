@@ -1,58 +1,35 @@
-import { useContext } from "react";
-import { userContext } from "./Context";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
-import { ToastContainer } from "react-toastify";
 import LoginPage from "./Pages/Login";
 import Client from "./Pages/Client";
 import Request from "./Pages/Requests";
 import Offers from "./Pages/Offer";
 import Orders from "./Pages/Orders";
 import Register from "./Pages/Register";
+import { useContext } from "react";
+import AuthProvider from "./Context";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
-  const { user, loading } = useContext(userContext);
-
-  if (loading) {
-    return <div>Asteptati</div>;
-  }
 
   return (
-    <>
-      <ToastContainer position="top-right" autoClose={3000} />
+    <AuthProvider>
       <BrowserRouter>
-        {user && <Navbar />}
+        <Navbar />
         <Routes>
-          <Route
-            path="/"
-            element={<LoginPage />}
-          />
-          <Route 
-            path="/inregistrare"
-            element={< Register/>}  
-          />
-          <Route
-            path="/clienti"
-            element={user ? <Client /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/cereri"
-            element={user ? <Request /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/oferte"
-            element={user ? <Offers /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/comenzi"
-            element={user ? <Orders /> : <Navigate to="/" />}
-          />
+          <Route path="/" element={<LoginPage />}/>
+          <Route path="/inregistrare" element={<Register />}/>
+          <Route path="/clienti" element={<ProtectedRoute><Client /></ProtectedRoute>} />
+          <Route path="/cereri" element={<ProtectedRoute><Request /></ProtectedRoute>} />
+          <Route path="/oferte" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
+          <Route path="/comenzi" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
         </Routes>
-
         <Footer />
       </BrowserRouter>
-    </>
+
+    </AuthProvider>
 
   );
 }

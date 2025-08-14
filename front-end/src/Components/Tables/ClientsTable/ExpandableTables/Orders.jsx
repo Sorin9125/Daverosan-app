@@ -39,4 +39,4 @@ function Orders({ orders }) {
     )
 }
 
-export default Orders();
+export default Orders;

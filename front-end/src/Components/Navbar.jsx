@@ -1,18 +1,14 @@
 import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material"
-import { userContext } from "../Context";
 import { useContext, useState } from "react";
 import userApi from "../Utils/User";
+import { AuthContext } from "../Context";
 
 function Navbar() {
-    const { user, setUser } = useContext(userContext);
+    const { user } = useContext(AuthContext);
     const [anchor, setAnchor] = useState(null);
     const isOpen = Boolean(anchor);
-
-    if (!user) {
-        return null;
-    }
 
     const handleClick = (e) => {
         setAnchor(e.currentTarget)
@@ -26,6 +22,10 @@ function Navbar() {
         setUser(null);
         const response = await userApi.logoutUser();
         handleClose()
+    }
+
+    if(!user) {
+        return null;
     }
 
     return (
@@ -71,7 +71,6 @@ function Navbar() {
                         aria-haspopup="true"
                         aria-expanded={isOpen ? "true" : undefined}
                     >
-                        {user.firstName + " " + user.lastName}
                         <ArrowDropDown />
                     </Typography>
                     <Menu

@@ -1,103 +1,106 @@
-import { Fragment, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import "./Table.css";
+import "../Table.css";
 import axios from "axios";
-import Modal from "../Modal/Modal";
+import Modal from "../../Modal/ClientModal";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination, CircularProgress, Box, Button } from "@mui/material";
+import ClientsTableRow from "./ClientsTableRow";
+import clientAPI from "../../../Utils/Client";
 
-function ClientsTable({ clients, openDeleteModal, openUpdateModal }) {
-    const [extraData, setExtraData] = useState({});
-    const [requestModal, setRequestModal] = useState(false);
-    const [formData, setFormData] = useState({
-        description: "",
-        date: "",
-    });
-    const [clientId, setClientId] = useState(null);
+function ClientsTable({ clients, createClient, udpateClient, deleteClient }) {
 
-    const clientRequests = async (id) => {
-        try {
-            const requests = await axios.get(
-                `${import.meta.env.VITE_API}/client/getClientRequests/${id}`,
-                {
-                    withCredentials: true,
-                }
-            );
-            setExtraData({
-                id,
-                type: "cereri de ofertă",
-                data: requests.data,
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    // const [requestModal, setRequestModal] = useState(false);
+    // const [formData, setFormData] = useState({
+    //     description: "",
+    //     date: "",
+    // });
+    // const [clientId, setClientId] = useState(null);
 
-    const clientOffers = async (id) => {
-        try {
-            const offers = await axios.get(
-                `${import.meta.env.VITE_API}/client/getClientOffers/${id}`,
-                {
-                    withCredentials: true,
-                }
-            );
-            setExtraData({
-                id,
-                type: "oferte",
-                data: offers.data,
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    // const clientRequests = async (id) => {
+    //     try {
+    //         const requests = await axios.get(
+    //             `${import.meta.env.VITE_API}/client/getClientRequests/${id}`,
+    //             {
+    //                 withCredentials: true,
+    //             }
+    //         );
+    //         setExtraData({
+    //             id,
+    //             type: "cereri de ofertă",
+    //             data: requests.data,
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
-    const clientOrders = async (id) => {
-        try {
-            const offers = await axios.get(
-                `${import.meta.env.VITE_API}/client/getClientOrders/${id}`,
-                {
-                    withCredentials: true,
-                }
-            );
-            setExtraData({
-                id,
-                type: "comenzi",
-                data: offers.data,
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    // const clientOffers = async (id) => {
+    //     try {
+    //         const offers = await axios.get(
+    //             `${import.meta.env.VITE_API}/client/getClientOffers/${id}`,
+    //             {
+    //                 withCredentials: true,
+    //             }
+    //         );
+    //         setExtraData({
+    //             id,
+    //             type: "oferte",
+    //             data: offers.data,
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    // const clientOrders = async (id) => {
+    //     try {
+    //         const offers = await axios.get(
+    //             `${import.meta.env.VITE_API}/client/getClientOrders/${id}`,
+    //             {
+    //                 withCredentials: true,
+    //             }
+    //         );
+    //         setExtraData({
+    //             id,
+    //             type: "comenzi",
+    //             data: offers.data,
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
-    const createRequest = async (id) => {
-        try {
-            const respone = await axios.post(
-                `${import.meta.env.VITE_API}/request/createRequest/${id}`,
-                {
-                    description: formData.description,
-                    sentAt: formData.date,
-                },
-                {
-                    withCredentials: true,
-                }
-            );
-            toast.success(respone.data.message);
-            setFormData({
-                description: "",
-                date: "",
-            });
-            setRequestModal(false);
-        } catch (err) {
-            toast.error(err.response.data.message);
-        }
-    };
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prev) => ({ ...prev, [name]: value }));
+    // };
+
+    // const createRequest = async (id) => {
+    //     try {
+    //         const respone = await axios.post(
+    //             `${import.meta.env.VITE_API}/request/createRequest/${id}`,
+    //             {
+    //                 description: formData.description,
+    //                 sentAt: formData.date,
+    //             },
+    //             {
+    //                 withCredentials: true,
+    //             }
+    //         );
+    //         toast.success(respone.data.message);
+    //         setFormData({
+    //             description: "",
+    //             date: "",
+    //         });
+    //         setRequestModal(false);
+    //     } catch (err) {
+    //         toast.error(err.response.data.message);
+    //     }
+    // };
 
     return (
         <>
-            <div className="table-container">
+            {/* <div className="table-container">
                 <table className="table">
                     <thead>
                         <tr>
@@ -303,7 +306,33 @@ function ClientsTable({ clients, openDeleteModal, openUpdateModal }) {
                         </button>
                     </form>
                 </div>
-            </Modal>
+            </Modal> */}
+            <Button variant="contained" onClick={createClient}>Adaugă un client</Button>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Nume</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Acțiuni</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        clients.map((client) => (
+                            <TableRow key={client.id}>
+                                <TableCell>{client.id}</TableCell>
+                                <TableCell>{client.name}</TableCell>
+                                <TableCell>{client.email}</TableCell>
+                                <TableCell>
+                                    <Button onClick={() => udpateClient(client)}>Actualizează client</Button>
+                                    <Button onClick={() => deleteClient(client.id)}>Șterge client</Button>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    }
+                </TableBody>
+            </Table>
         </>
     );
 }

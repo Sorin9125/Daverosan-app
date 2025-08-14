@@ -1,12 +1,14 @@
 import { Box, Typography } from "@mui/material";
-import { userContext } from "../Context";
 import { useContext } from "react";
+import { AuthContext } from "../Context";
 
 function Footer() {
-  const { user } = useContext(userContext);
+  const { user } = useContext(AuthContext);
+
   if(!user) {
     return null;
   }
+
   return (
     <>
       <Box
