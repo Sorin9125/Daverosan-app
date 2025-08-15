@@ -61,13 +61,12 @@ const userController = {
         process.env.JWT_SECRET,
         (err, token) => {
           if (err) {
-            console.log(err);
+            console.error(err);
             return res.status(400).json({ message: "Eroare la generarea jwt" })
           }
           res.cookie("token", token, {
             httpOnly: true,
             maxAge: process.env.COOKIE_AGE,
-            sameSite: "none"
           })
           return res.status(200).json({
             user: {

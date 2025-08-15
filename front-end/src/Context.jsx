@@ -12,7 +12,6 @@ function AuthProvider({ children }) {
     const fetchUser = async () => {
       try {
         const response = await userApi.getCurrentUser();
-        console.log(response);
         setUser(response.data);
       } catch (err) {
         setUser(null);
@@ -27,7 +26,8 @@ function AuthProvider({ children }) {
     setLoading(true);
     try {
       const response = await userApi.loginUser(userData);
-      setUser(response.data);
+      console.log(response.data.user)
+      setUser(response.data.user);
     } catch (err) {
       toast.error(err.response.data.message);
       setUser(null);
@@ -39,15 +39,28 @@ function AuthProvider({ children }) {
   const logout = async () => {
     try {
       const response = await userApi.logoutUser();
-      console.log(response);
+      toast.success(response.data.message);
       setUser(null);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const register = async (userData) => {
+    setLoading(true);
+    try {
+      const response = await userApi.createUser(userData);
+      setUser(response.data.user);
+    } catch (err) {
+      toast.error(err.response.data.message);
+      setUser(null)
+    } finally {
+      setLoading(false);
+    }
   }
 
   return(
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   )

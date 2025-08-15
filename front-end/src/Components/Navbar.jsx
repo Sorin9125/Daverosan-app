@@ -2,11 +2,10 @@ import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material"
 import { useContext, useState } from "react";
-import userApi from "../Utils/User";
 import { AuthContext } from "../Context";
 
 function Navbar() {
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [anchor, setAnchor] = useState(null);
     const isOpen = Boolean(anchor);
 
@@ -14,17 +13,21 @@ function Navbar() {
         setAnchor(e.currentTarget)
     }
 
-    const handleClose= () => {
+    const handleClose = () => {
         setAnchor(null)
     }
 
-    const logoutUser = async () => {
-        setUser(null);
-        const response = await userApi.logoutUser();
-        handleClose()
+    const handleLogout = async () => {
+        try {
+            await logout();
+            handleClose()
+        } catch (err) {
+            console.error(err);
+        }
+
     }
 
-    if(!user) {
+    if (!user) {
         return null;
     }
 
@@ -71,6 +74,7 @@ function Navbar() {
                         aria-haspopup="true"
                         aria-expanded={isOpen ? "true" : undefined}
                     >
+                        {user.firstName} {user.lastName}
                         <ArrowDropDown />
                     </Typography>
                     <Menu
@@ -87,7 +91,7 @@ function Navbar() {
                             horizontal: "right",
                         }}
                     >
-                        <MenuItem onClick={logoutUser}>Delogare</MenuItem>
+                        <MenuItem onClick={handleLogout}>Delogare</MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>

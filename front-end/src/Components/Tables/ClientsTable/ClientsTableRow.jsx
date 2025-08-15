@@ -1,76 +1,173 @@
-import Offers from "./ExpandableTables/Offers";
-import Requests from "./ExpandableTables/Request"
-import Orders from "./ExpandableTables/Orders"
-import { TableHead, TableRow, TableCell, IconButton, Collapse, Box, Typography, Menu, MenuItem, Button } from "@mui/material";
-import { KeyboardArrowDown, KeyboardArrowUp, MoreVert } from '@mui/icons-material'
-import clientAPI from "../../../Utils/Client";
+import { Table, TableHead, TableBody, TableRow,TableCell, Button, Collapse, Box, Typography,  } from "@mui/material";
+import { Fragment, useState } from "react";
+import requestAPI from "../../../Utils/Request";
+import offerAPI from "../../../Utils/Offer";
+import orderAPI from "../../../Utils/Order";
 
-function ClientsTableRow({ client, refresh }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const [editModal, setEditModal] = useState(false);
+function ClientsTableRow({ clients }) {
+  const [data, setData] = useState([]);
+  const [openRequests, setOpenRequests] = useState(false);
+  const [openOffers, setOpenOffers] = useState(false);
+  const [openOrders, setOpenOrders] = useState(false);
 
-  const updateClient = async (newClient) => {
-    await clientAPI.updateClient(client.id, newClient);
-    refresh();
+  const fetchRequests = async () => {
+    try {
+      const response = await requestAPI.getRequests();
+      console.log(response.data);
+      setData(response.data)
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  const deleteClient = async () => {
-    await clientAPI.deleteClient(client.id);
-    refresh();
+  const fetchOffers = async () => {
+    try {
+      const response = await offerAPI.getAllOffers();
+      console.log(response);
+      setData(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const fetchOrders = async () => {
+    try {
+      const response = await orderAPI.getAllOrders();
+      console.log(response);
+      setData(response.data);
+    } catch(err) {
+      console.error(err);
+    }
   }
 
   return (
-    <>
-      <TableRow>
-        <TableCell>{client.id}</TableCell>
-        <TableCell>{client.name}</TableCell>
-        <TableCell>{client.email}</TableCell>
-        <TableCell>
-          <Button variant="contained" size="small">Adaugă o cerere</Button>
+    <Fragment>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" } }} key={clients.id}>
+        <TableCell component="th" scope="row">
+          {clients.id}
         </TableCell>
+        <TableCell align="right">{clients.name}</TableCell>
+        <TableCell align="right">{clients.email}</TableCell>
         <TableCell>
-          <IconButton variant="contained" onClick={(e) => setMenuAnchor(e.currentTarget)}>
-            <MoreVert />
-          </IconButton>
-          <Menu
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={() => setMenuAnchor(null)}
+          <Button
+            aria-label="expand row"
+            size="small"
+            onClick={() => { setOpenRequests(!openRequests); fetchRequests(); }}
           >
-            <MenuItem onClick={() => setEditModal(true)}>Actualizează client</MenuItem>
-            <MenuItem onClick={deleteClient}>Șterge client</MenuItem>
-          </Menu>
+            {openRequests ? "Ascunde" : 'Generează'}
+          </Button>
         </TableCell>
         <TableCell>
-          <IconButton size="small" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
+          <Button
+            aria-label="expand row"
+            size="small"
+            onClick={() => { setOpenOffers(!openOffers); fetchOffers(); }}
+          >
+            {openOffers ? "Ascunde" : 'Generează'}
+          </Button>
         </TableCell>
+        <TableCell>
+          <Button
+            aria-label="expand row"
+            size="small"
+            onClick={() => { setOpenOrders(!openOrders); fetchOrders(); }}
+          >
+            {openOrders ? "Ascunde" : 'Generează'}
+          </Button>
+        </TableCell>
+        <TableCell align="right"></TableCell>
       </TableRow>
-
       <TableRow>
-        <TableCell colSpan={3} sx={{ p: 0 }}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box m={1}>
-              <Typography variant="subtitle2">Orders</Typography>
-              {open && <OrdersTable clientId={client.id} />}
-
-              <Divider sx={{ my: 1 }} />
-
-              <Typography variant="subtitle2">Offers</Typography>
-              {open && <OffersTable clientId={client.id} />}
-
-              <Divider sx={{ my: 1 }} />
-
-              <Typography variant="subtitle2">Requests</Typography>
-              {open && <RequestsTable clientId={client.id} />}
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={openRequests} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Cereri de ofertă
+              </Typography>
+              <Table size="small" aria-label="requests">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Descriere</TableCell>
+                    <TableCell align="right">Dată primită</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell component="th" scope="row">
+                        {request.id}
+                      </TableCell>
+                      <TableCell>{request.description}</TableCell>
+                      <TableCell align="right">{request.sentAt}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+          <Collapse in={openOffers} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Oferte
+              </Typography>
+              <Table size="small" aria-label="offers">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Preț</TableCell>
+                    <TableCell>Termen de finalizare</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.map((offer) => {
+                    <TableRow key={offer.id}>
+                      <TableCell>{offer.id}</TableCell>
+                      <TableCell>{offer.price}</TableCell>
+                      <TableCell>{new Date(offer.deadline).toLocaleDateString()}</TableCell>
+                      <TableCell>{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
+                    </TableRow>
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+          <Collapse in={openOrders} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Comenzi
+              </Typography>
+              <Table size="small" aria-label="orders">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Număr de comandă</TableCell>
+                      <TableCell>Cantitate</TableCell>
+                      <TableCell>Termen de finalizare</TableCell>
+                      <TableCell>Descriere</TableCell>
+                      <TableCell>Status</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data.map((order) => {
+                      <TableRow key={order.id}>
+                        <TableCell>{order.id}</TableCell>
+                        <TableCell>{order.number}</TableCell>
+                        <TableCell>{order.quantity} {order.unit}</TableCell>
+                        <TableCell>{new Date(order.deadline).toLocaleDateString()}</TableCell>
+                        <TableCell>{order.description}</TableCell>
+                        <TableCell>{order.isCompleted}</TableCell>
+                      </TableRow>
+                    })}
+                  </TableBody>
+              </Table>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </>
-  )
+    </Fragment>
+  );
 }
 
 export default ClientsTableRow;

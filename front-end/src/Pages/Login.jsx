@@ -1,8 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import userApi from "../Utils/User";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
-import { toast } from "react-toastify";
 import { AuthContext } from "../Context";
 
 function LoginPage() {
@@ -29,7 +27,7 @@ function LoginPage() {
         try {
             await login(formData);
         } catch (err) {
-            toast.error(err);
+            console.error(err);
         }
     }
 

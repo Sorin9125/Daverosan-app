@@ -7,9 +7,9 @@ import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody
 import ClientsTableRow from "./ClientsTableRow";
 import clientAPI from "../../../Utils/Client";
 
-function ClientsTable({ clients, createClient, udpateClient, deleteClient }) {
+function ClientsTable({ clients }) {
 
-    // const [requestModal, setRequestModal] = useState(false);
+    const [requestModal, setRequestModal] = useState(false);
     // const [formData, setFormData] = useState({
     //     description: "",
     //     date: "",
@@ -97,9 +97,29 @@ function ClientsTable({ clients, createClient, udpateClient, deleteClient }) {
     //         toast.error(err.response.data.message);
     //     }
     // };
-
+    console.log(clients);
     return (
         <>
+            <TableContainer component={Paper}>
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell align="right">Nume</TableCell>
+                            <TableCell align="right">Email</TableCell>
+                            <TableCell align="right">Cereri</TableCell>
+                            <TableCell align="right">Oferte</TableCell>
+                            <TableCell align="right">Comenzi</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {clients.map((client) => (
+                            <ClientsTableRow key={client.id} clients={client}></ClientsTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
             {/* <div className="table-container">
                 <table className="table">
                     <thead>
@@ -307,32 +327,7 @@ function ClientsTable({ clients, createClient, udpateClient, deleteClient }) {
                     </form>
                 </div>
             </Modal> */}
-            <Button variant="contained" onClick={createClient}>Adaugă un client</Button>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Nume</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Acțiuni</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        clients.map((client) => (
-                            <TableRow key={client.id}>
-                                <TableCell>{client.id}</TableCell>
-                                <TableCell>{client.name}</TableCell>
-                                <TableCell>{client.email}</TableCell>
-                                <TableCell>
-                                    <Button onClick={() => udpateClient(client)}>Actualizează client</Button>
-                                    <Button onClick={() => deleteClient(client.id)}>Șterge client</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
-                </TableBody>
-            </Table>
+
         </>
     );
 }

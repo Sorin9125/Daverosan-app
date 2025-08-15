@@ -12,8 +12,9 @@ function Client() {
     const fetchClients = useCallback(() => {
         const getClients = async () => {
             try {
-                const respone = await clientAPI.getAllClients();
-                setClientData(respone.data);
+                const response = await clientAPI.getAllClients();
+                console.log(response.data);
+                setClientData(response.data);
             } catch (err) {
                 console.error(err);
             }
@@ -67,9 +68,6 @@ function Client() {
         <>
             <ClientsTable
                 clients={clientData}
-                createClient={createClient}
-                udpateClient={updateClient}
-                deleteClient={deleteClient}
             />
             <ClientModal 
                 open={modalOpen}

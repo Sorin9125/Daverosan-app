@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import userApi from "../Utils/User";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { useContext } from "react";
+import { AuthContext } from "../Context";
 
 function Register() {
+    const { register, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -14,22 +14,23 @@ function Register() {
         lastName: ""
     })
 
+    useEffect(() => {
+        if (user) {
+            navigate("/clienti");
+        }
+    }, [user, navigate]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const register = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await userApi.createUser(formData);
-            setUser(response.data.user);
-            setLoading(true);
-            navigate("/clienti");
+            register(formData);
         } catch (err) {
-            toast.error(err.response.data.message);
-        } finally {
-            setLoading(false);
+            console.error(err);
         }
     }
 
@@ -64,7 +65,7 @@ function Register() {
                     >
                         Înregistrare
                     </Typography>
-                    <form onSubmit={register}>
+                    <form onSubmit={handleRegister}>
                         <TextField
                             variant="outlined"
                             label="Nume"

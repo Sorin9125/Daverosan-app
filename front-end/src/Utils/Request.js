@@ -8,14 +8,15 @@ const requestAPI = {
         })
         return response.json();
     },
-    getRequest: async () => {
+    getRequests: async () => {
         const response = await axios.get(`${BACKEND_URL}/request/getAllRequests`, {
             withCredentials: true,
         });
+        console.log(response);
         return response.json();
     },
-    createRequest: async (id, request) => {
-        const response = await axios.post(`${BACKEND_URL}/request/createRequest/${id}`, request, {
+    createRequest: async (clientId, request) => {
+        const response = await axios.post(`${BACKEND_URL}/request/createRequest/${clientId}`, request, {
                 withCredentials: true,
             });
         return response;
