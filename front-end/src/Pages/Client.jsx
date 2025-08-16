@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { Typography, Button, Box } from "@mui/material";
 import ClientsTable from "../Components/Tables/ClientsTable/ClientsTable";
 import ClientModal from "../Components/Modal/ClientModal";
 import { toast } from "react-toastify";
@@ -13,7 +14,6 @@ function Client() {
         const getClients = async () => {
             try {
                 const response = await clientAPI.getAllClients();
-                console.log(response.data);
                 setClientData(response.data);
             } catch (err) {
                 console.error(err);
@@ -65,11 +65,22 @@ function Client() {
     }
 
     return (
-        <>
+        <>  <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 4
+        }}>
+            <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
+                Clienți
+            </Typography>
+            <Button variant="contained"
+                color="primary" onClick={() => { }}>Adaugă client</Button></Box>
+
             <ClientsTable
                 clients={clientData}
             />
-            <ClientModal 
+            <ClientModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onSave={handleClient}

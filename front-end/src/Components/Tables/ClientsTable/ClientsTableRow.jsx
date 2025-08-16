@@ -1,20 +1,21 @@
-import { Table, TableHead, TableBody, TableRow,TableCell, Button, Collapse, Box, Typography,  } from "@mui/material";
+import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, } from "@mui/material";
 import { Fragment, useState } from "react";
 import requestAPI from "../../../Utils/Request";
 import offerAPI from "../../../Utils/Offer";
 import orderAPI from "../../../Utils/Order";
 
 function ClientsTableRow({ clients }) {
-  const [data, setData] = useState([]);
+  const [requestData, setRequestData] = useState([]);
   const [openRequests, setOpenRequests] = useState(false);
+  const [offerData, setOfferData] = useState([]);
   const [openOffers, setOpenOffers] = useState(false);
+  const [orderData, setOrderData] = useState([]);
   const [openOrders, setOpenOrders] = useState(false);
 
   const fetchRequests = async () => {
     try {
       const response = await requestAPI.getRequests();
-      console.log(response.data);
-      setData(response.data)
+      setRequestData(response.data)
     } catch (err) {
       console.error(err);
     }
@@ -23,8 +24,8 @@ function ClientsTableRow({ clients }) {
   const fetchOffers = async () => {
     try {
       const response = await offerAPI.getAllOffers();
-      console.log(response);
-      setData(response.data);
+      console.log(response.data);
+      setOfferData(response.data);
     } catch (err) {
       console.error(err);
     }
@@ -33,25 +34,29 @@ function ClientsTableRow({ clients }) {
   const fetchOrders = async () => {
     try {
       const response = await orderAPI.getAllOrders();
-      console.log(response);
-      setData(response.data);
-    } catch(err) {
+      console.log(response.data);
+      setOrderData(response.data);
+    } catch (err) {
       console.error(err);
     }
   }
 
   return (
     <Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }} key={clients.id}>
-        <TableCell component="th" scope="row">
+      <TableRow sx={{
+        "& > *": { borderBottom: "unset" },
+        "&: hover": { backgroundColor: "action.hover" }
+      }} key={clients.id}>
+        <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
           {clients.id}
         </TableCell>
-        <TableCell align="right">{clients.name}</TableCell>
-        <TableCell align="right">{clients.email}</TableCell>
+        <TableCell align="left">{clients.name}</TableCell>
+        <TableCell align="left">{clients.email}</TableCell>
         <TableCell>
           <Button
             aria-label="expand row"
             size="small"
+            color="black"
             onClick={() => { setOpenRequests(!openRequests); fetchRequests(); }}
           >
             {openRequests ? "Ascunde" : 'Generează'}
@@ -75,31 +80,36 @@ function ClientsTableRow({ clients }) {
             {openOrders ? "Ascunde" : 'Generează'}
           </Button>
         </TableCell>
-        <TableCell align="right"></TableCell>
+        <TableCell align="left">Muie dinamo</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={openRequests} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
                 Cereri de ofertă
               </Typography>
               <Table size="small" aria-label="requests">
                 <TableHead>
                   <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Descriere</TableCell>
-                    <TableCell align="right">Dată primită</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Dată primită</TableCell>
+                    <TableCell sx={{ fontWeight: "bold"}}>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((request) => (
-                    <TableRow key={request.id}>
+                  {requestData.map((request) => (
+                    <TableRow key={request.id} sx={{
+                      backgroundColor: "background.paper",
+                      "&:hover": { backgroundColor: "action.hover" },
+                    }}>
                       <TableCell component="th" scope="row">
                         {request.id}
                       </TableCell>
                       <TableCell>{request.description}</TableCell>
-                      <TableCell align="right">{request.sentAt}</TableCell>
+                      <TableCell align="right">{new Date(request.sentAt).toLocaleDateString()}</TableCell>
+                      <TableCell align="left">{request.isOffered ? "Ofertată" : "Neofertată"}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -108,21 +118,24 @@ function ClientsTableRow({ clients }) {
           </Collapse>
           <Collapse in={openOffers} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
                 Oferte
               </Typography>
               <Table size="small" aria-label="offers">
                 <TableHead>
                   <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Preț</TableCell>
-                    <TableCell>Termen de finalizare</TableCell>
-                    <TableCell>Status</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Preț</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((offer) => {
-                    <TableRow key={offer.id}>
+                  {offerData.map((offer) => {
+                    <TableRow key={offer.id} sx={{
+                      backgroundColor: "background.paper",
+                      "&:hover": { backgroundColor: "action.hover" }, 
+                    }}>
                       <TableCell>{offer.id}</TableCell>
                       <TableCell>{offer.price}</TableCell>
                       <TableCell>{new Date(offer.deadline).toLocaleDateString()}</TableCell>
@@ -135,32 +148,35 @@ function ClientsTableRow({ clients }) {
           </Collapse>
           <Collapse in={openOrders} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
                 Comenzi
               </Typography>
               <Table size="small" aria-label="orders">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>ID</TableCell>
-                      <TableCell>Număr de comandă</TableCell>
-                      <TableCell>Cantitate</TableCell>
-                      <TableCell>Termen de finalizare</TableCell>
-                      <TableCell>Descriere</TableCell>
-                      <TableCell>Status</TableCell>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {orderData.map((order) => {
+                    <TableRow key={order.id} sx={{
+                      backgroundColor: "background.paper",
+                      "&:hover": { backgroundColor: "action.hover" }, 
+                    }}>
+                      <TableCell>{order.id}</TableCell>
+                      <TableCell>{order.number}</TableCell>
+                      <TableCell>{order.quantity} {order.unit}</TableCell>
+                      <TableCell>{new Date(order.deadline).toLocaleDateString()}</TableCell>
+                      <TableCell>{order.description}</TableCell>
+                      <TableCell>{order.isCompleted}</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.map((order) => {
-                      <TableRow key={order.id}>
-                        <TableCell>{order.id}</TableCell>
-                        <TableCell>{order.number}</TableCell>
-                        <TableCell>{order.quantity} {order.unit}</TableCell>
-                        <TableCell>{new Date(order.deadline).toLocaleDateString()}</TableCell>
-                        <TableCell>{order.description}</TableCell>
-                        <TableCell>{order.isCompleted}</TableCell>
-                      </TableRow>
-                    })}
-                  </TableBody>
+                  })}
+                </TableBody>
               </Table>
             </Box>
           </Collapse>

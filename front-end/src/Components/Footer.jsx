@@ -14,7 +14,7 @@ function Footer() {
       <Box
         component="footer"
         sx={{
-          p: 2,
+          p: 3,
           mt: "auto",
           backgroundColor: "primary.main",
           color: "primary.contrastText",
