@@ -34,7 +34,7 @@ function OffersTable({ offers }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold"}}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Preț</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>

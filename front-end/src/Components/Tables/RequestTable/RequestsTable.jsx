@@ -34,7 +34,7 @@ function RequestsTable({ requests }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold"}}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Dată primită</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>

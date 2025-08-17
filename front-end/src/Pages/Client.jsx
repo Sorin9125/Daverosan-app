@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import ClientsTable from "../Components/Tables/ClientsTable/ClientsTable";
-import ClientModal from "../Components/Modal/ClientModal";
 import { toast } from "react-toastify";
 import clientAPI from "../Utils/Client";
+import FormModal from "../Components/Modal/ClientModal";
 
 function Client() {
     const [clientData, setClientData] = useState([]);
@@ -74,17 +74,11 @@ function Client() {
             <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
                 Clienți
             </Typography>
-            <Button variant="contained"
-                color="primary" onClick={() => { }}>Adaugă client</Button></Box>
+            <FormModal actionName={"Creează client"}/>
+            </Box>
 
             <ClientsTable
                 clients={clientData}
-            />
-            <ClientModal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onSave={handleClient}
-                client={client}
             />
         </>
     );

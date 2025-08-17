@@ -34,7 +34,7 @@ function OrdersTable({ orders }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>

@@ -1,75 +1,61 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from "@mui/material";
+import { useState, Fragment } from "react";
 
-function ClientModal({ open, onClose, onSave, client }) {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: ""
-    });
+function FormModal({ actionName }) {
+    const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-        if (client) {
-            setFormData({
-                name: client.name,
-                email: client.email,
-            })
-        } else {
-            setFormData({
-                name: "",
-                email: ""
-            })
-        }
-    }, [client])
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-    const handleSubmit = () => {
-        onSave(formData);
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const formJson = Object.fromEntries(formData.entries());
+        const email = formJson.email;
+        console.log(email);
+        handleClose();
+    };
 
     return (
-        <>
-            <Dialog open={open} onClose={onClose}>
-                <DialogTitle>
-                    {
-                        client ? "Actualizează client" : "Creează client"
-                    }
-                </DialogTitle>
+        <Fragment>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                {actionName}
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        fullWidth
-                        label="Nume"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        margin="dense"
-                        slotProps={{
-                            shrink: true
-                        }}
-                    />
-                    <TextField
-                        fullWidth
-                        label="Email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        margin="dense"
-                    />
+                    <DialogContentText>
+                        To subscribe to this website, please enter your email address here. We
+                        will send updates occasionally.
+                    </DialogContentText>
+                    <form onSubmit={handleSubmit} id="subscription-form">
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="name"
+                            name="email"
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            variant="standard"
+                        />
+                    </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose}>Anulează</Button>
-                    <Button variant="contained" onClick={handleSubmit}>
-                        {
-                            client ? "Actualizează" : "Creează"
-                        }
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit" form="subscription-form">
+                        Subscribe
                     </Button>
                 </DialogActions>
             </Dialog>
-        </>
-    )
+        </Fragment>
+    );
 }
 
-export default ClientModal;
+export default FormModal;
