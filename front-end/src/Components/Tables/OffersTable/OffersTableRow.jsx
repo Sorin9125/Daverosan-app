@@ -2,13 +2,13 @@ import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box
 import { Fragment, useState } from "react";
 import offerAPI from "../../../Utils/Offer";
 
-function OffersTableRow({ offers }) {
+function OffersTableRow({ offer }) {
     const [data, setData] = useState([]);
     const [openOrders, setOpenOrders] = useState(false);
 
     const fetchOrders = async () => {
         try {
-            const response = await offerAPI.getOfferOrder(offers.id);
+            const response = await offerAPI.getOfferOrder(offer.id);
             setData(response.data);
         } catch (err) {
             console.error(err);
@@ -20,17 +20,31 @@ function OffersTableRow({ offers }) {
             <TableRow sx={{
                 "& > *": { borderBottom: "unset" },
                 "&: hover": { backgroundColor: "action.hover" }
-            }} key={offers.id}>
+            }} key={offer.id}>
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
-                    {offers.id}
+                    {offer.id}
                 </TableCell>
-                <TableCell align="left">{offers.price}</TableCell>
-                <TableCell align="left">{new Date(offers.deadline).toLocaleDateString()}</TableCell>
-                <TableCell align="left">{offers.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
+                <TableCell align="left">{offer.price}</TableCell>
+                <TableCell align="left">{new Date(offer.deadline).toLocaleDateString()}</TableCell>
+                <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
+                <TableCell align="left">{offer.request.client.name}</TableCell>
                 <TableCell>
                     <Button
                         aria-label="expand row"
                         size="small"
+                        variant="contained"
+                        sx={{
+                            textTransform: "none",
+                            backgroundColor: openOrders ? "error.main" : "primary.main",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            borderRadius: 2,
+                            px: 2,
+                            py: 1,
+                            "&:hover": {
+                                backgroundColor: openOrders ? "error.dark" : "primary.dark",
+                            }
+                        }}
                         onClick={() => { setOpenOrders(!openOrders); fetchOrders(); }}
                     >
                         {openOrders ? "Ascunde" : 'Generează'}
@@ -39,7 +53,7 @@ function OffersTableRow({ offers }) {
                 <TableCell align="left">Muie dinamo</TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
                     <Collapse in={openOrders} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

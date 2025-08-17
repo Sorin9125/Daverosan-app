@@ -48,19 +48,6 @@ const productionNoteController = {
             return res.status(500).send("Eroare");
         }
     },
-    getProductionNoteById: async (req, res) => {
-        try {
-            const productionNoteId = req.params.id;
-            const productionNote = await productionNoteModel.findByPk(productionNoteId);
-            if (!productionNote) {
-                return res.status(400).josn({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
-            }
-            return res.status(200).json(productionNote);
-        } catch (err) {
-            console.log(err);
-            return res.status(500).send("Eroare");
-        }
-    },
     updateProductionNote: async (req, res) => {
         try {
             const productionNoteId = req.params.id;

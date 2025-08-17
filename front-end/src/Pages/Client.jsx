@@ -8,7 +8,7 @@ import clientAPI from "../Utils/Client";
 function Client() {
     const [clientData, setClientData] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [client, setClient] = useState(null)
+    const [client, setClient] = useState(null);
 
     const fetchClients = useCallback(() => {
         const getClients = async () => {

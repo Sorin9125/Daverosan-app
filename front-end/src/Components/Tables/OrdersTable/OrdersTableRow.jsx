@@ -1,14 +1,14 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, } from "@mui/material";
+import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip} from "@mui/material";
 import { Fragment, useState } from "react";
 import orderAPI from "../../../Utils/Order";
 
-function OrdersTableRow({ orders }) {
+function OrdersTableRow({ order }) {
     const [data, setData] = useState([]);
-    const [openOrders, setOpenOrders] = useState(false);
+    const [openProductionNotes, setOpenProductinNotes] = useState(false);
 
     const fetchProductionNotes = async () => {
         try {
-            const response = await orderAPI.getOrderProductionNotes(orders.id);
+            const response = await orderAPI.getOrderProductionNotes(order.id);
             setData(response.data);
         } catch (err) {
             console.error(err);
@@ -20,29 +20,52 @@ function OrdersTableRow({ orders }) {
             <TableRow sx={{
                 "& > *": { borderBottom: "unset" },
                 "&: hover": { backgroundColor: "action.hover" }
-            }} key={orders.id}>
+            }} key={order.id}>
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
-                    {orders.id}
+                    {order.id}
                 </TableCell>
-                <TableCell align="left">{orders.number}</TableCell>
-                <TableCell align="left">{orders.quantity} {orders.unit}</TableCell>
-                <TableCell align="left">{new Date(orders.deadline).toLocaleDateString()}</TableCell>
-                <TableCell align="left">{orders.description}</TableCell>
-                <TableCell align="left">{orders.isCompleted? "Finalizată" : "Nefinalizată"}</TableCell>
+                <TableCell align="left">{order.number}</TableCell>
+                <TableCell align="left">{order.quantity} {order.unit}</TableCell>
+                <TableCell align="left">{new Date(order.deadline).toLocaleDateString()}</TableCell>
+                <TableCell align="left" sx={{
+                    maxWidth: 300,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}>
+                    <Tooltip title={order.description} placement="top-start">
+                        <span style={{ display: "block", width: "100%" }}>{order.description}</span>
+                    </Tooltip>
+                </TableCell>
+                <TableCell align="left">{order.isCompleted ? "Finalizată" : "Nefinalizată"}</TableCell>
+                <TableCell align="left">{order.offer.request.client.name}</TableCell>
                 <TableCell>
                     <Button
                         aria-label="expand row"
                         size="small"
-                        onClick={() => { setOpenOrders(!openOrders); fetchProductionNotes(); }}
+                        variant="contained"
+                        sx={{
+                            textTransform: "none",
+                            backgroundColor: openProductionNotes ? "error.main" : "primary.main",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            borderRadius: 2,
+                            px: 2,
+                            py: 1,
+                            "&:hover": {
+                                backgroundColor: openProductionNotes ? "error.dark" : "primary.dark",
+                            }
+                        }}
+                        onClick={() => { setOpenProductinNotes(!openProductionNotes); fetchProductionNotes(); }}
                     >
-                        {openOrders ? "Ascunde" : 'Generează'}
+                        {openProductionNotes ? "Ascunde" : 'Generează'}
                     </Button>
                 </TableCell>
                 <TableCell align="left">Muie dinamo</TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={openOrders} timeout="auto" unmountOnExit>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                    <Collapse in={openProductionNotes} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
                                 Comenzi

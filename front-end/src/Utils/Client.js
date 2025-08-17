@@ -32,6 +32,12 @@ const clientAPI = {
         });
         return response;
     },
+    getOffers: async (id) => {
+        const response = await axios.get(`${BACKEND_URL}/client/getClientOffers/${id}`, {
+            withCredentials: true,
+        });
+        return response;
+    },
     getOrders: async (id) => {
         const response = await axios.get(`${BACKEND_URL}/client/getClientOrders/${id}`, {
             withCredentials: true,

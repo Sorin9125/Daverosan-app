@@ -1,14 +1,14 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, } from "@mui/material";
+import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip } from "@mui/material";
 import { Fragment, useState } from "react";
 import requestAPI from "../../../Utils/Request";
 
-function RequestsTableRow({ requests }) {
+function RequestsTableRow({ request }) {
     const [data, setData] = useState([]);
     const [openOffers, setOpenOffers] = useState(false);
 
     const fetchOffer = async () => {
         try {
-            const response = await requestAPI.getRequestOffer(requests.id);
+            const response = await requestAPI.getRequestOffer(request.id);
             setData(response.data);
         } catch (err) {
             console.error(err);
@@ -20,17 +20,40 @@ function RequestsTableRow({ requests }) {
             <TableRow sx={{
                 "& > *": { borderBottom: "unset" },
                 "&: hover": { backgroundColor: "action.hover" }
-            }} key={requests.id}>
+            }} key={request.id}>
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
-                    {requests.id}
+                    {request.id}
                 </TableCell>
-                <TableCell align="left">{requests.description}</TableCell>
-                <TableCell align="left">{new Date(requests.sentAt).toLocaleDateString()}</TableCell>
-                <TableCell align="left">{requests.isOffered ? "Ofertă trimisă" : "Ofertă netrimisă"}</TableCell>
+                <TableCell align="left" sx={{
+                    maxWidth: 300,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}>
+                    <Tooltip title={request.description} placement="top-start">
+                        <span style={{ display: "block", width: "100%" }}>{request.description}</span>
+                    </Tooltip>
+                </TableCell>
+                <TableCell align="left">{new Date(request.sentAt).toLocaleDateString()}</TableCell>
+                <TableCell align="left">{request.isOffered ? "Ofertă trimisă" : "Ofertă netrimisă"}</TableCell>
+                <TableCell align="left">{request.client.name}</TableCell>
                 <TableCell>
                     <Button
                         aria-label="expand row"
                         size="small"
+                        variant="contained"
+                        sx={{
+                            textTransform: "none",
+                            backgroundColor: openOffers ? "error.main" : "primary.main",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            borderRadius: 2,
+                            px: 2,
+                            py: 1,
+                            "&:hover": {
+                                backgroundColor: openOffers ? "error.dark" : "primary.dark",
+                            }
+                        }}
                         onClick={() => { setOpenOffers(!openOffers); fetchOffer(); }}
                     >
                         {openOffers ? "Ascunde" : 'Generează'}
@@ -55,7 +78,7 @@ function RequestsTableRow({ requests }) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {   
+                                    {
                                         <TableRow key={data.id} sx={{
                                             backgroundColor: "background.paper",
                                             "&:hover": { backgroundColor: "action.hover" },

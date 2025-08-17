@@ -1,4 +1,4 @@
-const { requestModel, offerModel, orderModel } = require("../models");
+const { requestModel, offerModel, orderModel, clientModel } = require("../models");
 
 const offerController = {
     createOffer: async (req, res) => {
@@ -37,27 +37,25 @@ const offerController = {
     },
     getAllOffers: async (req, res) => {
         try {
-            const offers = await offerModel.findAll();
+            const offers = await offerModel.findAll({
+                include: [{
+                    model: requestModel,
+                    attributes: [],
+                    include: [{
+                        model: clientModel,
+                        attributes: ["name"],
+                    }]
+                }],
+                raw: true,
+                nest: true,
+            });
             if (!offers) {
                 return res.status(400).send("Nu exista oferte");
             }
             return res.status(200).json(offers);
         } catch (err) {
-            console.log(offers);
-            return res.status(500).send("Eroare");
-        }
-    },
-    getOfferById: async (req, res) => {
-        try {
-            const offerId = req.params.id;
-            const offer = await offerModel.findByPk(offerId);
-            if (!offer) {
-                return res.status(400).json({ message: `Oferta cu id-ul ${offerId} nu exista` });
-            }
-            return res.status(200).json(offer);
-        } catch (err) {
             console.log(err);
-            return res.status(500).send(err);
+            return res.status(500).send("Eroare");
         }
     },
     updateOffer: async (req, res) => {

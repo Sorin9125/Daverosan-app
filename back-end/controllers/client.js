@@ -40,19 +40,6 @@ const clientController = {
             return res.status(500).send("Eroare");
         }
     },
-    getClientById: async (req, res) => {
-        try {
-            const clientId = req.params.id;
-            const client = await clientModel.findByPk(clientId);
-            if (!client) {
-                return res.status(400).json({ message: `Clientul cu id-ul ${clientId} nu exista` });
-            }
-            return res.status(200).json(client);
-        } catch (err) {
-            console.log(err);
-            return res.status(500).send("Eroare");
-        }
-    },
     updateClient: async (req, res) => {
         try {
             const clientId = req.params.id;

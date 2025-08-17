@@ -1,4 +1,4 @@
-const { orderModel, offerModel, requestModel, productionNoteModel } = require("../models");
+const { orderModel, offerModel, requestModel, productionNoteModel, clientModel } = require("../models");
 
 const orderController = {
     createOrder: async (req, res) => {
@@ -48,24 +48,28 @@ const orderController = {
     },
     getAllOrders: async (req, res) => {
         try {
-            const orders = await orderModel.findAll();
+            const orders = await orderModel.findAll({
+                include: [{
+                    model: offerModel,
+                    attributes: [],
+                    include: [{
+                        model: requestModel,
+                        attributes: [],
+                        include: [{
+                            model: clientModel,
+                            attributes: ["name"],
+                        }],
+                        raw: true,
+                        nest: true,
+                    }]
+                }],
+                nest: true,
+                raw: true,
+            });
             if (!orders) {
                 return res.status(400).json({ message: "Nu exista comenzi" });
             }
             return res.status(200).json(orders);
-        } catch (err) {
-            console.log(err);
-            return res.status(500).send("Eroare");
-        }
-    },
-    getOrderById: async (req, res) => {
-        try {
-            const orderId = req.params.id;
-            const order = await orderModel.findByPk(orderId);
-            if (!order) {
-                return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
-            }
-            return res.status(200).json(order);
         } catch (err) {
             console.log(err);
             return res.status(500).send("Eroare");

@@ -39,19 +39,6 @@ const requestController = {
             return res.status(500).send("Eroare");
         }
     },
-    getRequestById: async (req, res) => {
-        try {
-            const requestId = req.params.id;
-            const request = await requestModel.findByPk(requestId);
-            if (!request) {
-                return res.status(400).json({ message: `Cererea de oferta cu id-ul ${requestId} nu exista` });
-            }
-            return res.status(200).json(request)
-        } catch (err) {
-            console.log(err);
-            return res.status(500).send("Eroare");
-        }
-    },
     updateRequest: async (req, res) => {
         try {
             const requestId = req.params.id;

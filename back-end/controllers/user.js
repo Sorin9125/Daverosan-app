@@ -94,21 +94,6 @@ const userController = {
       return res.status(500).send("Eroare!");
     }
   },
-  getUserById: async (req, res) => {
-    try {
-      const userId = req.params.id;
-      const user = await userModel.findByPk(userId);
-      if (!user) {
-        return res
-          .status(400)
-          .json({ message: `Utilizatorul cu id-ul ${userId} nu exista` });
-      }
-      res.status(200).json(user);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).send("Eroare!");
-    }
-  },
   updateUser: async (req, res) => {
     try {
       const userId = req.params.id;
