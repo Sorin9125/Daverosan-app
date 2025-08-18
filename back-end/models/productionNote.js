@@ -24,6 +24,7 @@ const productionNoteModel = db.define("productionNote", {
     },
     weight: {
         type: DataTypes.INTEGER,
+        defaultValue: 1,
     },
     isFinished: {
         type: DataTypes.BOOLEAN,

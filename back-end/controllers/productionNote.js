@@ -11,10 +11,7 @@ const productionNoteController = {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
             const productionNote = req.body;
-            if (order.unit === "buc") {
-                productionNote.weight = 1;
-            }
-            if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
+            if (!(productionNote.reper && productionNote.scheme && productionNote.quantity)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
@@ -22,9 +19,6 @@ const productionNoteController = {
             }
             if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
                 return res.status(400).json({ message: "Introduceti un desen valid" });
-            }
-            if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
-                return res.status(400).json({ message: "Introduceti o greutate valida" });
             }
             if (!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
