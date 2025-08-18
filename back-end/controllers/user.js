@@ -31,7 +31,7 @@ const userController = {
         return res.status(400).json({ message: "Numele trebuie sa contina doar litere" });
       }
       if (
-        !(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/gm).test(user.password)
+        !(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/gm).test(user.password)
       ) {
         return res
           .status(400)
@@ -121,7 +121,7 @@ const userController = {
           .status(400)
           .json(
             {
-              message: "Pentru a actualiza parola trebuie sa introduceti parola corecta!"
+              message: "Pentru a actualiza datele trebuie sa introduceti parola corecta!"
             });
       }
       if (!newUser.firstName.match(/^[A-z]{3,}$/gm)) {
@@ -132,7 +132,7 @@ const userController = {
       }
       if (
         !newUser.password.match(
-          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/gm
+          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/gm
         )
       ) {
         return res
@@ -250,7 +250,7 @@ const userController = {
       res.clearCookie("token", {
         httpOnly: true,
       })
-      return res.status(200).json({ message: "Delogarea efectuată cu succes " });
+      return res.status(200).json({ message: "Delogarea a fost efectuată cu succes " });
     } catch (err) {
       return res.status(500).send("Eroare");
     }

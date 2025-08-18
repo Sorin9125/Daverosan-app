@@ -4,7 +4,7 @@ import TablePaginationActions from "../TablePagination";
 import OffersTableRow from "./OffersTableRow";
 import Search from "../Search";
 
-function OffersTable({ offers }) {
+function OffersTable({ offers, fecthOffers }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
@@ -34,13 +34,14 @@ function OffersTable({ offers }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell align="left" sx={{ fontWeight: "bold"}}>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Preț</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Client</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Comenzi</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Comenzi</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,7 +49,7 @@ function OffersTable({ offers }) {
                             ? filteredOffers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : filteredOffers
                         ).map((offer) => (
-                            <OffersTableRow key={offer.id} offer={offer}></OffersTableRow>
+                            <OffersTableRow key={offer.id} offer={offer} fetchOffers={fecthOffers} />
                         ))}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
@@ -60,26 +61,29 @@ function OffersTable({ offers }) {
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={3}>
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                    colSpan={3}
-                                    count={filteredOffers.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    slotProps={{
-                                        select: {
-                                            inputProps: {
-                                                'aria-label': 'rows per page',
-                                            },
-                                            native: true,
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={3}
+                                count={filteredOffers.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                slotProps={{
+                                    select: {
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
                                         },
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions} />
-                            </TableCell>
-
+                                        native: true,
+                                    },
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                                sx={{
+                                    "& .MuiTablePagination-toolbar": { width: "100%" },   
+                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },    
+                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
+                                }}
+                            />
                         </TableRow>
                     </TableFooter>
                 </Table>

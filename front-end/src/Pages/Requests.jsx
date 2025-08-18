@@ -30,7 +30,7 @@ function Request() {
             }}
                 component="h1" variant="h4" fontWeight="bold" gutterBottom
             >Cereri de ofertă</Typography>
-            <RequestsTable requests={requestData}/>
+            <RequestsTable requests={requestData} fetchRequests={fetchRequests} />
         </>
     )
 }

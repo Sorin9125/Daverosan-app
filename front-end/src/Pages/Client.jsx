@@ -1,14 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import ClientsTable from "../Components/Tables/ClientsTable/ClientsTable";
-import { toast } from "react-toastify";
 import clientAPI from "../Utils/Client";
-import FormModal from "../Components/Modal/ClientModal";
+import CreateClient from "../Components/Modals/Client/CreateClient";
 
 function Client() {
     const [clientData, setClientData] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [client, setClient] = useState(null);
 
     const fetchClients = useCallback(() => {
         const getClients = async () => {
@@ -24,46 +21,6 @@ function Client() {
 
     useEffect(fetchClients, [fetchClients]);
 
-    const createClient = () => {
-        setClient(null)
-        setModalOpen(true);
-    };
-
-    const updateClient = (client) => {
-        setClient(client);
-        setModalOpen(true)
-    }
-
-    const deleteClient = async (id) => {
-        try {
-            const response = await clientAPI.deleteClient(id);
-            toast.success(response.data.message);
-            fetchClients();
-        } catch (err) {
-            console.error(err.response.data.message);
-        }
-    }
-
-    const handleClient = async (clientData) => {
-        if (client) {
-            try {
-                const response = await clientAPI.updateClient(client.id, clientData);
-                toast.success(response.data.message)
-            } catch (err) {
-                toast.error(err.response.data.message);
-            }
-        } else {
-            try {
-                const response = await clientAPI.createClient(clientData);
-                toast.success(response.data.message);
-            } catch (err) {
-                toast.error(err.response.data.message);
-            }
-        }
-        setModalOpen(false);
-        fetchClients(0);
-    }
-
     return (
         <>  <Box sx={{
             display: "flex",
@@ -74,12 +31,10 @@ function Client() {
             <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
                 Clienți
             </Typography>
-            <FormModal actionName={"Creează client"}/>
+            <CreateClient fetchClients={fetchClients}/>
             </Box>
 
-            <ClientsTable
-                clients={clientData}
-            />
+            <ClientsTable clients={clientData} fetchClients={fetchClients} />
         </>
     );
 }

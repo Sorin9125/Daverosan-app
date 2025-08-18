@@ -30,7 +30,7 @@ function Orders() {
             }}
                 component="h1" variant="h4" fontWeight="bold" gutterBottom
             >Comenzi</Typography>
-            <OrdersTable orders={ordersData}></OrdersTable>
+            <OrdersTable orders={ordersData} fetchOrders={fetchOrders} />
         </>
 
     )

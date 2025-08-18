@@ -1,8 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, } from "@mui/material";
+import { toast } from "react-toastify";
 import { Fragment, useState } from "react";
 import offerAPI from "../../../Utils/Offer";
+import UpdateOffer from "../../Modals/Offers/UpdateOffer";
+import DeleteOffer from "../../Modals/Offers/DeleteOffer";
+import CreateOrder from "../../Modals/Orders/CreateOrder";
 
-function OffersTableRow({ offer }) {
+function OffersTableRow({ offer, fetchOffers }) {
     const [data, setData] = useState([]);
     const [openOrders, setOpenOrders] = useState(false);
 
@@ -11,7 +15,8 @@ function OffersTableRow({ offer }) {
             const response = await offerAPI.getOfferOrder(offer.id);
             setData(response.data);
         } catch (err) {
-            console.error(err);
+            setOpenOrders(false);
+            toast.error(err.response.data.message);
         }
     }
 
@@ -28,7 +33,7 @@ function OffersTableRow({ offer }) {
                 <TableCell align="left">{new Date(offer.deadline).toLocaleDateString()}</TableCell>
                 <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                 <TableCell align="left">{offer.request.client.name}</TableCell>
-                <TableCell>
+                <TableCell align="center">
                     <Button
                         aria-label="expand row"
                         size="small"
@@ -50,10 +55,18 @@ function OffersTableRow({ offer }) {
                         {openOrders ? "Ascunde" : 'Generează'}
                     </Button>
                 </TableCell>
-                <TableCell align="left">Muie dinamo</TableCell>
+                <TableCell align="center">
+                    <CreateOrder offerId={offer.id} />
+                </TableCell>
+                <TableCell align="left">
+                    <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
+                        <UpdateOffer offer={offer} fetchOffers={fetchOffers} />
+                        <DeleteOffer offer={offer} fetchOffers={fetchOffers} />
+                    </Box>
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                     <Collapse in={openOrders} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

@@ -30,7 +30,7 @@ function Offers() {
             }}
                 component="h1" variant="h4" fontWeight="bold" gutterBottom
             >Oferte</Typography>
-            <OffersTable offers={offersData}></OffersTable>
+            <OffersTable offers={offersData} fecthOffers={fetchOffers} />
         </>
     )
 }

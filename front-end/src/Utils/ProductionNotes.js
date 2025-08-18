@@ -1,8 +1,7 @@
 import axios from "axios";
-import orderAPI from "./Order";
 const BACKEND_URL = import.meta.env.VITE_APIș
 
-const productionNotesApi = {
+const productionNotesAPI = {
     createProductionNote: async (productionNote, orderId) => {
         const response = await axios.post(`${BACKEND_URL}/productionNote/createProductionNote/${orderId}`, productionNote, {
             withCredentials: true,
@@ -40,4 +39,4 @@ const productionNotesApi = {
     }
 }
 
-export default orderAPI;
+export default productionNotesAPI;

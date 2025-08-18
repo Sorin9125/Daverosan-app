@@ -26,7 +26,6 @@ function AuthProvider({ children }) {
     setLoading(true);
     try {
       const response = await userApi.loginUser(userData);
-      console.log(response.data.user)
       setUser(response.data.user);
     } catch (err) {
       toast.error(err.response.data.message);

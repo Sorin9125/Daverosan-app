@@ -3,7 +3,7 @@ const BACKEND_URL = import.meta.env.VITE_API;
 
 const orderAPI = {
     createOrder: async (order, offerId) => {
-        const response = await axios.post(`${BACKEND_URL}/order/createOrder/${id}`, order, {
+        const response = await axios.post(`${BACKEND_URL}/order/createOrder/${offerId}`, order, {
             withCredentials: true,
         });
         return response;

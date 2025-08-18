@@ -1,8 +1,12 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip} from "@mui/material";
+import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip } from "@mui/material";
+import { toast } from "react-toastify";
 import { Fragment, useState } from "react";
 import orderAPI from "../../../Utils/Order";
+import UpdateOrder from "../../Modals/Orders/UpdateOrder";
+import DeleteOrder from "../../Modals/Orders/DeleteOrder";
+import CreateProductionNote from "../../Modals/ProductionNotes/CreateProductionNote";
 
-function OrdersTableRow({ order }) {
+function OrdersTableRow({ order, fetchOrders }) {
     const [data, setData] = useState([]);
     const [openProductionNotes, setOpenProductinNotes] = useState(false);
 
@@ -11,7 +15,7 @@ function OrdersTableRow({ order }) {
             const response = await orderAPI.getOrderProductionNotes(order.id);
             setData(response.data);
         } catch (err) {
-            console.error(err);
+            toast.error(err.response.data.message);
         }
     }
 
@@ -39,7 +43,7 @@ function OrdersTableRow({ order }) {
                 </TableCell>
                 <TableCell align="left">{order.isCompleted ? "Finalizată" : "Nefinalizată"}</TableCell>
                 <TableCell align="left">{order.offer.request.client.name}</TableCell>
-                <TableCell>
+                <TableCell align="center">
                     <Button
                         aria-label="expand row"
                         size="small"
@@ -61,10 +65,18 @@ function OrdersTableRow({ order }) {
                         {openProductionNotes ? "Ascunde" : 'Generează'}
                     </Button>
                 </TableCell>
-                <TableCell align="left">Muie dinamo</TableCell>
+                <TableCell align="center">
+                    <CreateProductionNote order={order}/>
+                </TableCell>
+                <TableCell align="center">
+                    <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
+                        <UpdateOrder order={order} fetchOrders={fetchOrders} />
+                        <DeleteOrder order={order} fetchOrders={fetchOrders} />
+                    </Box>
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                     <Collapse in={openProductionNotes} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

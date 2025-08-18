@@ -41,7 +41,7 @@ function Navbar() {
                             component={Link}
                             to="/clienti"
                         >
-                            Clienti
+                            Clienți
                         </Button>
                         <Button
                             color="inherit"

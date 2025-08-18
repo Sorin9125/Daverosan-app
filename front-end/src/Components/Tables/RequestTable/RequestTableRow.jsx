@@ -1,8 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip } from "@mui/material";
 import { Fragment, useState } from "react";
+import { toast } from "react-toastify";
 import requestAPI from "../../../Utils/Request";
+import UpdateRequest from "../../Modals/Requests/UpdateRequest";
+import DeleteRequest from "../../Modals/Requests/DeleteRequest";
+import CreateOffer from "../../Modals/Offers/CreateOffer";
 
-function RequestsTableRow({ request }) {
+function RequestsTableRow({ request, fetchRequests }) {
     const [data, setData] = useState([]);
     const [openOffers, setOpenOffers] = useState(false);
 
@@ -11,7 +15,8 @@ function RequestsTableRow({ request }) {
             const response = await requestAPI.getRequestOffer(request.id);
             setData(response.data);
         } catch (err) {
-            console.error(err);
+            setOpenOffers(false);
+            toast.error(err.response.data.message);
         }
     }
 
@@ -37,7 +42,7 @@ function RequestsTableRow({ request }) {
                 <TableCell align="left">{new Date(request.sentAt).toLocaleDateString()}</TableCell>
                 <TableCell align="left">{request.isOffered ? "Ofertă trimisă" : "Ofertă netrimisă"}</TableCell>
                 <TableCell align="left">{request.client.name}</TableCell>
-                <TableCell>
+                <TableCell align="center">
                     <Button
                         aria-label="expand row"
                         size="small"
@@ -59,10 +64,18 @@ function RequestsTableRow({ request }) {
                         {openOffers ? "Ascunde" : 'Generează'}
                     </Button>
                 </TableCell>
-                <TableCell align="left">Muie Dinamo</TableCell>
+                <TableCell align="center">
+                    <CreateOffer requestID={request.id}/>
+                </TableCell>
+                <TableCell align="left">
+                    <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
+                        <UpdateRequest request={request} fetchRequests={fetchRequests} />
+                        <DeleteRequest request={request} fetchRequests={fetchRequests} />
+                    </Box>
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
                     <Collapse in={openOffers} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

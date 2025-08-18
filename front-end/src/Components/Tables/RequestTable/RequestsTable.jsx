@@ -4,7 +4,7 @@ import TablePaginationActions from "../TablePagination";
 import RequestsTableRow from "./RequestTableRow";
 import Search from "../Search";
 
-function RequestsTable({ requests }) {
+function RequestsTable({ requests, fetchRequests }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
@@ -34,13 +34,14 @@ function RequestsTable({ requests }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell align="left" sx={{ fontWeight: "bold"}}>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Dată primită</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Client</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Oferte</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Oferte</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,7 +49,7 @@ function RequestsTable({ requests }) {
                             ? filteredRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : filteredRequests
                         ).map((request) => (
-                            <RequestsTableRow key={request.id} request={request}></RequestsTableRow>
+                            <RequestsTableRow key={request.id} request={request} fetchRequests={fetchRequests} />
                         ))}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
@@ -60,26 +61,29 @@ function RequestsTable({ requests }) {
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={3}>
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                    colSpan={3}
-                                    count={filteredRequests.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    slotProps={{
-                                        select: {
-                                            inputProps: {
-                                                'aria-label': 'rows per page',
-                                            },
-                                            native: true,
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={3}
+                                count={filteredRequests.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                slotProps={{
+                                    select: {
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
                                         },
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </TableCell>
+                                        native: true,
+                                    },
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                                sx={{
+                                    "& .MuiTablePagination-toolbar": { width: "100%" },
+                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
+                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
+                                }}
+                            />
                         </TableRow>
                     </TableFooter>
                 </Table>

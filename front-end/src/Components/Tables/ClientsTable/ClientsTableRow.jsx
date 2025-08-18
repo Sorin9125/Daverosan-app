@@ -1,8 +1,11 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip } from "@mui/material";
 import { Fragment, useState } from "react";
 import clientAPI from "../../../Utils/Client";
+import UpdateClient from "../../Modals/Client/UpdateClient";
+import DeleteClient from "../../Modals/Client/DeleteClient";
+import CreateRequest from "../../Modals/Requests/CreateRequest";
 
-function ClientsTableRow({ client }) {
+function ClientsTableRow({ client, fetchClients }) {
   const [requestData, setRequestData] = useState([]);
   const [openRequests, setOpenRequests] = useState(false);
   const [offerData, setOfferData] = useState([]);
@@ -49,7 +52,7 @@ function ClientsTableRow({ client }) {
           </TableCell>
           <TableCell align="left">{client.name}</TableCell>
           <TableCell align="left">{client.email}</TableCell>
-          <TableCell>
+          <TableCell align="center">
             <Button
               aria-label="expand row"
               size="small"
@@ -71,7 +74,7 @@ function ClientsTableRow({ client }) {
               {openRequests ? "Ascunde" : 'Generează'}
             </Button>
           </TableCell>
-          <TableCell>
+          <TableCell align="center">
             <Button
               aria-label="expand row"
               size="small"
@@ -93,7 +96,7 @@ function ClientsTableRow({ client }) {
               {openOffers ? "Ascunde" : 'Generează'}
             </Button>
           </TableCell>
-          <TableCell>
+          <TableCell align="center">
             <Button
               aria-label="expand row"
               size="small"
@@ -115,10 +118,18 @@ function ClientsTableRow({ client }) {
               {openOrders ? "Ascunde" : 'Generează'}
             </Button>
           </TableCell>
-          <TableCell align="left">Muie dinamo</TableCell>
+          <TableCell align="center">
+              <CreateRequest clientId={client.id}/>
+          </TableCell>
+          <TableCell>
+            <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
+                <UpdateClient client={client} fetchClients={fetchClients} />
+                <DeleteClient client={client} fetchClients={fetchClients} />
+            </Box>
+          </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
             <Collapse in={openRequests} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

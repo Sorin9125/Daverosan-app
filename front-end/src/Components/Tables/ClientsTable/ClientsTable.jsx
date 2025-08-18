@@ -4,7 +4,7 @@ import TablePaginationActions from "../TablePagination";
 import ClientsTableRow from "./ClientsTableRow";
 import Search from "../Search";
 
-function ClientsTable({ clients }) {
+function ClientsTable({ clients, fetchClients }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
@@ -34,13 +34,14 @@ function ClientsTable({ clients }) {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
-                            <TableCell align="left" sx={{ fontWeight: "bold"}}>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Nume</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Email</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Cereri</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Oferte</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Comenzi</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Cereri</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Oferte</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Comenzi</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,7 +49,7 @@ function ClientsTable({ clients }) {
                             ? filteredClients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : filteredClients
                         ).map((client) => (
-                            <ClientsTableRow key={client.id} client={client}></ClientsTableRow>
+                            <ClientsTableRow key={client.id} client={client} fetchClients={fetchClients} />
                         ))}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
@@ -59,25 +60,29 @@ function ClientsTable({ clients }) {
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={3}>
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                    colSpan={3}
-                                    count={filteredClients.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    slotProps={{
-                                        select: {
-                                            inputProps: {
-                                                'aria-label': 'rows per page',
-                                            },
-                                            native: true,
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={3}
+                                count={filteredClients.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                slotProps={{
+                                    select: {
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
                                         },
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions} />
-                            </TableCell>
+                                        native: true,
+                                    },
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                                sx={{
+                                    "& .MuiTablePagination-toolbar": { width: "100%" },   
+                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },    
+                                    "& .MuiTablePagination-actions": { marginLeft: "auto" } 
+                                }}
+                            />
                         </TableRow>
                     </TableFooter>
                 </Table>
