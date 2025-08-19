@@ -9,7 +9,7 @@ import SelectSearch from "../Components/Filters/SelectSearch";
 function ProductionNotes() {
     const [productionNotesData, setProductionNotesData] = useState([]);
     const [ordersData, setOrdersData] = useState([]);
-    const [selectedOrder, setSelectedOrder] = useState();
+    const [selectedOrder, setSelectedOrder] = useState("");
 
     useEffect(() => {
         const fetchOrders = async () => {

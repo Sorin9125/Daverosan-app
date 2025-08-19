@@ -11,15 +11,20 @@ function ExportTable({ title, columns, data, fileName }) {
             format: "a4"
         });
 
+        const lines = title ? title.split("\n") : ["Export"];
         const titleFontSize = 22;
         doc.setFontSize(titleFontSize);
         doc.setFont(undefined, "bold");
 
         const pageWidth = doc.internal.pageSize.getWidth();
-        const textWidth = doc.getTextWidth(title);
-        const x = (pageWidth - textWidth) / 2;
-        const titleY = 50
-        doc.text(title, x, titleY);
+        let titleY = 50;
+
+        lines.forEach(line => {
+            const textWidth = doc.getTextWidth(line);
+            const x = (pageWidth - textWidth) / 2;
+            doc.text(line, x, titleY);
+            titleY += titleFontSize + 5;
+        });
 
         doc.setFont(undefined, "normal");
 

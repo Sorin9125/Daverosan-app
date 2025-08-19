@@ -36,23 +36,25 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
 
     const columns = [
         { header: "ID", accessor: "id" },
-        { header: "Numar de comanda", accessor: "number" },
-        { header: "Cantitate", accessor: "quantity" },
-        { header: "Termen de finalizare", accessor: "deadline" },
-        { header: "Descriere", accessor: "description" },
-        { header: "Status", accessor: "status" },
-        { header: "Client", accessor: "clientName" },
+        { header: "Reper", accessor: "reper" },
+        { header: "Desen", accessor: "scheme" },
+        { header: "cantitate", accessor: "quantity" },
+        { header: "Greutate", accessor: "weight" },
+        { header: "Status", accessor:"status" },
+        { header: "Comanda", accessor: "orderNumber" },
     ]
 
-    // const exportData = filteredOrders.map((order) => ({
-    //     id: order.id,
-    //     number: order.number,
-    //     quantity: `${order.quantity} ${order.unit}`,
-    //     deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
-    //     description: order.description,
-    //     status: order.status ? `${(order.quantity - order.remainingQuantity) / order.quantity * 100} + %` : "Finalizata",
-    //     clientName: order.offer.request.client.name,
-    // }));
+    const exportData = filteredProductionNotes.map((productionNote) => ({
+        id: productionNote.id,
+        reper: productionNote.reper,
+        scheme: productionNote.scheme,
+        quantity: productionNote.quantity,
+        weight: productionNote.order.unit === "buc"  ? "Comanda este" : productionNote.weight,
+        status: productionNote.status ? "Nefinalizata" : "Finalizata",
+        orderNumber: productionNote.order.number,
+    }));
+
+    console.log(selectedOrder);
 
     return (
         <>
@@ -65,7 +67,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                 <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
             </Box>
 
-            {/* <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"} /> */}
+            <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} />
 
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table aria-label="collapsible table">

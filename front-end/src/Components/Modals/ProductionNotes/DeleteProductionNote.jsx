@@ -46,7 +46,7 @@ function DeleteProductionNote({ productionNote, fetchProductionNotes, selectedOr
                 }}
                 onClick={handleClickOpen}
             >
-                Șterge cerere de ofertă
+                Șterge notă de producție
             </Button>
             <Dialog
                 open={open}
