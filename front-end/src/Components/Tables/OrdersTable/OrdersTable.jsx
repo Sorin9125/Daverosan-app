@@ -1,22 +1,43 @@
 import { useState } from "react";
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import OrdersTableRow from "./OrdersTableRow";
-import Search from "../Search";
+import FieldSearch from "../../Filters/FieldsSearch";
+import DateSearch from "../../Filters/DateSearch";
+import ExportTable from "../ExportTable";
 
 function OrdersTable({ orders, fetchOrders }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
-    const filteredOrders = orders.filter((order) =>
-        Object.values(order).some((value) =>
-            value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    const filteredOrders = orders.filter((order) => {
+        const term = searchTerm.toLowerCase();
+
+        const matchesText =
+            Object.values(order).some((value) =>
+                value?.toString().toLowerCase().includes(term)
+            ) ||
+            order.offer.request.client.name.toLowerCase().includes(term);
+
+        const requestDate = new Date(order.deadline);
+
+        const normalizedEnd = endDate ? new Date(endDate) : null;
+        if (normalizedEnd) {
+            normalizedEnd.setHours(23, 59, 59, 999);
+        }
+
+        const afterStart = !startDate || requestDate >= startDate;
+        const beforeEnd = !endDate || requestDate <= normalizedEnd;
+
+        return matchesText && afterStart && beforeEnd;
+    }
     );
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredOrders.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -27,9 +48,40 @@ function OrdersTable({ orders, fetchOrders }) {
         setPage(0);
     };
 
+    const columns = [
+        {header: "ID", accessor: "id"},
+        {header: "Numar de comanda", accessor: "number"},
+        {header: "Cantitate", accessor: "quantity"},
+        {header: "Termen de finalizare", accessor: "deadline"},
+        {header: "Descriere", accessor: "description"},
+        {header: "Status", accessor: "status"},
+        {header: "Client", accessor: "clientName"},
+    ]
+
+    const exportData = filteredOrders.map((order) => ({
+        id: order.id,
+        number: order.number,
+        quantity: `${order.quantity} ${order.unit}`,
+        deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
+        description: order.description,
+        status: order.status ? `${(order.quantity - order.remainingQuantity) / order.quantity * 100} + %` : "Finalizata",
+        clientName: order.offer.request.client.name,
+    }));
+
     return (
         <>
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <Box sx={{
+                mb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
+                <DateSearch startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} setPage={setPage} />
+            </Box>
+
+            <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"}/>
+
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
@@ -58,7 +110,6 @@ function OrdersTable({ orders, fetchOrders }) {
                                 <TableCell colSpan={6} />
                             </TableRow>
                         )
-
                         }
                     </TableBody>
                     <TableFooter>

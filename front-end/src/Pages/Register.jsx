@@ -16,7 +16,7 @@ function Register() {
 
     useEffect(() => {
         if (user) {
-            navigate("/clienti");
+            navigate("/clients");
         }
     }, [user, navigate]);
 

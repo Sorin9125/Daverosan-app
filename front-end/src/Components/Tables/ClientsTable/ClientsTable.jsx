@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import ClientsTableRow from "./ClientsTableRow";
-import Search from "../Search";
+import FieldSearch from "../../Filters/FieldsSearch";
+import ExportTable from "../ExportTable";
 
 function ClientsTable({ clients, fetchClients }) {
     const [page, setPage] = useState(0);
@@ -16,7 +17,7 @@ function ClientsTable({ clients, fetchClients }) {
     );
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredClients.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -27,9 +28,31 @@ function ClientsTable({ clients, fetchClients }) {
         setPage(0);
     };
 
+    const columns = [
+        {header: "ID", accessor: "id"},
+        {header: "Nume", accessor: "name"},
+        {header: "Email", accessor: "email"}, 
+    ];
+
+    const exportData = filteredClients.map((client) => ({
+        id: client.id,
+        name: client.name,
+        email: client.email,
+    }));
+
     return (
         <>
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
+            <Box sx={{
+                mb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
+            </Box>
+
+            <ExportTable title={"Clienti"} columns={columns} data={exportData} fileName={"Clienti.pdf"} />
+
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
@@ -78,9 +101,9 @@ function ClientsTable({ clients, fetchClients }) {
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                                 ActionsComponent={TablePaginationActions}
                                 sx={{
-                                    "& .MuiTablePagination-toolbar": { width: "100%" },   
-                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },    
-                                    "& .MuiTablePagination-actions": { marginLeft: "auto" } 
+                                    "& .MuiTablePagination-toolbar": { width: "100%" },
+                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
+                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
                                 }}
                             />
                         </TableRow>

@@ -32,7 +32,14 @@ const productionNoteController = {
     },
     getAllProductionNotes: async (req, res) => {
         try {
-            const productionNotes = await productionNoteModel.findAll();
+            const orderNumber = req.params.orderNumber;
+            const productionNotes = await productionNoteModel.findAll({
+                include: {
+                    model: orderModel,
+                    where: { number: orderNumber },
+                    attributes: ["number", "unit"],
+                }
+            });
             if (!productionNotes) {
                 return res.status(400).josn({ message: "Nu exista note de productie" });
             }
@@ -63,7 +70,7 @@ const productionNoteController = {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
             if (!(/^[0-9]{1,}/).test(newProductionNote.weight)) {
-                return res.status(400).json({ message: "Introduceti o cantintate valida"})
+                return res.status(400).json({ message: "Introduceti o cantintate valida" })
             }
             await productionNote.update(newProductionNote);
             return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes` });

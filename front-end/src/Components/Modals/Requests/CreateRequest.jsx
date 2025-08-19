@@ -2,8 +2,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, 
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import requestApi from "../../../Utils/Request";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs";
 
 function CreateRequest({ clientId }) {
@@ -115,7 +114,6 @@ function CreateRequest({ clientId }) {
                                 />
                             </Box>
                         </FormControl>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Data când a fost primită"
                                 onChange={(date) => handleChange({ target: { name: 'sentAt', value: date.format('YYYY-MM-DD') } })}
@@ -141,7 +139,6 @@ function CreateRequest({ clientId }) {
                                     },
                                 }}
                             />
-                        </LocalizationProvider>
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

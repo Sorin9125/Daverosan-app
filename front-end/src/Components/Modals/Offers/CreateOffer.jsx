@@ -1,8 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs";
 import offerAPI from "../../../Utils/Offer"
 
@@ -101,7 +100,6 @@ function CreateOffer({ requestID }) {
                                 }
                             }}
                         />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Termen de finalizare"
                                 onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
@@ -127,7 +125,6 @@ function CreateOffer({ requestID }) {
                                     },
                                 }}
                             />
-                        </LocalizationProvider>
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

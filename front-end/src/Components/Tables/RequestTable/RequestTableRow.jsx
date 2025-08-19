@@ -39,7 +39,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                         <span style={{ display: "block", width: "100%" }}>{request.description}</span>
                     </Tooltip>
                 </TableCell>
-                <TableCell align="left">{new Date(request.sentAt).toLocaleDateString()}</TableCell>
+                <TableCell align="left">{new Date(request.sentAt).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left">{request.isOffered ? "Ofertă trimisă" : "Ofertă netrimisă"}</TableCell>
                 <TableCell align="left">{request.client.name}</TableCell>
                 <TableCell align="center">
@@ -98,7 +98,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                                         }}>
                                             <TableCell>{data.id}</TableCell>
                                             <TableCell>{data.price}</TableCell>
-                                            <TableCell>{new Date(data.deadline).toLocaleDateString()}</TableCell>
+                                            <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                                         </TableRow>
                                     }

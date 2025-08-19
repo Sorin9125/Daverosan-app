@@ -39,30 +39,37 @@ function Navbar() {
                         <Button
                             color="inherit"
                             component={Link}
-                            to="/clienti"
+                            to="/clients"
                         >
                             Clienți
                         </Button>
                         <Button
                             color="inherit"
                             component={Link}
-                            to="/cereri"
+                            to="/requests"
                         >
                             Cereri
                         </Button>
                         <Button
                             color="inherit"
                             component={Link}
-                            to="/oferte"
+                            to="/offers"
                         >
                             Oferte
                         </Button>
                         <Button
                             color="inherit"
                             component={Link}
-                            to="/comenzi"
+                            to="/orders"
                         >
                             Comenzi
+                        </Button>
+                        <Button
+                            color="inherit"
+                            component={Link}
+                            to="/productionNotes"
+                        >
+                            Note de producție
                         </Button>
                     </Box>
                     <Typography

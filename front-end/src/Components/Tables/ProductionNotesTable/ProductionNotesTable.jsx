@@ -1,37 +1,29 @@
-import { useState } from "react"
+import { useState } from "react";
 import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
-import OffersTableRow from "./OffersTableRow";
-import FieldsSearch from "../../Filters/FieldsSearch"
-import DateSearch from "../../Filters/DateSearch"
+import ProductionNotesRow from "./ProductionNoteRow";
+import FieldSearch from "../../Filters/FieldsSearch";
 import ExportTable from "../ExportTable";
 
-function OffersTable({ offers, fecthOffers }) {
+function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedOrder }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
 
-    const filteredOffers = offers.filter((offer) => {
+    const filteredProductionNotes = productionNotes.filter((productionNote) => {
         const term = searchTerm.toLowerCase();
+
         const matchesText =
-            Object.values(offer).some((value) =>
+            Object.values(productionNote).some((value) =>
                 value?.toString().toLowerCase().includes(term)
             ) ||
-            offer.request.client.name.toLowerCase().includes(term);
-        const requestDate = new Date(offer.deadline);
-        const normalizedEnd = endDate ? new Date(endDate) : null;
-        if (normalizedEnd) {
-            normalizedEnd.setHours(23, 59, 59, 999);
-        }
-        const afterStart = !startDate || requestDate >= startDate;
-        const beforeEnd = !endDate || requestDate <= normalizedEnd;
-        return matchesText && afterStart && beforeEnd;
-    });
+            productionNote.order.number.toLowerCase().includes(term);
+        return matchesText;
+    }
+    );
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredOffers.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProductionNotes.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -43,20 +35,24 @@ function OffersTable({ offers, fecthOffers }) {
     };
 
     const columns = [
-        { header: "id", accessor: "id" },
-        { header: "Valoare", accessor: "price" },
+        { header: "ID", accessor: "id" },
+        { header: "Numar de comanda", accessor: "number" },
+        { header: "Cantitate", accessor: "quantity" },
         { header: "Termen de finalizare", accessor: "deadline" },
+        { header: "Descriere", accessor: "description" },
         { header: "Status", accessor: "status" },
         { header: "Client", accessor: "clientName" },
     ]
 
-    const exportData = filteredOffers.map((offer) => ({
-        id: offer.id,
-        price: offer.price,
-        deadline: new Date(offer.deadline).toLocaleDateString("en-GB"),
-        status: offer.status ? "Neaccepatata" : "Acceptata",
-        clientName: offer.request.client.name,
-    }));
+    // const exportData = filteredOrders.map((order) => ({
+    //     id: order.id,
+    //     number: order.number,
+    //     quantity: `${order.quantity} ${order.unit}`,
+    //     deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
+    //     description: order.description,
+    //     status: order.status ? `${(order.quantity - order.remainingQuantity) / order.quantity * 100} + %` : "Finalizata",
+    //     clientName: order.offer.request.client.name,
+    // }));
 
     return (
         <>
@@ -66,39 +62,38 @@ function OffersTable({ offers, fecthOffers }) {
                 justifyContent: "space-between",
                 alignItems: "center"
             }}>
-                <FieldsSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
-                <DateSearch startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} setPage={setPage} />
+                <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
             </Box>
 
-            <ExportTable fileName={"oferte.pdf"} data={exportData} title={"Oferte"} columns={columns} />
+            {/* <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"} /> */}
 
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Preț</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Client</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Comenzi</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Reper</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Desen</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Greutate</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Status</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Comandă</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {(rowsPerPage > 0
-                            ? filteredOffers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : filteredOffers
-                        ).map((offer) => (
-                            <OffersTableRow key={offer.id} offer={offer} fetchOffers={fecthOffers} />
+                            ? filteredProductionNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : filteredProductionNotes
+                        ).map((productionNote) => (
+                            <ProductionNotesRow key={productionNote.id} productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder}/>
                         ))}
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )
-
+                        {
+                            emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )
                         }
                     </TableBody>
                     <TableFooter>
@@ -106,7 +101,7 @@ function OffersTable({ offers, fecthOffers }) {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                 colSpan={3}
-                                count={filteredOffers.length}
+                                count={filteredProductionNotes.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 slotProps={{
@@ -134,4 +129,4 @@ function OffersTable({ offers, fecthOffers }) {
     )
 }
 
-export default OffersTable;
+export default ProductionNotesTable;

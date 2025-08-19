@@ -1,22 +1,19 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, TextareaAutosize, FormControl, Box, TextField, Select, MenuItem } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, FormControl, Box, TextField, Select, MenuItem, Typography } from "@mui/material";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import dayjs from "dayjs";
 import productionNoteAPI from "../../../Utils/ProductionNotes";
 
 function CreateProductionNote({ order }) {
     const [open, setOpen] = useState(false);
     const [formData, setFromData] = useState({
-        number: "",
+        reper: "",
+        scheme: "",
         quantity: "",
-        unit: "buc",
-        deadline: "",
-        description: "",
+        weight: 1,
     })
-
-    const [createType, setCreateType] = useState("manually")
+    const [createType, setCreateType] = useState("manually");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleClickOpen = (e) => {
         e.currentTarget.blur();
@@ -35,11 +32,31 @@ function CreateProductionNote({ order }) {
     const createProductionNote = async (e) => {
         e.preventDefault();
         try {
-            const response = await productionNoteAPI.createProductionNote(FormData, order.id);
+            const response = await productionNoteAPI.createProductionNote(formData, order.id);
             toast.success(response.data.message);
             handleClose();
         } catch (err) {
             console.log(err);
+            toast.error(err.response.data.message);
+        }
+    }
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+        handleChange(e);
+    };
+
+    const uploadFromFile = async (e) => {
+        e.preventDefault();
+        const fileData = new FormData();
+        fileData.append("file", selectedFile);
+        try {
+            const response = await productionNoteAPI.uploadFromFile(order.id, fileData);
+            toast.success(response.data.message);
+            handleClose();
+        } catch (err) {
+            console.error(err);
             toast.error(err.response.data.message);
         }
     }
@@ -110,126 +127,126 @@ function CreateProductionNote({ order }) {
                     {
                         createType === "manually" ? (
                             <>
-                                    <form onSubmit={createProductionNote} id="creation-form">
-                                        <TextField
-                                            autoFocus
-                                            required
-                                            margin="dense"
-                                            id="reper"
-                                            name="reper"
-                                            label="Reper"
-                                            type="text"
-                                            fullWidth
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            slotProps={{
-                                                inputLabel: {
-                                                    sx: {
-                                                        position: 'relative',
-                                                        transform: 'none',
-                                                        fontSize: '1.1rem',
-                                                        color: 'primary.main',
-                                                        mb: 1,
-                                                    },
-                                                },
-                                                input: {
-                                                    color: '#000',
+                                <form onSubmit={createProductionNote} id="creation-form">
+                                    <TextField
+                                        autoFocus
+                                        required
+                                        margin="dense"
+                                        id="reper"
+                                        name="reper"
+                                        label="Reper"
+                                        type="text"
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={handleChange}
+                                        slotProps={{
+                                            inputLabel: {
+                                                sx: {
+                                                    position: 'relative',
+                                                    transform: 'none',
                                                     fontSize: '1.1rem',
-                                                    padding: '12.5px 14px',
-                                                }
-                                            }}
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            required
-                                            margin="dense"
-                                            id="scheme"
-                                            name="scheme"
-                                            label="Desen"
-                                            type="text"
-                                            fullWidth
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            slotProps={{
-                                                inputLabel: {
-                                                    sx: {
-                                                        position: 'relative',
-                                                        transform: 'none',
-                                                        fontSize: '1.1rem',
-                                                        color: 'primary.main',
-                                                        mb: 1,
-                                                    },
+                                                    color: 'primary.main',
+                                                    mb: 1,
                                                 },
-                                                input: {
-                                                    color: '#000',
+                                            },
+                                            input: {
+                                                color: '#000',
+                                                fontSize: '1.1rem',
+                                                padding: '12.5px 14px',
+                                            }
+                                        }}
+                                    />
+                                    <TextField
+                                        autoFocus
+                                        required
+                                        margin="dense"
+                                        id="scheme"
+                                        name="scheme"
+                                        label="Desen"
+                                        type="text"
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={handleChange}
+                                        slotProps={{
+                                            inputLabel: {
+                                                sx: {
+                                                    position: 'relative',
+                                                    transform: 'none',
                                                     fontSize: '1.1rem',
-                                                    padding: '12.5px 14px',
-                                                }
-                                            }}
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            required
-                                            margin="dense"
-                                            id="quantity"
-                                            name="quantity"
-                                            label="Cantitate"
-                                            type="number"
-                                            fullWidth
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            slotProps={{
-                                                inputLabel: {
-                                                    sx: {
-                                                        position: 'relative',
-                                                        transform: 'none',
-                                                        fontSize: '1.1rem',
-                                                        color: 'primary.main',
-                                                        mb: 1,
-                                                    },
+                                                    color: 'primary.main',
+                                                    mb: 1,
                                                 },
-                                                input: {
-                                                    color: '#000',
+                                            },
+                                            input: {
+                                                color: '#000',
+                                                fontSize: '1.1rem',
+                                                padding: '12.5px 14px',
+                                            }
+                                        }}
+                                    />
+                                    <TextField
+                                        autoFocus
+                                        required
+                                        margin="dense"
+                                        id="quantity"
+                                        name="quantity"
+                                        label="Cantitate"
+                                        type="number"
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={handleChange}
+                                        slotProps={{
+                                            inputLabel: {
+                                                sx: {
+                                                    position: 'relative',
+                                                    transform: 'none',
                                                     fontSize: '1.1rem',
-                                                    padding: '12.5px 14px',
-                                                }
-                                            }}
-                                        />
-                                        {
-                                            order.unit === "buc" ? (
-                                                <></>
-                                            ) : (
-                                                <TextField
-                                                    autoFocus
-                                                    required
-                                                    margin="dense"
-                                                    id="weight"
-                                                    name="weight"
-                                                    label="Greutate"
-                                                    type="number"
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    onChange={handleChange}
-                                                    slotProps={{
-                                                        inputLabel: {
-                                                            sx: {
-                                                                position: 'relative',
-                                                                transform: 'none',
-                                                                fontSize: '1.1rem',
-                                                                color: 'primary.main',
-                                                                mb: 1,
-                                                            },
-                                                        },
-                                                        input: {
-                                                            color: '#000',
+                                                    color: 'primary.main',
+                                                    mb: 1,
+                                                },
+                                            },
+                                            input: {
+                                                color: '#000',
+                                                fontSize: '1.1rem',
+                                                padding: '12.5px 14px',
+                                            }
+                                        }}
+                                    />
+                                    {
+                                        order.unit === "buc" ? (
+                                            <></>
+                                        ) : (
+                                            <TextField
+                                                autoFocus
+                                                required
+                                                margin="dense"
+                                                id="weight"
+                                                name="weight"
+                                                label="Greutate"
+                                                type="number"
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={handleChange}
+                                                slotProps={{
+                                                    inputLabel: {
+                                                        sx: {
+                                                            position: 'relative',
+                                                            transform: 'none',
                                                             fontSize: '1.1rem',
-                                                            padding: '12.5px 14px',
-                                                        }
-                                                    }}
-                                                />
-                                            )
-                                        }
-                                    </form>
+                                                            color: 'primary.main',
+                                                            mb: 1,
+                                                        },
+                                                    },
+                                                    input: {
+                                                        color: '#000',
+                                                        fontSize: '1.1rem',
+                                                        padding: '12.5px 14px',
+                                                    }
+                                                }}
+                                            />
+                                        )
+                                    }
+                                </form>
                                 <DialogActions sx={{ px: 3, pb: 2 }}>
                                     <Button
                                         onClick={handleClose}
@@ -258,7 +275,68 @@ function CreateProductionNote({ order }) {
                                 </DialogActions>
                             </>
 
-                        ) : (<></>)
+                        ) : (
+                            <>
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: "100%" }}>
+                                    <input
+                                        type="file"
+                                        id="file-upload"
+                                        onChange={handleFileChange}
+                                        style={{ display: "none" }}
+                                    />
+                                    <label htmlFor="file-upload">
+                                        <Button
+                                            variant="outlined"
+                                            component="span"
+                                            startIcon={<AttachFileIcon />}
+                                            sx={{
+                                                textTransform: "none",
+                                                bgcolor: "white",
+                                                borderRadius: 2,
+                                                boxShadow: 1,
+                                                px: 2,
+                                                py: 1,
+                                                color: "primary.main",
+                                                "&:hover": { bgcolor: "grey.100" },
+                                            }}
+                                        >
+                                            {selectedFile ? selectedFile.name : "Alege fișier"}
+                                        </Button>
+                                    </label>
+                                    {selectedFile && (
+                                        <Typography variant="body2" color="text.primary">
+                                            Fișier selectat: {selectedFile.name}
+                                        </Typography>
+                                    )}
+                                </Box>
+                                <DialogActions sx={{ px: 3, pb: 2 }}>
+                                    <Button
+                                        onClick={handleClose}
+                                        sx={{
+                                            textTransform: "none",
+                                            fontWeight: "bold",
+                                            backgroundColor: "error.main",
+                                            borderRadius: 2,
+                                            color: "text.secondary"
+                                        }}
+                                    >Anulează</Button>
+                                    <Button
+                                        onClick={uploadFromFile}
+                                        variant="contained"
+                                        sx={{
+                                            textTransform: "none",
+                                            fontWeight: "bold",
+                                            borderRadius: 2,
+                                            backgroundColor: "primary.main",
+                                            "&:hover": { backgroundColor: "primary.dark" },
+                                        }}
+                                    >
+                                        Creează
+                                    </Button>
+                                </DialogActions>
+                            </>
+
+                        )
                     }
                 </DialogContent>
             </Dialog>

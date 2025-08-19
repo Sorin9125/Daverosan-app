@@ -4,10 +4,10 @@ const { productionNoteController } = require("../controllers");
 const uploadExcel = require("../middlewares/upload");
 
 router.post("/createProductionNote/:id", productionNoteController.createProductionNote);
-router.get("/getAllProductionNotes", productionNoteController.getAllProductionNotes);
+router.get("/getAllProductionNotes/:orderNumber", productionNoteController.getAllProductionNotes);
 router.put("/updateProductionNote/:id", productionNoteController.updateProductionNote);
 router.delete("/deleteProductionNote/:id", productionNoteController.deleteProductionNote);
-router.patch("/finishProductionNote/:id", productionNoteController.finishProductionNote)
+router.put("/finishProductionNote/:id", productionNoteController.finishProductionNote)
 router.post("/uploadExcel/:id", uploadExcel.single("file"), productionNoteController.uploadFromFile);
 
 module.exports = router;

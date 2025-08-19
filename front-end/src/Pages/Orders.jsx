@@ -18,7 +18,7 @@ function Orders() {
         getOrders();
     });
 
-    useEffect(fetchOrders, []);
+    useEffect(fetchOrders, [fetchOrders]);
 
     return (
         <>

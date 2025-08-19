@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import App from './App'
 import { CookiesProvider } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 const theme = createTheme({
   palette: {
     background: {
@@ -29,7 +31,10 @@ createRoot(document.getElementById('root')).render(
       <CssBaseline />
         <CookiesProvider>
             <ToastContainer />
-            <App />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <App />
+            </LocalizationProvider>
+            
         </CookiesProvider>
     </ThemeProvider>
   </StrictMode>,

@@ -13,7 +13,7 @@ function LoginPage() {
 
     useEffect(() => {
         if(user) {
-            navigate("/clienti");
+            navigate("/clients");
         }
     }, [user, navigate]);
 
@@ -131,7 +131,7 @@ function LoginPage() {
                         <Button
                             variant="outlined"
                             fullWidth
-                            onClick={() => {navigate("/inregistrare")}}
+                            onClick={() => {navigate("/register")}}
                         >
                             Înregistrează-te
                         </Button>

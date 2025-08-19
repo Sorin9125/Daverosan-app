@@ -2,6 +2,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box
 import { toast } from "react-toastify";
 import { Fragment, useState } from "react";
 import orderAPI from "../../../Utils/Order";
+import productionNotesAPI from "../../../Utils/ProductionNotes";
 import UpdateOrder from "../../Modals/Orders/UpdateOrder";
 import DeleteOrder from "../../Modals/Orders/DeleteOrder";
 import CreateProductionNote from "../../Modals/ProductionNotes/CreateProductionNote";
@@ -19,6 +20,16 @@ function OrdersTableRow({ order, fetchOrders }) {
         }
     }
 
+    const finishProductionNote = async (id) => {
+        try {
+            const response = await productionNotesAPI.finishProducionNote(id);
+            toast.success(response.data.message);
+            fetchOrders();
+        } catch (err) {
+            toast.error(err.response.data.message)
+        }
+    }
+
     return (
         <Fragment>
             <TableRow sx={{
@@ -30,7 +41,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                 </TableCell>
                 <TableCell align="left">{order.number}</TableCell>
                 <TableCell align="left">{order.quantity} {order.unit}</TableCell>
-                <TableCell align="left">{new Date(order.deadline).toLocaleDateString()}</TableCell>
+                <TableCell align="left">{new Date(order.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
                     whiteSpace: "nowrap",
@@ -41,7 +52,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                         <span style={{ display: "block", width: "100%" }}>{order.description}</span>
                     </Tooltip>
                 </TableCell>
-                <TableCell align="left">{order.isCompleted ? "Finalizată" : "Nefinalizată"}</TableCell>
+                <TableCell align="center">{order.isCompleted ? "Finalizată" : (order.quantity - order.remainingQuantity) / order.quantity * 100 + "%"}</TableCell>
                 <TableCell align="left">{order.offer.request.client.name}</TableCell>
                 <TableCell align="center">
                     <Button
@@ -66,7 +77,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                     </Button>
                 </TableCell>
                 <TableCell align="center">
-                    <CreateProductionNote order={order}/>
+                    <CreateProductionNote order={order} />
                 </TableCell>
                 <TableCell align="center">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
@@ -80,7 +91,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                     <Collapse in={openProductionNotes} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
-                                Comenzi
+                                Notă de producție
                             </Typography>
                             <Table size="small" aria-label="orders">
                                 <TableHead>
@@ -90,21 +101,43 @@ function OrdersTableRow({ order, fetchOrders }) {
                                         <TableCell sx={{ fontWeight: "bold" }}>Desen</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.map((productionNote) => {
+                                    {data.map((productionNote) => (
                                         <TableRow key={productionNote.id} sx={{
-                                            backgroundColor: index % 2 === 0 ? "background.paper" : "grey.50",
+                                            backgroundColor: "background.paper",
                                             "&:hover": { backgroundColor: "action.hover" },
                                         }}>
                                             <TableCell>{productionNote.id}</TableCell>
                                             <TableCell>{productionNote.reper}</TableCell>
                                             <TableCell>{productionNote.scheme}</TableCell>
                                             <TableCell>{productionNote.quantity}</TableCell>
-                                            <TableCell>{productionNote.isFinished}</TableCell>
+                                            <TableCell>{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
+                                            <TableCell align="center">
+                                                <Button
+                                                    onClick={() => finishProductionNote(productionNote.id)}
+                                                    aria-label="finish production note"
+                                                    size="small"
+                                                    variant="contained"
+                                                    sx={{
+                                                        textTransform: "none",
+                                                        backgroundColor: "primary.main",
+                                                        color: "#fff",
+                                                        fontWeight: "bold",
+                                                        borderRadius: 2,
+                                                        px: 2,
+                                                        py: 1,
+                                                        "&:hover": {
+                                                            backgroundColor: "primary.dark",
+                                                        }
+                                                    }}>
+                                                    Finalizează
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
-                                    })}
+                                    ))}
                                 </TableBody>
                             </Table>
                         </Box>

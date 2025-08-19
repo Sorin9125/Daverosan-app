@@ -1,5 +1,5 @@
 import axios from "axios";
-const BACKEND_URL = import.meta.env.VITE_APIș
+const BACKEND_URL = import.meta.env.VITE_API;
 
 const productionNotesAPI = {
     createProductionNote: async (productionNote, orderId) => {
@@ -8,9 +8,7 @@ const productionNotesAPI = {
         });
         return response;
     },
-    uploadFromFile: async (orderId) => {
-        const fileData = new FormData();
-        fileData.append("file", file);
+    uploadFromFile: async (orderId, fileData) => {
         const response = await axios.post(`${BACKEND_URL}/productionNote/uploadExcel/${orderId}`, fileData, {
             withCredentials: true,
             headers: {
@@ -19,8 +17,8 @@ const productionNotesAPI = {
         });
         return response;
     },
-    getAllProductionNotes: async () => {
-        const response = await axios.get(`${BACKEND_URL}/productionNote/getAllProductionNotes`, {
+    getAllProductionNotes: async (orderNumber) => {
+        const response = await axios.get(`${BACKEND_URL}/productionNote/getAllProductionNotes/${orderNumber}`, {
             withCredentials: true,
         });
         return response;
@@ -33,6 +31,12 @@ const productionNotesAPI = {
     },
     deleteProductionNote: async (id) => {
         const response = await axios.delete(`${BACKEND_URL}/productionNote/deleteProductionNote/${id}`, {
+            withCredentials: true,
+        });
+        return response;
+    },
+    finishProducionNote: async (id) => {
+        const response = await axios.put(`${BACKEND_URL}/productionNote/finishProductionNote/${id}`, {}, {
             withCredentials: true,
         });
         return response;

@@ -30,7 +30,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                     {offer.id}
                 </TableCell>
                 <TableCell align="left">{offer.price}</TableCell>
-                <TableCell align="left">{new Date(offer.deadline).toLocaleDateString()}</TableCell>
+                <TableCell align="left">{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                 <TableCell align="left">{offer.request.client.name}</TableCell>
                 <TableCell align="center">
@@ -92,7 +92,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                                             <TableCell>{data.id}</TableCell>
                                             <TableCell>{data.number}</TableCell>
                                             <TableCell>{data.quantity} {data.unit}</TableCell>
-                                            <TableCell>{new Date(data.deadline).toLocaleDateString()}</TableCell>
+                                            <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.description}</TableCell>
                                             <TableCell>{data.isCompleted}</TableCell>
                                         </TableRow>

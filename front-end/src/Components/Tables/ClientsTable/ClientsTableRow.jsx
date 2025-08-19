@@ -163,7 +163,7 @@ function ClientsTableRow({ client, fetchClients }) {
                             <span style={{ display: "block", width: "100%" }}>{request.description}</span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell align="left">{new Date(request.sentAt).toLocaleDateString()}</TableCell>
+                        <TableCell align="left">{new Date(request.sentAt).toLocaleDateString("en-GB")}</TableCell>
                         <TableCell align="left">{request.isOffered ? "Ofertată" : "Neofertată"}</TableCell>
                       </TableRow>
                     ))}
@@ -193,7 +193,7 @@ function ClientsTableRow({ client, fetchClients }) {
                       }}>
                         <TableCell>{offer.id}</TableCell>
                         <TableCell>{offer.price}</TableCell>
-                        <TableCell>{new Date(offer.deadline).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                         <TableCell>{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                       </TableRow>
                     ))}
@@ -226,7 +226,7 @@ function ClientsTableRow({ client, fetchClients }) {
                         <TableCell>{order.id}</TableCell>
                         <TableCell>{order.number}</TableCell>
                         <TableCell>{order.quantity} {order.unit}</TableCell>
-                        <TableCell>{new Date(order.deadline).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(order.deadline).toLocaleDateString("en-GB")}</TableCell>
                         <TableCell align="left" sx={{
                           maxWidth: 300,
                           whiteSpace: "nowrap",

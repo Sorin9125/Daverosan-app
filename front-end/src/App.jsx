@@ -8,6 +8,7 @@ import Request from "./Pages/Requests";
 import Offers from "./Pages/Offer";
 import Orders from "./Pages/Orders";
 import Register from "./Pages/Register";
+import ProductionNotes from "./Pages/ProductionNotes";
 import AuthProvider from "./Context";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 
@@ -31,11 +32,12 @@ function App() {
            }}>
             <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/inregistrare" element={<Register />} />
-            <Route path="/clienti" element={<ProtectedRoute><Client /></ProtectedRoute>} />
-            <Route path="/cereri" element={<ProtectedRoute><Request /></ProtectedRoute>} />
-            <Route path="/oferte" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
-            <Route path="/comenzi" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/clients" element={<ProtectedRoute><Client /></ProtectedRoute>} />
+            <Route path="/requests" element={<ProtectedRoute><Request /></ProtectedRoute>} />
+            <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
+            <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path="/productionNotes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>}/>
           </Routes>
           </Box>
           <Footer />

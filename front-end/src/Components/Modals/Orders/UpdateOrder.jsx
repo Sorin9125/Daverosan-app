@@ -1,8 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, TextareaAutosize, FormControl, Box, TextField, Select, MenuItem } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs";
 import orderAPI from "../../../Utils/Order"
 
@@ -201,7 +200,6 @@ function UpdateOrder({ order, fetchOrders }) {
                                 />
                             </Box>
                         </FormControl>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="Termen de finalizare"
                                 value={dayjs(formData.deadline)}
@@ -228,7 +226,6 @@ function UpdateOrder({ order, fetchOrders }) {
                                     },
                                 }}
                             />
-                        </LocalizationProvider>
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>
