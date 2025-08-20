@@ -22,7 +22,7 @@ const offerController = {
             if (new Date(offer.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum o termini daca nu ai primit-o?" })
             }
-            if (!(/^[0-9]{1,}$/).test(offer.price)) {
+            if (!(/^[0-9.]{1,}$/).test(offer.price)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             await request.createOffer(offer);
@@ -73,7 +73,7 @@ const offerController = {
             if (new Date(newOffer.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum termini inainte sa incepi?" });
             }
-            if (!(/^[0-9]{1,}$/).test(newOffer.price)) {
+            if (!(/^[0-9.]{1,}$/).test(newOffer.price)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             await offer.update(newOffer);
@@ -90,6 +90,10 @@ const offerController = {
             if (!offer) {
                 return res.status(400).json({ message: `Oferta cu id-ul ${offerId} nu exista` });
             }
+            const request = await requestModel.findByPk(offer.requestId);
+            await request.update({
+                isOffered: !request.isOffered,
+            })
             await offerModel.destroy({
                 where: {
                     id: offerId,

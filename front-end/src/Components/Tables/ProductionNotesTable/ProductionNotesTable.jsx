@@ -41,7 +41,6 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         { header: "cantitate", accessor: "quantity" },
         { header: "Greutate", accessor: "weight" },
         { header: "Status", accessor:"status" },
-        { header: "Comanda", accessor: "orderNumber" },
     ]
 
     const exportData = filteredProductionNotes.map((productionNote) => ({
@@ -50,11 +49,8 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         scheme: productionNote.scheme,
         quantity: productionNote.quantity,
         weight: productionNote.order.unit === "buc"  ? "Comanda este" : productionNote.weight,
-        status: productionNote.status ? "Nefinalizata" : "Finalizata",
-        orderNumber: productionNote.order.number,
+        status: productionNote.status ? "Finalizata" : "Nefinalizata",
     }));
-
-    console.log(selectedOrder);
 
     return (
         <>

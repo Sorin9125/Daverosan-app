@@ -12,7 +12,7 @@ const offerModel = db.define("offer", {
         allowNull: false,
     },
     price: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DECIMAL(10, 5),
         allowNull: false,
     },
     isAccepted: {

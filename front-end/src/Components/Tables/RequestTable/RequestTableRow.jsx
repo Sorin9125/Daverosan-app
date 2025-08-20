@@ -65,7 +65,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                     </Button>
                 </TableCell>
                 <TableCell align="center">
-                    <CreateOffer requestID={request.id}/>
+                    <CreateOffer requestID={request.id} fetchRequests={fetchRequests}/>
                 </TableCell>
                 <TableCell align="left">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
@@ -97,7 +97,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                                             "&:hover": { backgroundColor: "action.hover" },
                                         }}>
                                             <TableCell>{data.id}</TableCell>
-                                            <TableCell>{data.price}</TableCell>
+                                            <TableCell>{parseFloat(data.price)}</TableCell>
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                                         </TableRow>

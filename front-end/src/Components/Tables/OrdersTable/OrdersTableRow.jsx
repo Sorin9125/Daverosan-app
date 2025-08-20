@@ -40,7 +40,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                     {order.id}
                 </TableCell>
                 <TableCell align="left">{order.number}</TableCell>
-                <TableCell align="left">{order.quantity} {order.unit}</TableCell>
+                <TableCell align="left">{parseFloat(order.quantity)} {order.unit}</TableCell>
                 <TableCell align="left">{new Date(order.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
@@ -100,6 +100,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                                         <TableCell sx={{ fontWeight: "bold" }}>Reper</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Desen</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Greutate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                                         <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
                                     </TableRow>
@@ -114,6 +115,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                                             <TableCell>{productionNote.reper}</TableCell>
                                             <TableCell>{productionNote.scheme}</TableCell>
                                             <TableCell>{productionNote.quantity}</TableCell>
+                                            <TableCell>{productionNote.order?.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
                                             <TableCell>{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
                                             <TableCell align="center">
                                                 <Button

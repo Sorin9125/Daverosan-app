@@ -12,15 +12,15 @@ const orderModel = db.define("order", {
         allowNull:false,
     },
     quantity: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(10, 5),
         allowNull: false,
     },
     remainingQuantity: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(10, 5),
         allowNull:false,
     },
     unit: {
-        type: DataTypes.ENUM("buc", "kg"),
+        type: DataTypes.ENUM("buc", "t"),
         allowNull: false,
     },
     description: {

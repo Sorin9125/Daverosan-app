@@ -23,7 +23,7 @@ const productionNoteModel = db.define("productionNote", {
         allowNull: false,
     },
     weight: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(10, 5),
         defaultValue: 1,
     },
     isFinished: {

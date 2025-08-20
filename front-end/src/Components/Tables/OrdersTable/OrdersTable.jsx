@@ -49,13 +49,13 @@ function OrdersTable({ orders, fetchOrders }) {
     };
 
     const columns = [
-        {header: "ID", accessor: "id"},
-        {header: "Numar de comanda", accessor: "number"},
-        {header: "Cantitate", accessor: "quantity"},
-        {header: "Termen de finalizare", accessor: "deadline"},
-        {header: "Descriere", accessor: "description"},
-        {header: "Status", accessor: "status"},
-        {header: "Client", accessor: "clientName"},
+        { header: "ID", accessor: "id" },
+        { header: "Numar de comanda", accessor: "number" },
+        { header: "Cantitate", accessor: "quantity" },
+        { header: "Termen de finalizare", accessor: "deadline" },
+        { header: "Descriere", accessor: "description" },
+        { header: "Status", accessor: "status" },
+        { header: "Client", accessor: "clientName" },
     ]
 
     const exportData = filteredOrders.map((order) => ({
@@ -64,7 +64,7 @@ function OrdersTable({ orders, fetchOrders }) {
         quantity: `${order.quantity} ${order.unit}`,
         deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
         description: order.description,
-        status: order.status ? `${(order.quantity - order.remainingQuantity) / order.quantity * 100} + %` : "Finalizata",
+        status: order.status ? "Finalizata" : `${(order.quantity - order.remainingQuantity) / order.quantity * 100} %`,
         clientName: order.offer.request.client.name,
     }));
 
@@ -80,7 +80,7 @@ function OrdersTable({ orders, fetchOrders }) {
                 <DateSearch startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} setPage={setPage} />
             </Box>
 
-            <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"}/>
+            <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"} />
 
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table aria-label="collapsible table">

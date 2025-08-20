@@ -5,7 +5,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs";
 import orderAPI from "../../../Utils/Order"
 
-function CreateOrder({ offerId }) {
+function CreateOrder({ offerId, fetchOffers }) {
     const [open, setOpen] = useState(false);
     const [formData, setFromData] = useState({
         number: "",
@@ -34,6 +34,7 @@ function CreateOrder({ offerId }) {
         try {
             const response = await orderAPI.createOrder(formData, offerId);
             toast.success(response.data.message);
+            fetchOffers();
             handleClose();
         } catch (err) {
             console.log(err);
@@ -126,10 +127,13 @@ function CreateOrder({ offerId }) {
                                     },
                                 },
                                 input: {
-                                    color: '#000',
-                                    fontSize: '1.1rem',
-                                    padding: '12.5px 14px',
-                                }
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
                             }}
                         />
                         <FormControl fullWidth variant="outlined" margin="dense">
@@ -158,7 +162,7 @@ function CreateOrder({ offerId }) {
                                 }}
                             >
                                 <MenuItem value="buc">Bucată</MenuItem>
-                                <MenuItem value="kg">Kilogram</MenuItem>
+                                <MenuItem value="t">Tonă</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl fullWidth variant="outlined" margin="dense">
@@ -203,31 +207,31 @@ function CreateOrder({ offerId }) {
                                 />
                             </Box>
                         </FormControl>
-                            <DatePicker
-                                label="Termen de finalizare"
-                                onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
-                                slotProps={{
-                                    textField: {
-                                        fullWidth: true,
-                                        required: true,
-                                        variant: 'outlined',
-                                        sx: {
-                                            '& .MuiInputLabel-root': {
-                                                position: 'relative',
-                                                transform: 'none',
-                                                fontSize: '1.1rem',
-                                                color: 'primary.main',
-                                                mb: 1,
-                                            },
-                                            '& .MuiOutlinedInput-input': {
-                                                color: '#000',
-                                                fontSize: '1.1rem',
-                                                padding: '12.5px 14px',
-                                            },
+                        <DatePicker
+                            label="Termen de finalizare"
+                            onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
+                            slotProps={{
+                                textField: {
+                                    fullWidth: true,
+                                    required: true,
+                                    variant: 'outlined',
+                                    sx: {
+                                        '& .MuiInputLabel-root': {
+                                            position: 'relative',
+                                            transform: 'none',
+                                            fontSize: '1.1rem',
+                                            color: 'primary.main',
+                                            mb: 1,
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: '#000',
+                                            fontSize: '1.1rem',
+                                            padding: '12.5px 14px',
                                         },
                                     },
-                                }}
-                            />
+                                },
+                            }}
+                        />
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

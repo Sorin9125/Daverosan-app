@@ -1,11 +1,11 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Step } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs";
 import offerAPI from "../../../Utils/Offer"
 
-function CreateOffer({ requestID }) {
+function CreateOffer({ requestID, fetchRequests }) {
     const [open, setOpen] = useState(false);
     const [formData, setFromData] = useState({
         description: "",
@@ -26,11 +26,12 @@ function CreateOffer({ requestID }) {
         setFromData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const createRequest = async (e) => {
+    const createOffer = async (e) => {
         e.preventDefault();
         try {
             const response = await offerAPI.createOffer(formData, requestID);
             toast.success(response.data.message);
+            fetchRequests()
             handleClose();
         } catch (err) {
             toast.error(err.response.data.message);
@@ -71,7 +72,7 @@ function CreateOffer({ requestID }) {
             >
                 <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Creează o ofertă</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <form onSubmit={createRequest} id="creation-form">
+                    <form onSubmit={createOffer} id="creation-form">
                         <TextField
                             autoFocus
                             required
@@ -94,37 +95,40 @@ function CreateOffer({ requestID }) {
                                     },
                                 },
                                 input: {
-                                    color: '#000',
-                                    fontSize: '1.1rem',
-                                    padding: '12.5px 14px',
-                                }
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
                             }}
                         />
-                            <DatePicker
-                                label="Termen de finalizare"
-                                onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
-                                slotProps={{
-                                    textField: {
-                                        fullWidth: true,
-                                        required: true,
-                                        variant: 'outlined',
-                                        sx: {
-                                            '& .MuiInputLabel-root': {
-                                                position: 'relative',
-                                                transform: 'none',
-                                                fontSize: '1.1rem',
-                                                color: 'primary.main',
-                                                mb: 1,
-                                            },
-                                            '& .MuiOutlinedInput-input': {
-                                                color: '#000',
-                                                fontSize: '1.1rem',
-                                                padding: '12.5px 14px',
-                                            },
+                        <DatePicker
+                            label="Termen de finalizare"
+                            onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
+                            slotProps={{
+                                textField: {
+                                    fullWidth: true,
+                                    required: true,
+                                    variant: 'outlined',
+                                    sx: {
+                                        '& .MuiInputLabel-root': {
+                                            position: 'relative',
+                                            transform: 'none',
+                                            fontSize: '1.1rem',
+                                            color: 'primary.main',
+                                            mb: 1,
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: '#000',
+                                            fontSize: '1.1rem',
+                                            padding: '12.5px 14px',
                                         },
                                     },
-                                }}
-                            />
+                                },
+                            }}
+                        />
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

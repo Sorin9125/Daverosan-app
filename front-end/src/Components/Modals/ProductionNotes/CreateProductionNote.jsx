@@ -238,13 +238,16 @@ function CreateProductionNote({ order }) {
                                                         },
                                                     },
                                                     input: {
-                                                        color: '#000',
-                                                        fontSize: '1.1rem',
-                                                        padding: '12.5px 14px',
-                                                    }
+                                                        inputProps: { step: "any" },
+                                                        sx: {
+                                                            color: '#000',
+                                                            fontSize: '1.1rem',
+                                                            padding: '12.5px 14px',
+                                                        },
+                                                    },
                                                 }}
                                             />
-                                        )
+                                    )
                                     }
                                 </form>
                                 <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -284,6 +287,12 @@ function CreateProductionNote({ order }) {
                                         onChange={handleFileChange}
                                         style={{ display: "none" }}
                                     />
+                                    <Typography>
+                                        Fișierul trebuie să fie de tip excel și să aibă următoarea structură:
+                                        începând din celula A1 pe prima linie să fie în această oridine
+                                        coloanele Reper, Port, Desen, Cantitate și Greutate. Coloanele care
+                                        au nevoie de o valoare pe fiecare linie sunt Reper, Desen și Cantitate
+                                    </Typography>
                                     <label htmlFor="file-upload">
                                         <Button
                                             variant="outlined"

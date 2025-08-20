@@ -23,7 +23,7 @@ function UpdateOffer({ offer, fetchOffers }) {
         setFromData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const updateRequest = async (e) => {
+    const updateOffer = async (e) => {
         e.preventDefault();
 
         try {
@@ -70,7 +70,7 @@ function UpdateOffer({ offer, fetchOffers }) {
             >
                 <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Actualizează oferta</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <form onSubmit={updateRequest} id="update-form">
+                    <form onSubmit={updateOffer} id="update-form">
                         <TextField
                             autoFocus
                             required

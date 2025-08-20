@@ -17,7 +17,7 @@ function ProductionNotesRow({ productionNote, fetchProductionNotes, selectedOrde
                 <TableCell align="left">{productionNote.reper}</TableCell>
                 <TableCell align="left">{productionNote.scheme}</TableCell>
                 <TableCell align="left">{productionNote.quantity}</TableCell>
-                <TableCell align="center">{productionNote.order.unit === "buc" ? "Comanda este în bucăți" : productionNote.weight}</TableCell>
+                <TableCell align="center">{productionNote.order.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
                 <TableCell align="center">{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
                 <TableCell align="center">{productionNote.order.number}</TableCell>
                 <TableCell align="center">

@@ -20,7 +20,7 @@ const productionNoteController = {
             if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
                 return res.status(400).json({ message: "Introduceti un desen valid" });
             }
-            if (!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
+            if (!(/^[0-9.]{1,}$/).test(productionNote.quantity)) {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
             await order.createProductionNote(productionNote);
@@ -69,7 +69,7 @@ const productionNoteController = {
             if (!(/^[0-9]{1,}/).test(newProductionNote.quantity)) {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
-            if (!(/^[0-9]{1,}/).test(newProductionNote.weight)) {
+            if (!(/^[0-9.]{1,}/).test(newProductionNote.weight)) {
                 return res.status(400).json({ message: "Introduceti o cantintate valida" })
             }
             await productionNote.update(newProductionNote);
@@ -85,6 +85,12 @@ const productionNoteController = {
             const productioNote = await productionNoteModel.findByPk(productionNoteId);
             if (!productioNote) {
                 return res.status(400).json({ mesage: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
+            }
+            const order = await orderModel.findByPk(productioNote.orderId);
+            if (productioNote.isFinished) {
+                await order.update({
+                    remainingQuantity: order.remainingQuantity + productioNote.weight * productioNote.quantity,
+                })
             }
             await productionNoteModel.destroy({
                 where: {

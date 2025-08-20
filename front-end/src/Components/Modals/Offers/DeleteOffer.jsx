@@ -15,7 +15,7 @@ function DeleteOffer({ offer, fetchOffers }) {
         setOpen(false);
     };
 
-    const deleteRequest = async (e) => {
+    const deleteOffer = async (e) => {
         e.preventDefault();
         try {
             const response = await offerAPI.deleteOffer(offer.id);
@@ -85,7 +85,7 @@ function DeleteOffer({ offer, fetchOffers }) {
                             backgroundColor: "primary.main",
                             "&:hover": { backgroundColor: "primary.dark" },
                         }}
-                        onClick={deleteRequest}
+                        onClick={deleteOffer}
                     >
                         Șterge
                     </Button>

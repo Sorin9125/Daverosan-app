@@ -29,7 +29,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                     {offer.id}
                 </TableCell>
-                <TableCell align="left">{offer.price}</TableCell>
+                <TableCell align="left">{parseFloat(offer.price)}</TableCell>
                 <TableCell align="left">{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                 <TableCell align="left">{offer.request.client.name}</TableCell>
@@ -56,7 +56,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                     </Button>
                 </TableCell>
                 <TableCell align="center">
-                    <CreateOrder offerId={offer.id} />
+                    <CreateOrder offerId={offer.id} fetchOffers={fetchOffers}/>
                 </TableCell>
                 <TableCell align="left">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
@@ -91,7 +91,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                                         }}>
                                             <TableCell>{data.id}</TableCell>
                                             <TableCell>{data.number}</TableCell>
-                                            <TableCell>{data.quantity} {data.unit}</TableCell>
+                                            <TableCell>{parseFloat(data.quantity)} {data.unit}</TableCell>
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.description}</TableCell>
                                             <TableCell>{data.isCompleted}</TableCell>

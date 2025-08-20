@@ -22,9 +22,6 @@ const orderController = {
             if (!(/^[0-9\,.]{1,}$/).test(order.quantity)) {
                 return res.status(400).json({ message: "Intrduceti o cantitate valida" });
             }
-            if (!(/[buc]|[kg]/).test(order.unit)) {
-                return res.status(400).json({ message: "Unitatile de masura valide sunt buc si kg" });
-            }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]{1,}$/).test(order.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
@@ -89,9 +86,6 @@ const orderController = {
             if (!(/^[0-9\,.]{1,}$/).test(newOrder.quantity)) {
                 return res.status(400).json({ message: "Intrduceti o cantitate valida" });
             }
-            if (!(/[buc]|[kg]/).test(newOrder.unit)) {
-                return res.status(400).json({ message: "Unitatile de masura valide sunt buc si kg" });
-            }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]{1,}$/).test(newOrder.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
@@ -117,6 +111,10 @@ const orderController = {
             if (!order) {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
+            const offer = await offerModel.findByPk(order.offerId);
+            await offer.update({
+                isAccepted: !offer.isAccepted,
+            })
             await orderModel.destroy({
                 where: {
                     id: orderId,
