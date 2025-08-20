@@ -29,7 +29,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                     {offer.id}
                 </TableCell>
-                <TableCell align="left">{parseFloat(offer.price)}</TableCell>
+                <TableCell align="left">{parseFloat(offer.value)}</TableCell>
                 <TableCell align="left">{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                 <TableCell align="left">{offer.request.client.name}</TableCell>
@@ -77,8 +77,10 @@ function OffersTableRow({ offer, fetchOffers }) {
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Valoare</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Dată finalizare</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                                     </TableRow>
@@ -91,8 +93,10 @@ function OffersTableRow({ offer, fetchOffers }) {
                                         }}>
                                             <TableCell>{data.id}</TableCell>
                                             <TableCell>{data.number}</TableCell>
+                                            <TableCell>{parseFloat(data.value)}</TableCell>
                                             <TableCell>{parseFloat(data.quantity)} {data.unit}</TableCell>
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
+                                            <TableCell>{data.isCompleted ? new Date(data.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfășurare"}</TableCell>
                                             <TableCell>{data.description}</TableCell>
                                             <TableCell>{data.isCompleted}</TableCell>
                                         </TableRow>

@@ -109,6 +109,37 @@ function CreateOrder({ offerId, fetchOffers }) {
                             autoFocus
                             required
                             margin="dense"
+                            id="value"
+                            name="value"
+                            label="Valoare"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {
+                                        position: 'relative',
+                                        transform: 'none',
+                                        fontSize: '1.1rem',
+                                        color: 'primary.main',
+                                        mb: 1,
+                                    },
+                                },
+                                input: {
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
+                            }}
+                        />
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
                             id="quantity"
                             name="quantity"
                             label="Cantitate"

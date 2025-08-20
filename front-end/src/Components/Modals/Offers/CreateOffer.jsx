@@ -77,8 +77,8 @@ function CreateOffer({ requestID, fetchRequests }) {
                             autoFocus
                             required
                             margin="dense"
-                            id="price"
-                            name="price"
+                            id="value"
+                            name="value"
                             label="Valoarea ofertei (euro)"
                             type="number"
                             fullWidth

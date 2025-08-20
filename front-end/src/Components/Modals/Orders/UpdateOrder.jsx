@@ -104,6 +104,35 @@ function UpdateOrder({ order, fetchOrders }) {
                             autoFocus
                             required
                             margin="dense"
+                            id="value"
+                            name="value"
+                            label="valoare"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            value={formData.value}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {
+                                        position: 'relative',
+                                        transform: 'none',
+                                        fontSize: '1.1rem',
+                                        color: 'primary.main',
+                                        mb: 1,
+                                    },
+                                },
+                                input: {
+                                    color: '#000',
+                                    fontSize: '1.1rem',
+                                    padding: '12.5px 14px',
+                                }
+                            }}
+                        />
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
                             id="quantity"
                             name="quantity"
                             label="Cantitate"

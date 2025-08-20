@@ -192,7 +192,7 @@ function ClientsTableRow({ client, fetchClients }) {
                         "&:hover": { backgroundColor: "action.hover" },
                       }}>
                         <TableCell>{offer.id}</TableCell>
-                        <TableCell>{offer.price}</TableCell>
+                        <TableCell>{parseFloat(offer.value)}</TableCell>
                         <TableCell>{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                         <TableCell>{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                       </TableRow>
@@ -211,8 +211,10 @@ function ClientsTableRow({ client, fetchClients }) {
                     <TableRow>
                       <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Valoare</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Dată finalizare</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                     </TableRow>
@@ -225,8 +227,10 @@ function ClientsTableRow({ client, fetchClients }) {
                       }}>
                         <TableCell>{order.id}</TableCell>
                         <TableCell>{order.number}</TableCell>
-                        <TableCell>{order.quantity} {order.unit}</TableCell>
+                        <TableCell>{parseFloat(order.value)}</TableCell>
+                        <TableCell>{parseFloat(order.quantity)} {order.unit}</TableCell>
                         <TableCell>{new Date(order.deadline).toLocaleDateString("en-GB")}</TableCell>
+                        <TableCell>{order.isCompleted ? new Date(order.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfășurare"}</TableCell>
                         <TableCell align="left" sx={{
                           maxWidth: 300,
                           whiteSpace: "nowrap",

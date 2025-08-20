@@ -44,7 +44,7 @@ function OffersTable({ offers, fecthOffers }) {
 
     const columns = [
         { header: "id", accessor: "id" },
-        { header: "Valoare", accessor: "price" },
+        { header: "Valoare", accessor: "value" },
         { header: "Termen de finalizare", accessor: "deadline" },
         { header: "Status", accessor: "status" },
         { header: "Client", accessor: "clientName" },
@@ -52,7 +52,7 @@ function OffersTable({ offers, fecthOffers }) {
 
     const exportData = filteredOffers.map((offer) => ({
         id: offer.id,
-        price: offer.price,
+        value: offer.value,
         deadline: new Date(offer.deadline).toLocaleDateString("en-GB"),
         status: offer.status ? "Neaccepatata" : "Acceptata",
         clientName: offer.request.client.name,

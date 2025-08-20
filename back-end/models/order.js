@@ -36,6 +36,14 @@ const orderModel = db.define("order", {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    value: {
+        type: DataTypes.DECIMAL(10,5),
+        allowNull: false,
+    },
+    finishDate: {
+        type: DataTypes.DATE,
+        defaultValue: null,
+    }
 },
     {
         freezeTableName: true,

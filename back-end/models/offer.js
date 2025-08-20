@@ -11,7 +11,7 @@ const offerModel = db.define("offer", {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    price: {
+    value: {
         type: DataTypes.DECIMAL(10, 5),
         allowNull: false,
     },

@@ -16,7 +16,7 @@ const orderController = {
                 return res.status(400).json({ message: `Oferta cu id-ul ${offerId} a fost deja acceptata` });
             }
             const order = req.body;
-            if (!(order.quantity && order.unit && order.description && order.deadline && order.number)) {
+            if (!(order.quantity && order.unit && order.description && order.deadline && order.number && order.value)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[0-9\,.]{1,}$/).test(order.quantity)) {
@@ -27,6 +27,9 @@ const orderController = {
             }
             if (!(/^[A-z0-9]{1,}$/).test(order.number)) {
                 return res.status(400).json({ message: "Introduceti un numar de comanda valid" });
+            }
+            if (!(/^[0-9.]{1,}$/).test(order.value)) {
+                return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             const request = await requestModel.findByPk(offer.requestId);
             if (new Date(order.deadline).getTime() < new Date(request.sentAt).getTime()) {
@@ -80,7 +83,7 @@ const orderController = {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
             const newOrder = req.body;
-            if (!(newOrder.quantity && newOrder.unit && newOrder.description && newOrder.deadline && newOrder.number)) {
+            if (!(newOrder.quantity && newOrder.unit && newOrder.description && newOrder.deadline && newOrder.number && newOrder.value)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[0-9\,.]{1,}$/).test(newOrder.quantity)) {
@@ -91,6 +94,9 @@ const orderController = {
             }
             if (!(/^[A-z0-9]{1,}$/).test(newOrder.number)) {
                 return res.status(400).json({ message: "Introduceti un numar de comanda valid" });
+            }
+            if (!(/^[0-9.]$/).test(newOrder.value)) {
+                return res.status(400).send({ message: "Introduceti o valoare valida" });
             }
             const offer = await offerModel.findByPk(order.offerId);
             const request = await requestModel.findByPk(offer.requestId);

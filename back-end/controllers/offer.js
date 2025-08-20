@@ -16,13 +16,13 @@ const offerController = {
                 return res.status(400).json({ message: `Cererea cu id-ul ${requestId} a primit deja un raspuns` });
             }
             const offer = req.body;
-            if (!(offer.deadline && offer.price)) {
+            if (!(offer.deadline && offer.value)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (new Date(offer.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum o termini daca nu ai primit-o?" })
             }
-            if (!(/^[0-9.]{1,}$/).test(offer.price)) {
+            if (!(/^[0-9.]{1,}$/).test(offer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             await request.createOffer(offer);
@@ -66,14 +66,14 @@ const offerController = {
                 return res.status(400).json({ message: `Oferta cu id-ul ${offerId} nu exista` });
             }
             const newOffer = req.body;
-            if (!(newOffer.deadline && newOffer.price)) {
+            if (!(newOffer.deadline && newOffer.value)) {
                 return res.status(400).json({ messsage: "Completeaza toate campurile printurle" });
             }
             const request = await requestModel.findByPk(offer.requestId);
             if (new Date(newOffer.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum termini inainte sa incepi?" });
             }
-            if (!(/^[0-9.]{1,}$/).test(newOffer.price)) {
+            if (!(/^[0-9.]{1,}$/).test(newOffer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
             await offer.update(newOffer);

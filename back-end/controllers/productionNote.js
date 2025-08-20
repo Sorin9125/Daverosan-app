@@ -123,6 +123,7 @@ const productionNoteController = {
             if (order.remainingQuantity == 0) {
                 order.update({
                     isCompleted: true,
+                    finishDate: order.updatedAt,
                 })
                 return res.status(200).json({ message: `Comanda cu id-ul ${productionNote.orderId} a fost finalizata` });
             }

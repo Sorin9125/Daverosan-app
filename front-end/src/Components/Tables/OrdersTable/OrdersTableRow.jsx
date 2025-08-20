@@ -40,8 +40,10 @@ function OrdersTableRow({ order, fetchOrders }) {
                     {order.id}
                 </TableCell>
                 <TableCell align="left">{order.number}</TableCell>
+                <TableCell align="left">{parseFloat(order.value)}</TableCell>
                 <TableCell align="left">{parseFloat(order.quantity)} {order.unit}</TableCell>
                 <TableCell align="left">{new Date(order.deadline).toLocaleDateString("en-GB")}</TableCell>
+                <TableCell align="left">{order.isCompleted ? new Date(order.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfășurare"}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
                     whiteSpace: "nowrap",
@@ -52,7 +54,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                         <span style={{ display: "block", width: "100%" }}>{order.description}</span>
                     </Tooltip>
                 </TableCell>
-                <TableCell align="center">{order.isCompleted ? "Finalizată" : (order.quantity - order.remainingQuantity) / order.quantity * 100 + "%"}</TableCell>
+                <TableCell align="center">{order.isCompleted ? "Finalizată" : ((order.quantity - order.remainingQuantity) / order.quantity * 100).toFixed(2) + "%"}</TableCell>
                 <TableCell align="left">{order.offer.request.client.name}</TableCell>
                 <TableCell align="center">
                     <Button
@@ -87,7 +89,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={openProductionNotes} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -118,7 +120,8 @@ function OrdersTableRow({ order, fetchOrders }) {
                                             <TableCell>{productionNote.order?.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
                                             <TableCell>{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
                                             <TableCell align="center">
-                                                <Button
+                                                {!productionNote.isFinished ? (
+                                                    <Button
                                                     onClick={() => finishProductionNote(productionNote.id)}
                                                     aria-label="finish production note"
                                                     size="small"
@@ -137,6 +140,12 @@ function OrdersTableRow({ order, fetchOrders }) {
                                                     }}>
                                                     Finalizează
                                                 </Button>
+                                                ) : (
+                                                    "Nota de producție este deja finalizată"
+                                                )
+                                                    
+                                                }
+                                                
                                             </TableCell>
                                         </TableRow>
                                     ))}

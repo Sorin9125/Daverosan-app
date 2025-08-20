@@ -97,7 +97,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                                             "&:hover": { backgroundColor: "action.hover" },
                                         }}>
                                             <TableCell>{data.id}</TableCell>
-                                            <TableCell>{parseFloat(data.price)}</TableCell>
+                                            <TableCell>{parseFloat(data.value)}</TableCell>
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                                         </TableRow>

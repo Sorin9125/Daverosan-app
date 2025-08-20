@@ -51,8 +51,10 @@ function OrdersTable({ orders, fetchOrders }) {
     const columns = [
         { header: "ID", accessor: "id" },
         { header: "Numar de comanda", accessor: "number" },
+        { header: "Valoare", accessor: "value"},
         { header: "Cantitate", accessor: "quantity" },
         { header: "Termen de finalizare", accessor: "deadline" },
+        { header: "Data finalizare", accessor: "finishedDate"},
         { header: "Descriere", accessor: "description" },
         { header: "Status", accessor: "status" },
         { header: "Client", accessor: "clientName" },
@@ -61,10 +63,12 @@ function OrdersTable({ orders, fetchOrders }) {
     const exportData = filteredOrders.map((order) => ({
         id: order.id,
         number: order.number,
+        value: order.value,
         quantity: `${order.quantity} ${order.unit}`,
         deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
+        finishedDate: order.isCompleted ? new Date(order.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfasurare",
         description: order.description,
-        status: order.status ? "Finalizata" : `${(order.quantity - order.remainingQuantity) / order.quantity * 100} %`,
+        status: order.isComplteted ? "Finalizata" : `${(order.quantity - order.remainingQuantity) / order.quantity * 100} %`,
         clientName: order.offer.request.client.name,
     }));
 
@@ -88,8 +92,10 @@ function OrdersTable({ orders, fetchOrders }) {
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Valoare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Dată finalizare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Client</TableCell>

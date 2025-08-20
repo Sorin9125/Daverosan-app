@@ -75,13 +75,13 @@ function UpdateOffer({ offer, fetchOffers }) {
                             autoFocus
                             required
                             margin="dense"
-                            id="price"
-                            name="price"
+                            id="value"
+                            name="value"
                             label="Valoarea ofertei (euro)"
                             type="number"
                             fullWidth
                             variant="outlined"
-                            value={formData.price}
+                            value={formData.value}
                             onChange={handleChange}
                             slotProps={{
                                 inputLabel: {
