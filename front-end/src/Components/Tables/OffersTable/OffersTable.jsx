@@ -52,7 +52,7 @@ function OffersTable({ offers, fecthOffers }) {
 
     const exportData = filteredOffers.map((offer) => ({
         id: offer.id,
-        value: offer.value,
+        value: parseFloat(offer.value),
         deadline: new Date(offer.deadline).toLocaleDateString("en-GB"),
         status: offer.status ? "Neaccepatata" : "Acceptata",
         clientName: offer.request.client.name,
