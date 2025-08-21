@@ -170,7 +170,7 @@ function UpdateProductionNote({ productionNote, fetchProductionNotes, selectedOr
                                     type="number"
                                     fullWidth
                                     variant="outlined"
-                                    value={formData.weight}
+                                    value={parseFloat(formData.weight)}
                                     onChange={handleChange}
                                     slotProps={{
                                         inputLabel: {

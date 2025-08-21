@@ -42,6 +42,7 @@ function CreateClient({ fetchClients }) {
                 size="small"
                 variant="contained"
                 sx={{
+                    fontSize: "1.2rem",
                     textTransform: "none",
                     backgroundColor: "primary.main",
                     color: "#fff",

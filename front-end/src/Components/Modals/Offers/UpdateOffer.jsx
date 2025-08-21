@@ -81,7 +81,7 @@ function UpdateOffer({ offer, fetchOffers }) {
                             type="number"
                             fullWidth
                             variant="outlined"
-                            value={formData.value}
+                            value={parseFloat(formData.value)}
                             onChange={handleChange}
                             slotProps={{
                                 inputLabel: {
@@ -101,9 +101,9 @@ function UpdateOffer({ offer, fetchOffers }) {
                             }}
                         />
                             <DatePicker
-                                label="Data când a fost primită"
+                                label="Termen de finalizare"
                                 value={dayjs(formData.deadline)}
-                                onChange={(date) => handleChange({ target: { name: 'sentAt', value: date.format('YYYY-MM-DD') } })}
+                                onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
                                 slotProps={{
                                     textField: {
                                         fullWidth: true,

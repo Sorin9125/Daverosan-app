@@ -106,12 +106,12 @@ function UpdateOrder({ order, fetchOrders }) {
                             margin="dense"
                             id="value"
                             name="value"
-                            label="valoare"
+                            label="Valoare"
                             type="number"
                             fullWidth
                             variant="outlined"
                             onChange={handleChange}
-                            value={formData.value}
+                            value={parseFloat(formData.value)}
                             slotProps={{
                                 inputLabel: {
                                     sx: {
@@ -140,7 +140,7 @@ function UpdateOrder({ order, fetchOrders }) {
                             fullWidth
                             variant="outlined"
                             onChange={handleChange}
-                            value={formData.quantity}
+                            value={parseFloat(formData.quantity)}
                             slotProps={{
                                 inputLabel: {
                                     sx: {

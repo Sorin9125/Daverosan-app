@@ -47,7 +47,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         id: productionNote.id,
         reper: productionNote.reper,
         scheme: productionNote.scheme,
-        quantity: productionNote.quantity,
+        quantity: parseFloat(productionNote.quantity),
         weight: productionNote.order.unit === "buc"  ? "Comanda este" : productionNote.weight,
         status: productionNote.status ? "Finalizata" : "Nefinalizata",
     }));

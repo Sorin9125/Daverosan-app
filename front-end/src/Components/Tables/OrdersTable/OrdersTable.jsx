@@ -64,7 +64,7 @@ function OrdersTable({ orders, fetchOrders }) {
         id: order.id,
         number: order.number,
         value: parseFloat(order.value),
-        quantity: `${order.quantity} ${order.unit}`,
+        quantity: `${parseFloat(order.quantity)} ${order.unit}`,
         deadline: new Date(order.deadline).toLocaleDateString("en-GB"),
         finishedDate: order.isCompleted ? new Date(order.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfasurare",
         description: order.description,
