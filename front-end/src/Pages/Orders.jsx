@@ -16,7 +16,7 @@ function Orders() {
             }
         }
         getOrders();
-    });
+    }, []);
 
     useEffect(fetchOrders, [fetchOrders]);
 

@@ -24,6 +24,7 @@ function OrdersTableRow({ order, fetchOrders }) {
         try {
             const response = await productionNotesAPI.finishProducionNote(id);
             toast.success(response.data.message);
+            fetchProductionNotes();
             fetchOrders();
         } catch (err) {
             toast.error(err.response.data.message)

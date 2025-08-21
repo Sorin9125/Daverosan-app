@@ -1,10 +1,9 @@
-import { createContext, useState, useEffect } from "react";
-import userApi from "./Utils/User";
+import { useState, useEffect } from "react";
+import userApi from "../Utils/User";
 import { toast } from "react-toastify";
+import AuthContext from "./AuthContext";
 
-export const AuthContext = createContext();
-
-function AuthProvider({ children }) {
+function Context({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -14,6 +13,7 @@ function AuthProvider({ children }) {
         const response = await userApi.getCurrentUser();
         setUser(response.data);
       } catch (err) {
+        console.error(err);
         setUser(null);
       } finally {
         setLoading(false);
@@ -65,4 +65,4 @@ function AuthProvider({ children }) {
   )
 }
 
-export default AuthProvider
+export default Context

@@ -110,7 +110,7 @@ const productionNoteController = {
             if (!productionNote) {
                 return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} nu exista` });
             }
-            if (productionNote.isCompleted === true) {
+            if (productionNote.isCompleted == true) {
                 return res.status(400).json({ message: `Nota de productie cu id-ul ${productionNoteId} este deja finalizata` });
             }
             await productionNote.update({
@@ -123,7 +123,7 @@ const productionNoteController = {
             if (order.remainingQuantity == 0) {
                 order.update({
                     isCompleted: true,
-                    finishDate: order.updatedAt,
+                    finishDate: new Date(),
                 })
                 return res.status(200).json({ message: `Comanda cu id-ul ${productionNote.orderId} a fost finalizata` });
             }

@@ -59,7 +59,7 @@ function DeleteProductionNote({ productionNote, fetchProductionNotes, selectedOr
                     }
                 }}
             >
-                <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Șterge cerere de ofertă</DialogTitle>
+                <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Șterge nota de producție</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Typography>
                         Sunteți sigur că vreți să ștergeți nota de producție de la comanda cu numărul {productionNote.order.number}?

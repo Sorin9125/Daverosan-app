@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "../Context";
+import AuthContext from "../Context/AuthContext";
 
 function Footer() {
   const { user } = useContext(AuthContext);
@@ -18,10 +18,11 @@ function Footer() {
           mt: "auto",
           backgroundColor: "primary.main",
           color: "primary.contrastText",
-          textAlign: "center"
+          textAlign: "center",
+          height: 80,
         }}
       >
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" fontSize="1.2rem">
               Daverosan
           </Typography>
       </Box>

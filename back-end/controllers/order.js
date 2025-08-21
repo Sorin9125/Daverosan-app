@@ -95,7 +95,7 @@ const orderController = {
             if (!(/^[A-z0-9]{1,}$/).test(newOrder.number)) {
                 return res.status(400).json({ message: "Introduceti un numar de comanda valid" });
             }
-            if (!(/^[0-9.]$/).test(newOrder.value)) {
+            if (!(/^[0-9.]{1,}$/).test(newOrder.value)) {
                 return res.status(400).send({ message: "Introduceti o valoare valida" });
             }
             const offer = await offerModel.findByPk(order.offerId);

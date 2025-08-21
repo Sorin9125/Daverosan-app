@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { useContext } from "react";
-import { AuthContext } from "../Context";
+import AuthContext from "../Context/AuthContext";
 
 function Register() {
     const { register, user } = useContext(AuthContext);

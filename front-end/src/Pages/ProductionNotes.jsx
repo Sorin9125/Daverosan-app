@@ -35,9 +35,9 @@ function ProductionNotes() {
             }
             getProductionNotes();
         }
-    });
+    }, [selectedOrder]);
 
-    useEffect(fetchProductionNotes, [selectedOrder]);
+    useEffect(fetchProductionNotes);
 
     return (
         <>

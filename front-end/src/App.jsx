@@ -9,13 +9,13 @@ import Offers from "./Pages/Offer";
 import Orders from "./Pages/Orders";
 import Register from "./Pages/Register";
 import ProductionNotes from "./Pages/ProductionNotes";
-import AuthProvider from "./Context";
+import Context from "./Context/Context";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 
 function App() {
 
   return (
-    <AuthProvider>
+    <Context>
       <BrowserRouter>
         <Box sx={{
           display: "flex",
@@ -43,7 +43,7 @@ function App() {
           <Footer />
         </Box>
       </BrowserRouter>
-    </AuthProvider>
+    </Context>
 
   );
 }

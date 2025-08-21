@@ -2,7 +2,6 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, 
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers"
-import dayjs from "dayjs";
 import orderAPI from "../../../Utils/Order"
 
 function CreateOrder({ offerId, fetchOffers }) {
