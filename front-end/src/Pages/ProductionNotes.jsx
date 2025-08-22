@@ -37,7 +37,7 @@ function ProductionNotes() {
         }
     }, [selectedOrder]);
 
-    useEffect(fetchProductionNotes);
+    useEffect(fetchProductionNotes, [fetchProductionNotes]);
 
     return (
         <>
@@ -50,7 +50,7 @@ function ProductionNotes() {
                 component="h1" variant="h4" fontWeight="bold" gutterBottom
             >Note de producție</Typography>
 
-            <SelectSearch selectedItem={selectedOrder} setSelectedItem={setSelectedOrder}>
+            <SelectSearch selectedItem={selectedOrder} setSelectedItem={setSelectedOrder} labelName={"Numărul de comandă"}>
                 {
                     ordersData.map((order) => (
                         <MenuItem key={order.id} value={order.number}>

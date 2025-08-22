@@ -15,12 +15,13 @@ function RequestsTable({ requests, fetchRequests }) {
 
     const filteredRequests = requests.filter((request) => {
         const term = searchTerm.toLowerCase();
-
+        const statusLabel = request.isOffered ? "Oferta trimisa" : "Oferta netrimisa"
         const matchesText =
             Object.values(request).some((value) =>
                 value?.toString().toLowerCase().includes(term)
             ) ||
-            request.client.name.toLowerCase().includes(term);
+            request.client.name.toLowerCase().includes(term) ||
+            statusLabel.toLowerCase().includes(term); 
 
         const requestDate = new Date(request.sentAt);
 
@@ -59,7 +60,7 @@ function RequestsTable({ requests, fetchRequests }) {
         id: request.id,
         description: request.description,
         sentAt: new Date(request.sentAt).toLocaleDateString("en-GB"),
-        status: request.status ? "Neofertata" : "Ofertata",
+        status: request.isOffered ? "Oferta trimisa" : "Oferta netrimisa",
         clientName: request.client.name,
     }))
 

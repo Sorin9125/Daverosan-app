@@ -15,11 +15,13 @@ function OffersTable({ offers, fecthOffers }) {
 
     const filteredOffers = offers.filter((offer) => {
         const term = searchTerm.toLowerCase();
+        const statusLabel = offer.isAccepted ? "Acceptata" : "Neacceptata";
         const matchesText =
             Object.values(offer).some((value) =>
                 value?.toString().toLowerCase().includes(term)
             ) ||
-            offer.request.client.name.toLowerCase().includes(term);
+            offer.request.client.name.toLowerCase().includes(term) ||
+            statusLabel.toLowerCase().includes(term); 
         const requestDate = new Date(offer.deadline);
         const normalizedEnd = endDate ? new Date(endDate) : null;
         if (normalizedEnd) {
@@ -54,7 +56,7 @@ function OffersTable({ offers, fecthOffers }) {
         id: offer.id,
         value: parseFloat(offer.value),
         deadline: new Date(offer.deadline).toLocaleDateString("en-GB"),
-        status: offer.status ? "Neaccepatata" : "Acceptata",
+        status: offer.isAccepted ? "Neaccepatata" : "Acceptata",
         clientName: offer.request.client.name,
     }));
 

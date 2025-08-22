@@ -15,20 +15,18 @@ function OrdersTable({ orders, fetchOrders }) {
 
     const filteredOrders = orders.filter((order) => {
         const term = searchTerm.toLowerCase();
-
+        const statusLabel = order.isCompleted ? "Finalizata" : "Comanda este în desfasurare"
         const matchesText =
             Object.values(order).some((value) =>
                 value?.toString().toLowerCase().includes(term)
             ) ||
-            order.offer.request.client.name.toLowerCase().includes(term);
-
+            order.offer.request.client.name.toLowerCase().includes(term) ||
+            statusLabel.toLowerCase().includes(term); 
         const requestDate = new Date(order.deadline);
-
         const normalizedEnd = endDate ? new Date(endDate) : null;
         if (normalizedEnd) {
             normalizedEnd.setHours(23, 59, 59, 999);
         }
-
         const afterStart = !startDate || requestDate >= startDate;
         const beforeEnd = !endDate || requestDate <= normalizedEnd;
 

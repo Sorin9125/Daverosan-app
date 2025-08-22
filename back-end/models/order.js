@@ -20,7 +20,7 @@ const orderModel = db.define("order", {
         allowNull:false,
     },
     unit: {
-        type: DataTypes.ENUM("buc", "t"),
+        type: DataTypes.ENUM("buc", "kg"),
         allowNull: false,
     },
     description: {

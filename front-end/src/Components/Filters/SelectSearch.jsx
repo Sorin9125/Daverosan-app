@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, Select } from "@mui/material";
 
-function SelectSearch({ selectedItem, setSelectedItem, children }) {
+function SelectSearch({ selectedItem, setSelectedItem, children, labelName }) {
     return (
         <FormControl margin="dense" variant="outlined" sx={{ minWidth: 200, mb: 2 }}>
             <InputLabel
@@ -11,9 +11,10 @@ function SelectSearch({ selectedItem, setSelectedItem, children }) {
                     color: 'primary.main',
                     mb: 1,
                 }}
-            >Numărul de comandă</InputLabel>
+            >{labelName}</InputLabel>
             <Select
-                label="Număr comandă"
+                id=""
+                label={labelName}
                 value={selectedItem}
                 onChange={(e) => setSelectedItem(e.target.value)}
                 sx={{

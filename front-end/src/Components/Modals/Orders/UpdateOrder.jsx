@@ -184,7 +184,7 @@ function UpdateOrder({ order, fetchOrders }) {
                                 }}
                             >
                                 <MenuItem value="buc">Bucată</MenuItem>
-                                <MenuItem value="t">Tonă</MenuItem>
+                                <MenuItem value="kg">Kilogram</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl fullWidth variant="outlined" margin="dense">
