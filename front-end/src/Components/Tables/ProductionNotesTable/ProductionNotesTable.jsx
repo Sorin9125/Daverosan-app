@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import ProductionNotesRow from "./ProductionNoteRow";
 import FieldSearch from "../../Filters/FieldsSearch";
@@ -40,7 +40,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         { header: "Desen", accessor: "scheme" },
         { header: "cantitate", accessor: "quantity" },
         { header: "Greutate", accessor: "weight" },
-        { header: "Status", accessor:"status" },
+        { header: "Status", accessor: "status" },
     ]
 
     const exportData = filteredProductionNotes.map((productionNote) => ({
@@ -48,7 +48,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         reper: productionNote.reper,
         scheme: productionNote.scheme,
         quantity: parseFloat(productionNote.quantity),
-        weight: productionNote.order.unit === "buc"  ? "Comanda este" : productionNote.weight,
+        weight: productionNote.order.unit === "buc" ? "Comanda este" : parseFloat(productionNote.weight),
         status: productionNote.status ? "Finalizata" : "Nefinalizata",
     }));
 
@@ -65,7 +65,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
 
             <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
@@ -75,6 +75,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Greutate</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Status</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Comandă</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Opțiuni</TableCell>
                         </TableRow>
@@ -84,7 +85,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                             ? filteredProductionNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : filteredProductionNotes
                         ).map((productionNote) => (
-                            <ProductionNotesRow key={productionNote.id} productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder}/>
+                            <ProductionNotesRow key={productionNote.id} productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder} />
                         ))}
                         {
                             emptyRows > 0 && (
@@ -94,35 +95,46 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                             )
                         }
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={filteredProductionNotes.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                slotProps={{
-                                    select: {
-                                        inputProps: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        native: true,
-                                    },
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                                sx={{
-                                    "& .MuiTablePagination-toolbar": { width: "100%" },
-                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
-                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
-                                }}
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>
+            <Box
+                sx={{
+                    borderTop: "1px solid",
+                    borderColor: "divider",
+                    backgroundColor: "background.paper",
+                    borderRadius: "0 0 12px 12px",
+                }}>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={filteredProductionNotes.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                        select: {
+                            inputProps: {
+                                'aria-label': 'rows per page',
+                            },
+                            native: true,
+                        },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                    sx={{
+                        "& .MuiTablePagination-toolbar": {
+                            width: "100%",
+                            justifyContent: "flex-start",
+                        },
+                        "& .MuiTablePagination-spacer": {
+                            flex: "0 0 0",
+                        },
+                        "& .MuiTablePagination-actions": {
+                            marginLeft: 0,
+                        },
+                    }}
+                />
+            </Box>
         </>
     )
 }

@@ -23,7 +23,12 @@ function TablePaginationActions({ count, page, rowsPerPage, onPageChange }) {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 1  }}>
+    <Box sx={{
+      display: "flex",
+      alignItems: "center",
+      gap: 1,
+      ml: 2,
+    }} >
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -52,7 +57,7 @@ function TablePaginationActions({ count, page, rowsPerPage, onPageChange }) {
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
-    </Box>
+    </Box >
   );
 }
 

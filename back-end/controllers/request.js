@@ -12,7 +12,7 @@ const requestController = {
             if (!(request.sentAt && request.description)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]+$/gm).test(request.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]+$/gm).test(request.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await client.createRequest(request);
@@ -50,7 +50,7 @@ const requestController = {
             if (!(newRequest.sentAt && newRequest.description)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|., ]+$/gm).test(newRequest.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]+$/gm).test(newRequest.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await request.update(newRequest);

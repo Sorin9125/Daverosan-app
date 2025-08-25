@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import OrdersTableRow from "./OrdersTableRow";
 import FieldSearch from "../../Filters/FieldsSearch";
@@ -15,13 +15,13 @@ function OrdersTable({ orders, fetchOrders }) {
 
     const filteredOrders = orders.filter((order) => {
         const term = searchTerm.toLowerCase();
-        const statusLabel = order.isCompleted ? "Finalizata" : "Comanda este în desfasurare"
+        const statusLabel = order.isCompleted ? "Finalizata" : "Comanda este in desfasurare"
         const matchesText =
             Object.values(order).some((value) =>
                 value?.toString().toLowerCase().includes(term)
             ) ||
             order.offer.request.client.name.toLowerCase().includes(term) ||
-            statusLabel.toLowerCase().includes(term); 
+            statusLabel.toLowerCase().includes(term);
         const requestDate = new Date(order.deadline);
         const normalizedEnd = endDate ? new Date(endDate) : null;
         if (normalizedEnd) {
@@ -49,10 +49,10 @@ function OrdersTable({ orders, fetchOrders }) {
     const columns = [
         { header: "ID", accessor: "id" },
         { header: "Numar de comanda", accessor: "number" },
-        { header: "Valoare", accessor: "value"},
+        { header: "Valoare", accessor: "value" },
         { header: "Cantitate", accessor: "quantity" },
         { header: "Termen de finalizare", accessor: "deadline" },
-        { header: "Data finalizare", accessor: "finishedDate"},
+        { header: "Data finalizare", accessor: "finishedDate" },
         { header: "Descriere", accessor: "description" },
         { header: "Status", accessor: "status" },
         { header: "Client", accessor: "clientName" },
@@ -84,7 +84,7 @@ function OrdersTable({ orders, fetchOrders }) {
 
             <ExportTable data={exportData} columns={columns} fileName={"comenzi.pdf"} title={"Comenzi"} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
@@ -116,35 +116,51 @@ function OrdersTable({ orders, fetchOrders }) {
                         )
                         }
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={filteredOrders.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                slotProps={{
-                                    select: {
-                                        inputProps: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        native: true,
-                                    },
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                                sx={{
-                                    "& .MuiTablePagination-toolbar": { width: "100%" },
-                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
-                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
-                                }}
-                            />
-                        </TableRow>
-                    </TableFooter>
+
                 </Table>
             </TableContainer>
+            <Box
+                sx={{
+                    borderTop: "1px solid",
+                    borderColor: "divider",         
+                    backgroundColor: "background.paper",
+                    borderRadius: "0 0 12px 12px",    
+                    display: "flex",
+                    justifyContent: "flex-start",
+                }}
+            >
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={filteredOrders.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                        select: {
+                            inputProps: {
+                                'aria-label': 'rows per page',
+                            },
+                            native: true,
+                        },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                    sx={{
+                        width: "100%",
+                        "& .MuiTablePagination-toolbar": {
+                            width: "100%",
+                            justifyContent: "flex-start",
+                        },
+                        "& .MuiTablePagination-spacer": {
+                            flex: "0 0 0",
+                        },
+                        "& .MuiTablePagination-actions": {
+                            marginLeft: 0,
+                        },
+                    }}
+                />
+            </Box>
         </>
     )
 }

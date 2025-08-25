@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import OffersTableRow from "./OffersTableRow";
 import FieldsSearch from "../../Filters/FieldsSearch"
@@ -21,7 +21,7 @@ function OffersTable({ offers, fecthOffers }) {
                 value?.toString().toLowerCase().includes(term)
             ) ||
             offer.request.client.name.toLowerCase().includes(term) ||
-            statusLabel.toLowerCase().includes(term); 
+            statusLabel.toLowerCase().includes(term);
         const requestDate = new Date(offer.deadline);
         const normalizedEnd = endDate ? new Date(endDate) : null;
         if (normalizedEnd) {
@@ -74,7 +74,7 @@ function OffersTable({ offers, fecthOffers }) {
 
             <ExportTable fileName={"oferte.pdf"} data={exportData} title={"Oferte"} columns={columns} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
@@ -103,35 +103,41 @@ function OffersTable({ offers, fecthOffers }) {
 
                         }
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={filteredOffers.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                slotProps={{
-                                    select: {
-                                        inputProps: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        native: true,
-                                    },
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                                sx={{
-                                    "& .MuiTablePagination-toolbar": { width: "100%" },
-                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
-                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
-                                }}
-                            />
-                        </TableRow>
-                    </TableFooter>
+
                 </Table>
             </TableContainer>
+            <Box
+                sx={{
+                    borderTop: "1px solid",
+                    borderColor: "divider",
+                    backgroundColor: "background.paper",
+                    borderRadius: "0 0 12px 12px",
+                }}>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={filteredOffers.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                        select: {
+                            inputProps: {
+                                'aria-label': 'rows per page',
+                            },
+                            native: true,
+                        },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                    sx={{
+                        "& .MuiTablePagination-toolbar": { width: "100%" },
+                        "& .MuiTablePagination-spacer": { flex: "0 0 0" },
+                        "& .MuiTablePagination-actions": { marginLeft: "auto" }
+                    }}
+                />
+            </Box>
+
         </>
     )
 }

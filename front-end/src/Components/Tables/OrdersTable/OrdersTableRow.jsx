@@ -20,17 +20,6 @@ function OrdersTableRow({ order, fetchOrders }) {
         }
     }
 
-    const finishProductionNote = async (id) => {
-        try {
-            const response = await productionNotesAPI.finishProducionNote(id);
-            toast.success(response.data.message);
-            fetchProductionNotes();
-            fetchOrders();
-        } catch (err) {
-            toast.error(err.response.data.message)
-        }
-    }
-
     return (
         <Fragment>
             <TableRow sx={{
@@ -105,7 +94,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                                         <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Greutate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-                                        <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
+                                        
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -120,34 +109,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                                             <TableCell>{productionNote.quantity}</TableCell>
                                             <TableCell>{productionNote.order?.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
                                             <TableCell>{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
-                                            <TableCell align="center">
-                                                {!productionNote.isFinished ? (
-                                                    <Button
-                                                    onClick={() => finishProductionNote(productionNote.id)}
-                                                    aria-label="finish production note"
-                                                    size="small"
-                                                    variant="contained"
-                                                    sx={{
-                                                        textTransform: "none",
-                                                        backgroundColor: "primary.main",
-                                                        color: "#fff",
-                                                        fontWeight: "bold",
-                                                        borderRadius: 2,
-                                                        px: 2,
-                                                        py: 1,
-                                                        "&:hover": {
-                                                            backgroundColor: "primary.dark",
-                                                        }
-                                                    }}>
-                                                    Finalizează
-                                                </Button>
-                                                ) : (
-                                                    "Nota de producție este deja finalizată"
-                                                )
-                                                    
-                                                }
-                                                
-                                            </TableCell>
+                                            
                                         </TableRow>
                                     ))}
                                 </TableBody>

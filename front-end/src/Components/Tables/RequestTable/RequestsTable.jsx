@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, Box } from "@mui/material";
+import { Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination, Box } from "@mui/material";
 import TablePaginationActions from "../TablePagination";
 import RequestsTableRow from "./RequestTableRow";
 import FieldSearch from "../../Filters/FieldsSearch";
@@ -21,7 +21,7 @@ function RequestsTable({ requests, fetchRequests }) {
                 value?.toString().toLowerCase().includes(term)
             ) ||
             request.client.name.toLowerCase().includes(term) ||
-            statusLabel.toLowerCase().includes(term); 
+            statusLabel.toLowerCase().includes(term);
 
         const requestDate = new Date(request.sentAt);
 
@@ -49,11 +49,11 @@ function RequestsTable({ requests, fetchRequests }) {
     };
 
     const columns = [
-        {header: "ID", accessor: "id"},
-        {header: "Descriere", accessor: "description"},
-        {header: "Data primita", accessor: "sentAt"},
-        {header: "Status", accessor: "status"},
-        {header: "Client", accessor: "clientName"},
+        { header: "ID", accessor: "id" },
+        { header: "Descriere", accessor: "description" },
+        { header: "Data primita", accessor: "sentAt" },
+        { header: "Status", accessor: "status" },
+        { header: "Client", accessor: "clientName" },
     ];
 
     const exportData = filteredRequests.map((request) => ({
@@ -76,9 +76,9 @@ function RequestsTable({ requests, fetchRequests }) {
                 <DateSearch startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} setPage={setPage} />
             </Box>
 
-            <ExportTable data={exportData} columns={columns} fileName={"cereri.pdf"} title={"Cereri de oferta"}/>
+            <ExportTable data={exportData} columns={columns} fileName={"cereri.pdf"} title={"Cereri de oferta"} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
@@ -107,35 +107,45 @@ function RequestsTable({ requests, fetchRequests }) {
 
                         }
                     </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={filteredRequests.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                slotProps={{
-                                    select: {
-                                        inputProps: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        native: true,
-                                    },
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                                sx={{
-                                    "& .MuiTablePagination-toolbar": { width: "100%" },
-                                    "& .MuiTablePagination-spacer": { flex: "0 0 0" },
-                                    "& .MuiTablePagination-actions": { marginLeft: "auto" }
-                                }}
-                            />
-                        </TableRow>
-                    </TableFooter>
                 </Table>
             </TableContainer>
+            <Box
+                sx={{
+                    borderTop: "1px solid",
+                    borderColor: "divider",
+                    backgroundColor: "background.paper",
+                    borderRadius: "0 0 12px 12px",
+                }}
+            ><TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={filteredRequests.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                        select: {
+                            inputProps: {
+                                "aria-label": "rows per page",
+                            },
+                            native: true,
+                        },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                    sx={{
+                        "& .MuiTablePagination-toolbar": {
+                            width: "100%",
+                            justifyContent: "flex-start",
+                        },
+                        "& .MuiTablePagination-spacer": {
+                            flex: "0 0 0",
+                        },
+                        "& .MuiTablePagination-actions": {
+                            marginLeft: 0,
+                        },
+                    }}
+                /></Box>
         </>
     )
 };
