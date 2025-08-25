@@ -48,8 +48,8 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         reper: productionNote.reper,
         scheme: productionNote.scheme,
         quantity: parseFloat(productionNote.quantity),
-        weight: productionNote.order.unit === "buc" ? "Comanda este" : parseFloat(productionNote.weight),
-        status: productionNote.status ? "Finalizata" : "Nefinalizata",
+        weight: productionNote.order.unit === "buc" ? "Comanda este in bucati" : parseFloat(productionNote.weight),
+        status: productionNote.isFinished ? "Finalizata" : "Nefinalizata",
     }));
 
     return (
@@ -65,7 +65,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
 
             <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>

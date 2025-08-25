@@ -46,7 +46,7 @@ function ExportTable({ title, columns, data, fileName }) {
             color="primary"
             startIcon={<DownloadIcon />}
             onClick={exportPDF}
-            sx={{ textTransform: "none" }}
+            sx={{ textTransform: "none", borderRadius: "12px 12px 0 0" }}
         >
             Exportă ca PDF
         </Button>

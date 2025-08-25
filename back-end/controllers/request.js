@@ -54,6 +54,7 @@ const requestController = {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await request.update(newRequest);
+            await request.save();
             return res.status(200).json({ message: `Cererea de oferta cu id-ul ${requestId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);

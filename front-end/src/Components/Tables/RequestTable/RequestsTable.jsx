@@ -78,7 +78,7 @@ function RequestsTable({ requests, fetchRequests }) {
 
             <ExportTable data={exportData} columns={columns} fileName={"cereri.pdf"} title={"Cereri de oferta"} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>

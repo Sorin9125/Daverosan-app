@@ -74,7 +74,7 @@ function OffersTable({ offers, fecthOffers }) {
 
             <ExportTable fileName={"oferte.pdf"} data={exportData} title={"Oferte"} columns={columns} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>

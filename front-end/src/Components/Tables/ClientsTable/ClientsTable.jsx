@@ -53,7 +53,7 @@ function ClientsTable({ clients, fetchClients }) {
 
             <ExportTable title={"Clienti"} columns={columns} data={exportData} fileName={"Clienti.pdf"} />
 
-            <TableContainer component={Paper} sx={{ borderRadius: "12px 12px 0 0", boxShadow: 3 }}>
+            <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>

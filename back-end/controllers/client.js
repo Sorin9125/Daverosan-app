@@ -58,6 +58,7 @@ const clientController = {
                 return res.status(400).json({ message: "Email-ul nu este valid" });
             }
             await client.update(newClient);
+            await client.save();
             return res.status(200).json({ message: `Clientul cu id-ul ${clientId} a fost actualizat cu succes` });
         } catch (err) {
             console.log(err);
