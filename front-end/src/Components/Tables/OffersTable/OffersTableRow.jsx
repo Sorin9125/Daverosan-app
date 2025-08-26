@@ -98,7 +98,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.isCompleted ? new Date(data.finishDate).toLocaleDateString("en-GB") : "Comanda este în desfășurare"}</TableCell>
                                             <TableCell>{data.description}</TableCell>
-                                            <TableCell>{data.isCompleted}</TableCell>
+                                            <TableCell>{data.isCompleted ? "Finalizată" : ((data.quantity - data.remainingQuantity) / data.quantity * 100).toFixed(2) + "%"}</TableCell>
                                         </TableRow>
                                     }
                                 </TableBody>

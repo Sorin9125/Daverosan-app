@@ -2,7 +2,6 @@ import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box
 import { toast } from "react-toastify";
 import { Fragment, useState } from "react";
 import orderAPI from "../../../Utils/Order";
-import productionNotesAPI from "../../../Utils/ProductionNotes";
 import UpdateOrder from "../../Modals/Orders/UpdateOrder";
 import DeleteOrder from "../../Modals/Orders/DeleteOrder";
 import CreateProductionNote from "../../Modals/ProductionNotes/CreateProductionNote";

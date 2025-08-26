@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { toast } from "react-toastify";
 import { TableRow, TableCell, Box } from "@mui/material";
 import UpdateProductionNote from "../../Modals/ProductionNotes/UpdateProductionNote"
 import DeleteProductionNote from "../../Modals/ProductionNotes/DeleteProductionNote";
@@ -11,7 +12,7 @@ function ProductionNotesRow({ productionNote, fetchProductionNotes, selectedOrde
             const response = await productionNotesAPI.finishProducionNote(id);
             toast.success(response.data.message);
             fetchProductionNotes();
-            fetchOrders();
+            fetchProductionNotes();
         } catch (err) {
             toast.error(err.response.data.message)
         }
