@@ -30,33 +30,12 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
-app.use(cors({
-    origin: [process.env.ORIGIN_SITE],
-    credentials: true,
-    allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "Access-Control-Allow-Methods",
-        "Access-Control-Request-Headers",
-        "Access-Control-Allow-Origin"
-    ],
-    methods: [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE",
-    ]
-})
-);
-
 const port = process.env.PORT;
 app.get("/", async (req, res) => {
     res.status(200).send("Salut!");
 });
 
-app.post("/reset", async (req, res) => {
+app.post("/api/reset", async (req, res) => {
     try {
         await db.sync({ force: true });
         res.status(200).send("Database reset succeeded");
