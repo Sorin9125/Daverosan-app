@@ -14,10 +14,10 @@ const productionNoteController = {
             if (!(productionNote.reper && productionNote.scheme && productionNote.quantity)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
+            if (!(/^[A-z0-9\-,.!@#$%^&*/() ]{1,}$/).test(productionNote.reper)) {
                 return res.status(400).json({ message: "Introduceti o denumire valida" });
             }
-            if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
+            if (!(/^[0-9A-z.,/ ]{1,}$/).test(productionNote.scheme)) {
                 return res.status(400).json({ message: "Introduceti un desen valid" });
             }
             if (!(/^[0-9.]{1,}$/).test(productionNote.quantity)) {
@@ -60,10 +60,10 @@ const productionNoteController = {
             if (!(newProductionNote.reper && newProductionNote.scheme && newProductionNote.quantity)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(newProductionNote.reper)) {
+            if (!(/^[A-z0-9\-,.!@#$%^&*()/ ]{1,}$/).test(newProductionNote.reper)) {
                 return res.status(400).json({ message: "Introduceti o denumire valida" });
             }
-            if (!(/^[0-9A-z ]{1,}$/).test(newProductionNote.scheme)) {
+            if (!(/^[0-9A-z,./ ]{1,}$/).test(newProductionNote.scheme)) {
                 return res.status(400).json({ message: "Introduceti un desen valid" });
             }
             if (!(/^[0-9]{1,}/).test(newProductionNote.quantity)) {
@@ -162,10 +162,10 @@ const productionNoteController = {
                     if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
                         return res.status(400).josn({ message: "Completeaza toate campurile printule" });
                     }
-                    if (!(/^[A-z0-9\-,.!@#$%^&* ]{1,}$/).test(productionNote.reper)) {
+                    if (!(/^[A-z0-9\-,.!@#$%^&*()/ ]{1,}$/).test(productionNote.reper)) {
                         return res.status(400).json({ message: "Introduceti o denumire valida" });
                     }
-                    if (!(/^[0-9A-z ]{1,}$/).test(productionNote.scheme)) {
+                    if (!(/^[0-9A-z.,/ ]{1,}$/).test(productionNote.scheme)) {
                         return res.status(400).json({ message: "Introduceti un desen valid" });
                     }
                     if (!(/^[0-9]{1,}/).test(productionNote.weight)) {

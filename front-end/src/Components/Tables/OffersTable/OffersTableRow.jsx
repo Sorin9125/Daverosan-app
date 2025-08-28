@@ -1,4 +1,4 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, } from "@mui/material";
+import { Table, TableHead, TableBody, TableRow, TableCell, Button, Collapse, Box, Typography, Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
 import { Fragment, useState } from "react";
 import offerAPI from "../../../Utils/Offer";
@@ -29,7 +29,17 @@ function OffersTableRow({ offer, fetchOffers }) {
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                     {offer.id}
                 </TableCell>
-                <TableCell align="left">{parseFloat(offer.value)}</TableCell>
+                <TableCell align="left">{offer.type === "total" ? parseFloat(offer.value) + " total" : parseFloat(offer.value) + "/" + offer.unit}</TableCell>
+                <TableCell align="left" sx={{
+                    maxWidth: 300,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}>
+                    <Tooltip title={offer.description} placement="top-start">
+                        <span style={{ display: "block", width: "100%" }}>{offer.description}</span>
+                    </Tooltip>
+                </TableCell>
                 <TableCell align="left">{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                 <TableCell align="left">{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                 <TableCell align="left">{offer.request.client.name}</TableCell>
@@ -56,7 +66,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                     </Button>
                 </TableCell>
                 <TableCell align="center">
-                    <CreateOrder offerId={offer.id} fetchOffers={fetchOffers}/>
+                    <CreateOrder offerId={offer.id} fetchOffers={fetchOffers} />
                 </TableCell>
                 <TableCell align="left">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
@@ -66,7 +76,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
                     <Collapse in={openOrders} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

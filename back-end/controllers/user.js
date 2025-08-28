@@ -67,6 +67,7 @@ const userController = {
           res.cookie("token", token, {
             httpOnly: true,
             maxAge: process.env.COOKIE_AGE,
+            secure: (process.env.SITE_MODE != "dev")
           })
           return res.status(200).json({
             user: {
@@ -207,6 +208,7 @@ const userController = {
             res.cookie("token", token, {
               httpOnly: true,
               maxAge: process.env.COOKIE_AGE,
+              secure: (process.env.SITE_MODE != "dev"),
             })
             return res.status(200).json({
               user: {

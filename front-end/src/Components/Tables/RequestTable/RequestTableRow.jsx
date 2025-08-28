@@ -65,7 +65,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                     </Button>
                 </TableCell>
                 <TableCell align="center">
-                    <CreateOffer requestID={request.id} fetchRequests={fetchRequests}/>
+                    <CreateOffer requestID={request.id} fetchRequests={fetchRequests} />
                 </TableCell>
                 <TableCell align="left">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
@@ -85,7 +85,8 @@ function RequestsTableRow({ request, fetchRequests }) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
-                                        <TableCell sx={{ fontWeight: "bold" }}>Preț</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Valoare (euro)</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                                     </TableRow>
@@ -97,7 +98,17 @@ function RequestsTableRow({ request, fetchRequests }) {
                                             "&:hover": { backgroundColor: "action.hover" },
                                         }}>
                                             <TableCell>{data.id}</TableCell>
-                                            <TableCell>{parseFloat(data.value)}</TableCell>
+                                            <TableCell>{data.type === "total" ? parseFloat(data.value) + " total" : parseFloat(data.value) + "/" + data.unit}</TableCell>
+                                            <TableCell align="left" sx={{
+                                                maxWidth: 300,
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                            }}>
+                                                <Tooltip title={data.description} placement="top-start">
+                                                    <span style={{ display: "block", width: "100%" }}>{data.description}</span>
+                                                </Tooltip>
+                                            </TableCell>
                                             <TableCell>{new Date(data.deadline).toLocaleDateString("en-GB")}</TableCell>
                                             <TableCell>{data.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                                         </TableRow>

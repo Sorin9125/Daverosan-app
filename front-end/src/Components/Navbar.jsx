@@ -20,7 +20,7 @@ function Navbar() {
     const handleLogout = async () => {
         try {
             await logout();
-            handleClose()
+            handleClose();
         } catch (err) {
             console.error(err);
         }

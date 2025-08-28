@@ -15,6 +15,18 @@ const offerModel = db.define("offer", {
         type: DataTypes.DECIMAL(10, 5),
         allowNull: false,
     },
+    unit: {
+        type: DataTypes.ENUM("buc", "kg"),
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.STRING(5000),
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM("total", "unit"),
+        allowNull: false,
+    },
     isAccepted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

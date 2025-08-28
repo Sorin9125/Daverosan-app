@@ -16,7 +16,7 @@ const offerController = {
                 return res.status(400).json({ message: `Cererea cu id-ul ${requestId} a primit deja un raspuns` });
             }
             const offer = req.body;
-            if (!(offer.deadline && offer.value)) {
+            if (!(offer.deadline && offer.value && offer.unit, offer.description && offer.type)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (new Date(offer.deadline).getTime() < new Date(request.sentAt).getTime()) {
@@ -24,6 +24,9 @@ const offerController = {
             }
             if (!(/^[0-9.]{1,}$/).test(offer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
+            }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]{1,}$/).test(offer.description)) {
+                return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await request.createOffer(offer);
             await request.update({
@@ -67,7 +70,7 @@ const offerController = {
                 return res.status(400).json({ message: `Oferta cu id-ul ${offerId} nu exista` });
             }
             const newOffer = req.body;
-            if (!(newOffer.deadline && newOffer.value)) {
+            if (!(newOffer.deadline && newOffer.value && newOffer.unit && newOffer.description && newOffer.type)) {
                 return res.status(400).json({ messsage: "Completeaza toate campurile printurle" });
             }
             const request = await requestModel.findByPk(offer.requestId);
@@ -77,8 +80,22 @@ const offerController = {
             if (!(/^[0-9.]{1,}$/).test(newOffer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]{1,}$/).test(newOffer.description)) {
+                return res.status(400).json({ message: "Introduceti o descriere valida" });
+            }
             await offer.update(newOffer);
             await offer.save();
+            const order = await orderModel.findOne({
+                where: {
+                    offerId: offerId,
+                }
+            });
+            if (order) {
+                await order.update({
+                    unit: newOffer.unit
+                })
+                order.save();
+            }
             return res.status(200).json({ message: `Oferta cu id-ul ${offerId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);

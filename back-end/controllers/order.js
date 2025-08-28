@@ -16,7 +16,7 @@ const orderController = {
                 return res.status(400).json({ message: `Oferta cu id-ul ${offerId} a fost deja acceptata` });
             }
             const order = req.body;
-            if (!(order.quantity && order.unit && order.description && order.deadline && order.number && order.value)) {
+            if (!(order.quantity && order.description && order.deadline && order.number && order.value)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[0-9\,.]{1,}$/).test(order.quantity)) {
@@ -40,6 +40,7 @@ const orderController = {
             });
             await offer.save();
             order.remainingQuantity = order.quantity;
+            order.unit = offer.unit;
             await offer.createOrder(order);
             return res.status(200).json({ message: `Comanda pentru cererea ${offer.requestId} a fost creata` });
         } catch (err) {

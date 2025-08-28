@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 
 app.use(cors({
-    origin: [process.env.ORIGIN_SITE],
+    origin: process.env.ORIGIN_SITE,
     credentials: true,
     allowedHeaders: [
         "Content-Type",

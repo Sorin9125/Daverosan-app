@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Step } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, InputLabel, FormControl, Select, MenuItem, TextareaAutosize, Box } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers"
@@ -7,9 +7,12 @@ import offerAPI from "../../../Utils/Offer"
 function CreateOffer({ requestID, fetchRequests }) {
     const [open, setOpen] = useState(false);
     const [formData, setFromData] = useState({
+        value: "",
+        deadline: new Date(),
+        unit: "buc",
         description: "",
-        sentAt: new Date(),
-    })
+        type: "total",
+    });
 
     const handleClickOpen = (e) => {
         e.currentTarget.blur();
@@ -72,6 +75,35 @@ function CreateOffer({ requestID, fetchRequests }) {
                 <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Creează o ofertă</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <form onSubmit={createOffer} id="creation-form">
+                        <FormControl fullWidth variant="outlined" margin="dense">
+                            <InputLabel
+                                sx={{
+                                    position: 'relative',
+                                    transform: 'none',
+                                    fontSize: '1.1rem',
+                                    color: 'primary.main',
+                                    mb: 1,
+                                }}
+                            >
+                                Selectați tipul de ofertă
+                            </InputLabel>
+                            <Select
+                                value={formData.type}
+                                onChange={handleChange}
+                                name="type"
+                                sx={{
+                                    fontSize: '1.1rem',
+                                    color: '#000',
+                                    padding: '12.5px 14px',
+                                    '.MuiSelect-select': {
+                                        padding: '12.5px 14px',
+                                    },
+                                }}
+                            >
+                                <MenuItem value="total">Total</MenuItem>
+                                <MenuItem value="unit">Pe unitate</MenuItem>
+                            </Select>
+                        </FormControl>
                         <TextField
                             autoFocus
                             required
@@ -103,6 +135,77 @@ function CreateOffer({ requestID, fetchRequests }) {
                                 },
                             }}
                         />
+                        <FormControl fullWidth variant="outlined" margin="dense">
+                            <InputLabel
+                                sx={{
+                                    position: 'relative',
+                                    transform: 'none',
+                                    fontSize: '1.1rem',
+                                    color: 'primary.main',
+                                    mb: 1,
+                                }}
+                            >
+                                Unitate de măsură
+                            </InputLabel>
+                            <Select
+                                value={formData.unit}
+                                onChange={handleChange}
+                                name="unit"
+                                sx={{
+                                    fontSize: '1.1rem',
+                                    color: '#000',
+                                    padding: '12.5px 14px',
+                                    '.MuiSelect-select': {
+                                        padding: '12.5px 14px',
+                                    },
+                                }}
+                            >
+                                <MenuItem value="buc">Bucată</MenuItem>
+                                <MenuItem value="kg">Kilogram</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth variant="outlined" margin="dense">
+                            <InputLabel
+                                sx={{
+                                    position: 'relative',
+                                    transform: 'none',
+                                    fontSize: '1.1rem',
+                                    color: 'primary.main',
+                                    mb: 1,
+                                }}
+                            >
+                                Descriere
+                            </InputLabel>
+                            <Box sx={{
+                                width: '100%',
+                                border: '1px solid rgba(0,0,0,0.23)',
+                                borderRadius: 1,
+                                backgroundColor: '#fff',
+                                maxHeight: 150,
+                                overflowY: 'auto',
+                                padding: '0 14px',
+                                boxSizing: 'border-box',
+                            }}>
+                                <TextareaAutosize
+                                    minRows={3}
+                                    name="description"
+                                    placeholder="Descriere..."
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: '100%',
+                                        fontSize: '1.1rem',
+                                        color: '#000',
+                                        padding: '12.5px 0',
+                                        border: 'none',
+                                        outline: 'none',
+                                        resize: 'none',
+                                        backgroundColor: 'transparent',
+                                        fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                                    }}
+                                />
+                            </Box>
+                        </FormControl>
                         <DatePicker
                             label="Termen de finalizare"
                             onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}

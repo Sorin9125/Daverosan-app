@@ -119,12 +119,12 @@ function ClientsTableRow({ client, fetchClients }) {
             </Button>
           </TableCell>
           <TableCell align="center">
-              <CreateRequest clientId={client.id}/>
+            <CreateRequest clientId={client.id} />
           </TableCell>
           <TableCell>
             <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
-                <UpdateClient client={client} fetchClients={fetchClients} />
-                <DeleteClient client={client} fetchClients={fetchClients} />
+              <UpdateClient client={client} fetchClients={fetchClients} />
+              <DeleteClient client={client} fetchClients={fetchClients} />
             </Box>
           </TableCell>
         </TableRow>
@@ -180,7 +180,8 @@ function ClientsTableRow({ client, fetchClients }) {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Preț</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Valoare (euro)</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
                     </TableRow>
@@ -192,7 +193,17 @@ function ClientsTableRow({ client, fetchClients }) {
                         "&:hover": { backgroundColor: "action.hover" },
                       }}>
                         <TableCell>{offer.id}</TableCell>
-                        <TableCell>{parseFloat(offer.value)}</TableCell>
+                        <TableCell>{offer.type === "total" ? parseFloat(offer.value) + " total" : `${parseFloat(offer.value)}/${offer.unit}`}</TableCell>
+                        <TableCell align="left" sx={{
+                          maxWidth: 300,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}>
+                          <Tooltip title={offer.description} placement="top-start">
+                            <span style={{ display: "block", width: "100%" }}>{offer.description}</span>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>{new Date(offer.deadline).toLocaleDateString("en-GB")}</TableCell>
                         <TableCell>{offer.isAccepted ? "Acceptată" : "Neacceptată"}</TableCell>
                       </TableRow>

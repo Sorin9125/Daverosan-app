@@ -106,7 +106,7 @@ function UpdateOrder({ order, fetchOrders }) {
                             margin="dense"
                             id="value"
                             name="value"
-                            label="Valoare"
+                            label="Valoare totală"
                             type="number"
                             fullWidth
                             variant="outlined"
@@ -168,35 +168,6 @@ function UpdateOrder({ order, fetchOrders }) {
                                     mb: 1,
                                 }}
                             >
-                                Unitate de măsură
-                            </InputLabel>
-                            <Select
-                                value={formData.unit}
-                                name="unit"
-                                onChange={handleChange}
-                                sx={{
-                                    fontSize: '1.1rem',
-                                    color: '#000',
-                                    padding: '12.5px 14px',
-                                    '.MuiSelect-select': {
-                                        padding: '12.5px 14px',
-                                    },
-                                }}
-                            >
-                                <MenuItem value="buc">Bucată</MenuItem>
-                                <MenuItem value="kg">Kilogram</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth variant="outlined" margin="dense">
-                            <InputLabel
-                                sx={{
-                                    position: 'relative',
-                                    transform: 'none',
-                                    fontSize: '1.1rem',
-                                    color: 'primary.main',
-                                    mb: 1,
-                                }}
-                            >
                                 Descriere
                             </InputLabel>
                             <Box sx={{
@@ -229,32 +200,32 @@ function UpdateOrder({ order, fetchOrders }) {
                                 />
                             </Box>
                         </FormControl>
-                            <DatePicker
-                                label="Termen de finalizare"
-                                value={dayjs(formData.deadline)}
-                                onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
-                                slotProps={{
-                                    textField: {
-                                        fullWidth: true,
-                                        required: true,
-                                        variant: 'outlined',
-                                        sx: {
-                                            '& .MuiInputLabel-root': {
-                                                position: 'relative',
-                                                transform: 'none',
-                                                fontSize: '1.1rem',
-                                                color: 'primary.main',
-                                                mb: 1,
-                                            },
-                                            '& .MuiOutlinedInput-input': {
-                                                color: '#000',
-                                                fontSize: '1.1rem',
-                                                padding: '12.5px 14px',
-                                            },
+                        <DatePicker
+                            label="Termen de finalizare"
+                            value={dayjs(formData.deadline)}
+                            onChange={(date) => handleChange({ target: { name: 'deadline', value: date.format('YYYY-MM-DD') } })}
+                            slotProps={{
+                                textField: {
+                                    fullWidth: true,
+                                    required: true,
+                                    variant: 'outlined',
+                                    sx: {
+                                        '& .MuiInputLabel-root': {
+                                            position: 'relative',
+                                            transform: 'none',
+                                            fontSize: '1.1rem',
+                                            color: 'primary.main',
+                                            mb: 1,
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: '#000',
+                                            fontSize: '1.1rem',
+                                            padding: '12.5px 14px',
                                         },
                                     },
-                                }}
-                            />
+                                },
+                            }}
+                        />
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

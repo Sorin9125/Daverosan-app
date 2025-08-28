@@ -9,7 +9,6 @@ function CreateOrder({ offerId, fetchOffers }) {
     const [formData, setFromData] = useState({
         number: "",
         quantity: "",
-        unit: "buc",
         deadline: "",
         description: "",
     })
@@ -110,7 +109,7 @@ function CreateOrder({ offerId, fetchOffers }) {
                             margin="dense"
                             id="value"
                             name="value"
-                            label="Valoare"
+                            label="Valoare totală"
                             type="number"
                             fullWidth
                             variant="outlined"
@@ -166,35 +165,6 @@ function CreateOrder({ offerId, fetchOffers }) {
                                 },
                             }}
                         />
-                        <FormControl fullWidth variant="outlined" margin="dense">
-                            <InputLabel
-                                sx={{
-                                    position: 'relative',
-                                    transform: 'none',
-                                    fontSize: '1.1rem',
-                                    color: 'primary.main',
-                                    mb: 1,
-                                }}
-                            >
-                                Unitate de măsură
-                            </InputLabel>
-                            <Select
-                                value={formData.unit}
-                                name="unit"
-                                onChange={handleChange}
-                                sx={{
-                                    fontSize: '1.1rem',
-                                    color: '#000',
-                                    padding: '12.5px 14px',
-                                    '.MuiSelect-select': {
-                                        padding: '12.5px 14px',
-                                    },
-                                }}
-                            >
-                                <MenuItem value="buc">Bucată</MenuItem>
-                                <MenuItem value="kg">Kilogram</MenuItem>
-                            </Select>
-                        </FormControl>
                         <FormControl fullWidth variant="outlined" margin="dense">
                             <InputLabel
                                 sx={{
