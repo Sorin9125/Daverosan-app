@@ -140,7 +140,6 @@ const productionNoteController = {
             if (req.file == undefined) {
                 return res.status(400).json({ message: "Trebuie sa incarci un fisier" });
             }
-            console.log(req.file)
             const orderId = req.params.id;
             const dir = path.join(__dirname, "..", "files", "uploads", req.file.filename);
             readExcelFile(dir).then(async (rows) => {
