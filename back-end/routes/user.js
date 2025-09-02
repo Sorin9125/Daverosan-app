@@ -9,5 +9,6 @@ router.delete("/deleteUser/:id", userController.deleteUser);
 router.post("/loginUser", userController.loginUser);
 router.get("/getCurrentUser", userController.getCurrentUser);
 router.get("/logoutUser", userController.logoutUser);
+router.post("/sendToken", userController.setResetToken);
 
 module.exports = router;

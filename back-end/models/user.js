@@ -22,8 +22,11 @@ const userModel = db.define("user", {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    resetToken: {
+        type: DataTypes.STRING,
+        defaultValue: null,
     }
-
 },
     {
         freezeTableName: true,

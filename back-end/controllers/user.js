@@ -1,6 +1,15 @@
 const { userModel } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Mailgun = require("mailgun.js");
+const FormData = require("form-data");
+const mailgun = new Mailgun(FormData);
+const mg = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API,
+  url: "https://api.eu.mailgun.net"
+});
+const { v4: uuidv4 } = require("uuid");
 
 const hashPassword = async (pasword) => {
   const rounds = 10;
@@ -254,6 +263,41 @@ const userController = {
       })
       return res.status(200).json({ message: "Delogarea a fost efectuată cu succes " });
     } catch (err) {
+      return res.status(500).send("Eroare");
+    }
+  },
+  setResetToken: async (req, res) => {
+    try {
+      const email = req.body.email;
+      const user = await userModel.findOne({
+        where: {
+          email: email,
+        },
+      });
+      if (!user) {
+        return res.status(400).json({ message: `User-ul cu adresa de mail ${email} nu exista. Va rog sa va inregistrati!` });
+      }
+      const resetToken = uuidv4();
+      user.update({ resetToken });
+      user.save();
+      const data = {
+        from: "Daverosan IT support <postmaster@daverosan.space>",
+        to: email,
+        subject: "Resetare parola",
+        html: `<html lang="en">
+						<body>
+							<div>
+								Apasă  
+								<a href="${process.env.ORIGIN_SITE}/reset-password/${resetToken}" target="_blank">aici</a>
+								pentru a reseta parola!
+							</div>	
+						</body>
+					</html>`,
+      }
+      await mg.messages.create("daverosan.space", data);
+      return res.status(200).json({ message: "Codul pentru resetare a fost trimis cu succes" });
+    } catch (err) {
+      console.log(err);
       return res.status(500).send("Eroare");
     }
   }
