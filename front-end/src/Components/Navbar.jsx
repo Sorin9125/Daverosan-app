@@ -71,7 +71,7 @@ function Navbar() {
                         <Button
                             color="inherit"
                             component={Link}
-                            to="/productionNotes"
+                            to="/production-notes"
                             sx={{ fontSize: "1.1rem", px: 3, py: 1.5 }}
                         >
                             Note de producție

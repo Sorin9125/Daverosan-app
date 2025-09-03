@@ -11,6 +11,8 @@ import Register from "./Pages/Register";
 import ProductionNotes from "./Pages/ProductionNotes";
 import Context from "./Context/Context";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 function App() {
 
@@ -33,11 +35,13 @@ function App() {
             <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />}/>
+            <Route path="/reset-password/:resetToken" element={<ResetPassword />}/>
             <Route path="/clients" element={<ProtectedRoute><Client /></ProtectedRoute>} />
             <Route path="/requests" element={<ProtectedRoute><Request /></ProtectedRoute>} />
             <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-            <Route path="/productionNotes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>}/>
+            <Route path="/production-notes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>}/>
           </Routes>
           </Box>
           <Footer />

@@ -37,6 +37,18 @@ const userApi = {
             withCredentials: true,
         })
         return response;
+    },
+    sendResetToken: async (email) => {
+        const response = await axios.post(`${BACKEND_URL}/user/sendToken`, email, {
+            withCredentials: true,
+        });
+        return response;
+    },
+    resetPassword: async (password, resetToken) => {
+        const response = await axios.put(`${BACKEND_URL}/user/resetPassword/${resetToken}`, password, {
+            withCredentials: true,
+        });
+        return response;
     }
 }
 

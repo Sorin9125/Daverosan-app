@@ -300,6 +300,74 @@ const userController = {
       console.log(err);
       return res.status(500).send("Eroare");
     }
+  },
+  resetPassword: async (req, res) => {
+    try {
+      const resetToken = req.params.resetToken;
+      console.log(resetToken);
+      const user = await userModel.findOne({
+        where: {
+          resetToken: resetToken,
+        }
+      });
+      if (!user) {
+        return res.status(400).json({ message: "Schimba semaforul" });
+      }
+      let password = req.body.password;
+      if (!password) {
+        return res.status(400).json("Completeaza toate campurile printule");
+      }
+      if (
+        !(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/gm).test(password)
+      ) {
+        return res
+          .status(400)
+          .json({
+            message:
+              "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
+          });
+      }
+      password = await hashPassword(password);
+      const doesExist = await bcrypt.compare(
+        password,
+        user.password
+      );
+      if (doesExist) {
+        return res.status(400).json({ message: "Parola nu poate sa fie cea anterioara" });
+      } else {
+        user.update({
+          password: password,
+          resetToken: null
+        });
+        res.status(200).json("Parola a fost actualizata cu succes");
+        jwt.sign(
+          { email: user.email },
+          process.env.JWT_SECRET,
+          (err, token) => {
+            if (err) {
+              console.log(err);
+              return res.status(400).json({ message: "Eroare la generarea jwt" })
+            }
+            res.cookie("token", token, {
+              httpOnly: true,
+              maxAge: process.env.COOKIE_AGE,
+              secure: (process.env.SITE_MODE != "dev"),
+            })
+            return res.status(200).json({
+              user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+              }
+            });
+          }
+        )
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send("Eroare");
+    }
   }
 };
 
