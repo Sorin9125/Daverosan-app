@@ -2,9 +2,11 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import AuthContext from "../Context/AuthContext";
+import userApi from "../Utils/User";
+import { toast } from "react-toastify";
 
 function Register() {
-    const { register, user } = useContext(AuthContext);
+    const { setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -13,11 +15,13 @@ function Register() {
         lastName: ""
     })
 
-    useEffect(() => {
-        if (user) {
-            navigate("/clients");
-        }
-    }, [user, navigate]);
+    // useEffect(() => {
+    //     console.log("Dute-n pizda matii")
+    //     if (user && !user.isVerified) {
+    //         console.log("M-am dus sau nu m-am dus");
+    //         navigate(`/activate-account/${user.email}`);
+    //     }
+    // }, [user, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,10 +30,15 @@ function Register() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            register(formData);
+            const response = await userApi.createUser(formData);
+            console.log(response.data.message);
+            navigate(`/activate-account/${response.data.email}`);
         } catch (err) {
-            console.error(err);
+            toast.error(err.response?.data.message);
+        } finally {
+            setLoading(false);
         }
     }
 

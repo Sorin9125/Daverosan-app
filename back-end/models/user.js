@@ -26,6 +26,14 @@ const userModel = db.define("user", {
     resetToken: {
         type: DataTypes.STRING,
         defaultValue: null,
+    },
+    isVerified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+    verificationCode: {
+        type: DataTypes.INTEGER,
     }
 },
     {

@@ -49,6 +49,12 @@ const userApi = {
             withCredentials: true,
         });
         return response;
+    },
+    activateAccount: async (verificationCode, email) => {
+        const response = await axios.put(`${BACKEND_URL}/user/activateAccount/${email}`, verificationCode, {
+            withCredentials: true,
+        });
+        return response;
     }
 }
 

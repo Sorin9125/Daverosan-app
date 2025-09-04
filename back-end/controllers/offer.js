@@ -94,7 +94,7 @@ const offerController = {
                 await order.update({
                     unit: newOffer.unit
                 })
-                order.save();
+                await order.save();
             }
             return res.status(200).json({ message: `Oferta cu id-ul ${offerId} a fost actualizata cu succes` });
         } catch (err) {

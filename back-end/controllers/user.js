@@ -40,7 +40,7 @@ const userController = {
         return res.status(400).json({ message: "Numele trebuie sa contina doar litere" });
       }
       if (
-        !(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/gm).test(user.password)
+        !(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/gm).test(user.password)
       ) {
         return res
           .status(400)
@@ -49,9 +49,9 @@ const userController = {
               "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
           });
       }
-      if (!(/^[A-z1-9./-_]+@daverosan.ro$/gm).test(user.email)) {
-        return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
-      }
+      // if (!(/^[A-z1-9./-_]+@daverosan.ro$/gm).test(user.email)) {
+      //   return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
+      // }
       if (
         await userModel.findOne({
           where: {
@@ -64,30 +64,35 @@ const userController = {
           .json({ message: `Utilizatorul cu email-ul ${user.email} deja exista` });
       }
       user.password = await hashPassword(user.password);
+      user.verificationCode = Math.floor(Math.random() * (1000000 - 100000) + 100000);
       await userModel.create(user);
-      jwt.sign(
-        { email: user.email },
-        process.env.JWT_SECRET,
-        (err, token) => {
-          if (err) {
-            console.error(err);
-            return res.status(400).json({ message: "Eroare la generarea jwt" })
-          }
-          res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: process.env.COOKIE_AGE,
-            secure: (process.env.SITE_MODE != "dev")
-          })
-          return res.status(200).json({
-            user: {
-              id: user.id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email
-            }
-          });
-        }
-      )
+      const data = {
+        from: "Daverosan IT support <postmaster@daverosan.space>",
+        to: user.email,
+        subject: "Activare cont",
+        html: `<html lang="en">
+						<body>
+              <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.5;">
+                Codul pentru a putea să vă activați contul este: 
+                <span style="
+                    display: inline-block;
+                    background-color: #f0f0f0; 
+                    color: #1976d2; 
+                    font-weight: bold; 
+                    font-size: 18px; 
+                    padding: 6px 12px; 
+                    border-radius: 4px;
+                    margin-left: 4px;
+                    letter-spacing: 1px;
+                  ">
+                    ${user.verificationCode}
+                </span>
+              </div>
+						</body>
+					</html>`,
+      }
+      // await mg.messages.create("daverosan.space", data);
+      return res.status(200).json({ email: user.email });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -112,7 +117,6 @@ const userController = {
         return res.status(404).json({ message: `User-ul cu id-ul ${userId} nu exista` });
       }
       const newUser = req.body;
-      console.log(newUser);
       const isCorrect = await bcrypt.compare(newUser.password, user.password);
       console.log(isCorrect);
       if (
@@ -126,7 +130,6 @@ const userController = {
         return res.status(400).json({ message: "Completeaza toate campurile printule!" });
       }
       if (!isCorrect) {
-        console.log(await hashPassword(newUser.password));
         return res
           .status(400)
           .json(
@@ -140,22 +143,9 @@ const userController = {
       if (!newUser.lastName.match(/^[A-z]{3,}$/gm)) {
         res.status(400).json({ message: "Numele trebuie sa contina doar litere" });
       }
-      if (
-        !newUser.password.match(
-          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/gm
-        )
-      ) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
-          });
-      }
       if (!newUser.email.match(/^[A-z1-9]+@daverosan.ro$/gm)) {
         return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
       }
-      newUser.password = await hashPassword(newUser.password);
       await user.update(newUser);
       return res.status(200).json({ message: "Utilizatorul a fost actualizat cu succes" });
     } catch (err) {
@@ -224,7 +214,8 @@ const userController = {
                 id: existingUser.id,
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,
-                email: existingUser.email
+                email: existingUser.email,
+                isVerified: existingUser.isVerified,
               }
             });
           }
@@ -246,7 +237,7 @@ const userController = {
         where: {
           email: decoded.email,
         },
-        attributes: ["id", "firstName", "lastName", "email"],
+        attributes: ["id", "firstName", "lastName", "email", "isVerified"],
       });
       if (!user) {
         return res.status(400).json({ message: "User-ul nu exista" });
@@ -286,11 +277,24 @@ const userController = {
         subject: "Resetare parola",
         html: `<html lang="en">
 						<body>
-							<div>
-								Apasă  
-								<a href="${process.env.ORIGIN_SITE}/reset-password/${resetToken}" target="_blank">aici</a>
-								pentru a reseta parola!
-							</div>	
+              <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.5;">
+                Apasă 
+                <a 
+                  href="${process.env.ORIGIN_SITE}/reset-password/${resetToken}" 
+                  target="_blank"
+                  style="
+                  color: #1976d2; 
+                  text-decoration: none; 
+                  font-weight: bold;
+                  padding: 2px 4px;
+                  "
+                  onmouseover="this.style.textDecoration='underline';" 
+                  onmouseout="this.style.textDecoration='none';"
+                >
+                  aici
+                </a> 
+                pentru a reseta parola!
+              </div>	
 						</body>
 					</html>`,
       }
@@ -304,7 +308,6 @@ const userController = {
   resetPassword: async (req, res) => {
     try {
       const resetToken = req.params.resetToken;
-      console.log(resetToken);
       const user = await userModel.findOne({
         where: {
           resetToken: resetToken,
@@ -358,12 +361,80 @@ const userController = {
                 id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                email: user.email
+                email: user.email,
+                isVerified: user.isVerified,
               }
             });
           }
         )
       }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send("Eroare");
+    }
+  },
+  activateAccount: async (req, res) => {
+    try {
+      const email = req.params.email;
+      const { code } = req.body;
+      console.log("Codul utilizatorului este: " + code);
+      const user = await userModel.findOne({
+        where: {
+          email: email,
+        }
+      });
+      if (!user) {
+        return res.status(400).json({ message: "Schimba semaforul" });
+      }
+      if (user.verificationCode != code) {
+        return res.status(400).json({ message: "Codul pe care l-ati introdus este gresit" });
+      }
+      await user.update({
+        isVerified: true,
+        verificationCode: null,
+      });
+      const data = {
+        from: "Daverosan IT support <postmaster@daverosan.space>",
+        to: user.email,
+        subject: "Activare cont",
+        html: `<html lang="en">
+						<body>
+              <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.5; text-align: center; padding: 20px;">
+                <div style="font-size: 18px; font-weight: bold; color: #1976d2; margin-bottom: 10px;">
+                  ✅ Cont activat cu succes!
+                </div>
+                <div>
+                  Adresa de mail a fost verificată cu succes! 
+                </div>
+              </div>
+						</body>
+					</html>`,
+      }
+      // await mg.messages.create("daverosan.space", data);
+      jwt.sign(
+        { email: user.email },
+        process.env.JWT_SECRET,
+        (err, token) => {
+          if (err) {
+            console.error(err);
+            return res.status(400).json({ message: "Eroare la generarea jwt" })
+          }
+          res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: process.env.COOKIE_AGE,
+            secure: (process.env.SITE_MODE != "dev")
+          })
+          return res.status(200).json({
+            user: {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              isVerified: user.isVerified,
+            }
+          });
+        }
+      )
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare");

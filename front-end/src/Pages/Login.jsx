@@ -1,19 +1,22 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, Link } from '@mui/material';
 import AuthContext from "../Context/AuthContext";
+import { toast } from "react-toastify";
+import userApi from "../Utils/User";
 
 function LoginPage() {
-    const { login, user } = useContext(AuthContext);
+    const {  user, setUser, setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
+    const [failedAttempts, setFailedAttempts] = useState(0)
 
     useEffect(() => {
-        if(user) {
-            navigate("/clients");
+        if (user) {
+            navigate(`/clients`);
         }
     }, [user, navigate]);
 
@@ -22,14 +25,20 @@ function LoginPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            await login(formData);
-        } catch (err) {
-            console.error(err);
-        }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await userApi.loginUser(formData);
+      setUser(response.data.user);
+    } catch (err) {
+      setFailedAttempts((prev) => prev + 1);
+      toast.error(err.response.data.message);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
+  };
 
     return (
         <>
@@ -126,12 +135,30 @@ function LoginPage() {
                             Autentificare
                         </Button>
                     </form>
+                    {
+                        failedAttempts >= 3 ? <Link
+                            component="button"
+                            variant="body2"
+                            onClick={() => { navigate("/forgot-password"); setFailedAttempts(0) }}
+                            sx={{
+                                color: 'primary.main',
+                                textDecoration: 'underline',
+                                fontWeight: 500,
+                                ml: 0.5,
+                                cursor: 'pointer',
+                                alignContent: 'center',
+                                '&:hover': {
+                                    color: 'primary.dark',
+                                    textDecoration: 'none',
+                                },
+                            }}>Am uitat parola</Link> : <></>
+                    }
                     <Typography variant="body2" align="center" sx={{ mt: 2 }}>
                         Nu ai cont?
                         <Button
                             variant="outlined"
                             fullWidth
-                            onClick={() => {navigate("/register")}}
+                            onClick={() => { navigate("/register") }}
                         >
                             Înregistrează-te
                         </Button>

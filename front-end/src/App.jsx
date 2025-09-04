@@ -13,12 +13,13 @@ import Context from "./Context/Context";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
+import ActivateAccount from "./Pages/ActivateAccount";
 
 function App() {
 
   return (
-    <Context>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Context>
         <Box sx={{
           display: "flex",
           flexDirection: "column",
@@ -26,28 +27,29 @@ function App() {
         }}
         >
           <Navbar />
-          <Box sx={{ 
+          <Box sx={{
             flex: 1,
             p: 3,
             mt: 2,
             mb: 2,
-           }}>
+          }}>
             <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />}/>
-            <Route path="/reset-password/:resetToken" element={<ResetPassword />}/>
-            <Route path="/clients" element={<ProtectedRoute><Client /></ProtectedRoute>} />
-            <Route path="/requests" element={<ProtectedRoute><Request /></ProtectedRoute>} />
-            <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
-            <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-            <Route path="/production-notes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>}/>
-          </Routes>
+              <Route path="/" element={<LoginPage />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+              <Route path="/activate-account/:email" element={<ActivateAccount />}/>
+              <Route path="/clients" element={<ProtectedRoute><Client /></ProtectedRoute>} />
+              <Route path="/requests" element={<ProtectedRoute><Request /></ProtectedRoute>} />
+              <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
+              <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+              <Route path="/production-notes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>} />
+            </Routes>
           </Box>
           <Footer />
         </Box>
-      </BrowserRouter>
-    </Context>
+      </Context>
+    </BrowserRouter>
 
   );
 }

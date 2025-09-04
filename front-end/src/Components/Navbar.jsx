@@ -3,9 +3,11 @@ import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/m
 import { ArrowDropDown } from "@mui/icons-material"
 import { useContext, useState } from "react";
 import AuthContext from "../Context/AuthContext";
+import userApi from "../Utils/User";
+import { toast } from "react-toastify";
 
 function Navbar() {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, setUser } = useContext(AuthContext);
     const [anchor, setAnchor] = useState(null);
     const isOpen = Boolean(anchor);
 
@@ -19,7 +21,9 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await logout();
+            const response = await userApi.logoutUser();
+            toast.success(response.data.message);
+            setUser(null);
             handleClose();
         } catch (err) {
             console.error(err);
@@ -27,7 +31,7 @@ function Navbar() {
 
     }
 
-    if (!user) {
+    if (!user || !user?.isVerified) {
         return null;
     }
 

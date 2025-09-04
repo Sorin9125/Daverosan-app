@@ -5,7 +5,7 @@ import AuthContext from "../Context/AuthContext";
 function Footer() {
   const { user } = useContext(AuthContext);
 
-  if(!user) {
+  if(!user || !user?.isVerified) {
     return null;
   }
 

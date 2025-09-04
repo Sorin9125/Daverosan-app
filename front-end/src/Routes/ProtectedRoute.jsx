@@ -3,13 +3,14 @@ import { Navigate } from "react-router-dom";
 import AuthContext from "../Context/AuthContext";
 
 function ProtectedRoute({ children }) {
-    const { user, loading } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
-    if(loading) {
-        return <p>Loading...</p>
-    }
     if(!user) {
         return <Navigate to="/" />
+    } else {
+        if(!user.isVerified) {
+            return <Navigate to={`/activate-account/${user.email}`} />
+        }
     }
 
     return children;

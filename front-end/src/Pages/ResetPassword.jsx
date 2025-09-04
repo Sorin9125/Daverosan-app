@@ -10,8 +10,7 @@ function ResetPassword() {
         password: ""
     });
     const [isFormCompleted, setIsFormCompleted] = useState(false);
-    const resetToken = useParams();
-    console.log(resetToken);
+    const { resetToken } = useParams();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -63,7 +62,7 @@ function ResetPassword() {
                         !isFormCompleted ? <form onSubmit={handleReset}>
                             <TextField
                                 variant="outlined"
-                                label="Parolă"
+                                label="Parolă nouă"
                                 name="password"
                                 type="password"
                                 fullWidth
@@ -106,7 +105,22 @@ function ResetPassword() {
                                     color: 'text.primary',
                                 }}
                             >
-                                Parola a fost resetată cu succes. Pentru a vă autentifica întorceți-vă pe <Link component="button" variant="body2" onClick={() => {navigate("/")}}>pagina principală</Link>
+                                Parola a fost resetată cu succes. Pentru a vă autentifica întorceți-vă pe
+                                <Link
+                                    component="button"
+                                    variant="body1"
+                                    onClick={() => { navigate("/") }}
+                                    sx={{
+                                        color: 'primary.main',
+                                        textDecoration: 'underline',
+                                        fontWeight: 500,
+                                        ml: 0.5,
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            color: 'primary.dark',
+                                            textDecoration: 'none',
+                                        },
+                                    }}>pagina principală</Link>
                             </Typography>
                     }
 
