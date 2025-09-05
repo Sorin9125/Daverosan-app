@@ -49,9 +49,9 @@ const userController = {
               "Parola trebuie sa contina cel putin o litera mare, o cifra si 6 caractere!"
           });
       }
-      // if (!(/^[A-z1-9./-_]+@daverosan.ro$/gm).test(user.email)) {
-      //   return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
-      // }
+      if (!(/^[A-z1-9./-_]+@daverosan.ro$/gm).test(user.email)) {
+        return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
+      }
       if (
         await userModel.findOne({
           where: {
@@ -91,7 +91,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      // await mg.messages.create("daverosan.space", data);
+      await mg.messages.create("daverosan.space", data);
       return res.status(200).json({ 
         email: user.email,
         firstName: user.firstName,
@@ -415,7 +415,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      // await mg.messages.create("daverosan.space", data);
+      await mg.messages.create("daverosan.space", data);
       jwt.sign(
         { email: user.email },
         process.env.JWT_SECRET,
