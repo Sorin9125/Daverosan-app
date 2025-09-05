@@ -23,7 +23,6 @@ function DeleteOrder({ order, fetchOrders }) {
             fetchOrders();
             handleClose();
         } catch (err) {
-            console.log(err);
             toast.error(err.response.data.message);
         }
     }

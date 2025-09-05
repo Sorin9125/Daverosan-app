@@ -6,7 +6,7 @@ import userApi from "../Utils/User";
 import { toast } from "react-toastify";
 
 function Register() {
-    const { setLoading } = useContext(AuthContext);
+    const { user, setUser, setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -15,13 +15,11 @@ function Register() {
         lastName: ""
     })
 
-    // useEffect(() => {
-    //     console.log("Dute-n pizda matii")
-    //     if (user && !user.isVerified) {
-    //         console.log("M-am dus sau nu m-am dus");
-    //         navigate(`/activate-account/${user.email}`);
-    //     }
-    // }, [user, navigate]);
+    useEffect(() => {
+        if (user && !user.isVerified) {
+            navigate(`/activate-account/${user.email}`);
+        }
+    }, [user, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,8 +31,7 @@ function Register() {
         setLoading(true);
         try {
             const response = await userApi.createUser(formData);
-            console.log(response.data.message);
-            navigate(`/activate-account/${response.data.email}`);
+            setUser(response.data);
         } catch (err) {
             toast.error(err.response?.data.message);
         } finally {

@@ -67,7 +67,7 @@ const userController = {
       user.verificationCode = Math.floor(Math.random() * (1000000 - 100000) + 100000);
       await userModel.create(user);
       const data = {
-        from: "Daverosan IT support <postmaster@daverosan.space>",
+        from: "Daverosan IT support <noreply@daverosan.space>",
         to: user.email,
         subject: "Activare cont",
         html: `<html lang="en">
@@ -92,7 +92,12 @@ const userController = {
 					</html>`,
       }
       // await mg.messages.create("daverosan.space", data);
-      return res.status(200).json({ email: user.email });
+      return res.status(200).json({ 
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isVerified: user.isVerified,
+       });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -242,7 +247,7 @@ const userController = {
       if (!user) {
         return res.status(400).json({ message: "User-ul nu exista" });
       }
-      return res.status(200).json(user.toJSON());
+      return res.status(200).json(user);
     } catch (err) {
       return res.status(500).send("Eroare")
     }
@@ -272,7 +277,7 @@ const userController = {
       user.update({ resetToken });
       user.save();
       const data = {
-        from: "Daverosan IT support <postmaster@daverosan.space>",
+        from: "Daverosan IT support <noreply@daverosan.space>",
         to: email,
         subject: "Resetare parola",
         html: `<html lang="en">
@@ -394,7 +399,7 @@ const userController = {
         verificationCode: null,
       });
       const data = {
-        from: "Daverosan IT support <postmaster@daverosan.space>",
+        from: "Daverosan IT support <noreply@daverosan.space>",
         to: user.email,
         subject: "Activare cont",
         html: `<html lang="en">

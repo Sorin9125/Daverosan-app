@@ -7,7 +7,7 @@ import userApi from "../Utils/User";
 import { toast } from "react-toastify";
 
 function Navbar() {
-    const { user, logout, setUser } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const [anchor, setAnchor] = useState(null);
     const isOpen = Boolean(anchor);
 

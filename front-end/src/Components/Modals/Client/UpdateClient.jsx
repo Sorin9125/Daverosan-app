@@ -32,7 +32,6 @@ function UpdateClient({ client, fetchClients }) {
             fetchClients();
             handleClose();
         } catch (err) {
-            console.log(err);
             toast.error(err.response.data.message);
         }
     }

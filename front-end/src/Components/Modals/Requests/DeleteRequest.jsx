@@ -23,7 +23,6 @@ function DeleteRequest({ request, fetchRequests }) {
             fetchRequests();
             handleClose();
         } catch (err) {
-            console.log(err);
             toast.error(err.response.data.message);
         }
     }
