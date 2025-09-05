@@ -130,6 +130,7 @@ function OrdersTable({ orders, fetchOrders }) {
                 }}
             >
                 <TablePagination
+                    component="div"
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                     colSpan={3}
                     count={filteredOrders.length}
