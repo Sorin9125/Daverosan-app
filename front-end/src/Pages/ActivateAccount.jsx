@@ -11,7 +11,7 @@ function ActivateAccount() {
         code: "",
     });
     const {user,  setUser, setLoading} = useContext(AuthContext);
-    const { email } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,9 +27,8 @@ function ActivateAccount() {
 
     const handleActivation = async (e) => {
         e.preventDefault();
-        setLoading(false)
         try {
-            const response = await userApi.activateAccount(formData, email);
+            const response = await userApi.activateAccount(formData, id);
             toast.success(response.data.message);
             setUser((prev) => ({...prev, isVerified: true }));
         } catch (err) {

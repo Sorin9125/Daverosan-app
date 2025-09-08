@@ -65,7 +65,7 @@ const userController = {
       }
       user.password = await hashPassword(user.password);
       user.verificationCode = Math.floor(Math.random() * (1000000 - 100000) + 100000);
-      await userModel.create(user);
+      const createdUser = await userModel.create(user);
       const data = {
         from: "Daverosan IT support <noreply@daverosan.space>",
         to: user.email,
@@ -92,12 +92,13 @@ const userController = {
 					</html>`,
       }
       await mg.messages.create("daverosan.space", data);
-      return res.status(200).json({ 
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isVerified: user.isVerified,
-       });
+      return res.status(200).json({
+        id: createdUser.id,
+        email: createdUser.email,
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
+        isVerified: createdUser.isVerified,
+      });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -114,6 +115,22 @@ const userController = {
       return res.status(500).send("Eroare!");
     }
   },
+  getUserById: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const user = await userModel.findByPk(id);
+      if (!user) {
+        return res.status(400).json({ message: `User-ul cu id-ul ${id} nu exista` });
+      }
+      return res.status(200).json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      })
+    } catch (err) {
+      return res.status(500).send("Erorae");
+    }
+  },
   updateUser: async (req, res) => {
     try {
       const userId = req.params.id;
@@ -123,7 +140,6 @@ const userController = {
       }
       const newUser = req.body;
       const isCorrect = await bcrypt.compare(newUser.password, user.password);
-      console.log(isCorrect);
       if (
         !(
           newUser.firstName &&
@@ -151,8 +167,19 @@ const userController = {
       if (!newUser.email.match(/^[A-z1-9]+@daverosan.ro$/gm)) {
         return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
       }
-      await user.update(newUser);
-      return res.status(200).json({ message: "Utilizatorul a fost actualizat cu succes" });
+      await user.update({
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+      });
+      return res.status(200).json({
+        message: "Utilizatorul a fost actualizat cu succes",
+        lastName: newUser.lastName,
+        firstName: newUser.firstName,
+        email: newUser.email,
+        id: user.id,
+        isVerified: user.isVerified,
+      });
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -380,17 +407,9 @@ const userController = {
   },
   activateAccount: async (req, res) => {
     try {
-      const email = req.params.email;
+      const id = req.params.email
       const { code } = req.body;
-      console.log("Codul utilizatorului este: " + code);
-      const user = await userModel.findOne({
-        where: {
-          email: email,
-        }
-      });
-      if (!user) {
-        return res.status(400).json({ message: "Schimba semaforul" });
-      }
+      const user = await userModel.findByPk(id);
       if (user.verificationCode != code) {
         return res.status(400).json({ message: "Codul pe care l-ati introdus este gresit" });
       }

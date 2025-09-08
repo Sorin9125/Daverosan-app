@@ -17,7 +17,7 @@ function Register() {
 
     useEffect(() => {
         if (user && !user.isVerified) {
-            navigate(`/activate-account/${user.email}`);
+            navigate(`/activate-account/${user.id}`);
         }
     }, [user, navigate]);
 

@@ -15,7 +15,7 @@ const userApi = {
         return response;
     },
     updateUser: async (id, newUser) => {
-        const response = await axios.put(`${BACKEND_URL}/user/udpateUser/${id}`, newUser, {
+        const response = await axios.put(`${BACKEND_URL}/user/updateUser/${id}`, newUser, {
             withCredentials: true,
         });
         return response;
@@ -50,8 +50,14 @@ const userApi = {
         });
         return response;
     },
-    activateAccount: async (verificationCode, email) => {
-        const response = await axios.put(`${BACKEND_URL}/user/activateAccount/${email}`, verificationCode, {
+    activateAccount: async (verificationCode, id) => {
+        const response = await axios.put(`${BACKEND_URL}/user/activateAccount/${id}`, verificationCode, {
+            withCredentials: true,
+        });
+        return response;
+    },
+    getUserById: async (id) => {
+        const response = await axios.get(`${BACKEND_URL}/user/getUserById/${id}`, {
             withCredentials: true,
         });
         return response;

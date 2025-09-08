@@ -5,11 +5,13 @@ import { useContext, useState } from "react";
 import AuthContext from "../Context/AuthContext";
 import userApi from "../Utils/User";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
     const { user, setUser } = useContext(AuthContext);
     const [anchor, setAnchor] = useState(null);
     const isOpen = Boolean(anchor);
+    const navigate = useNavigate();
 
     const handleClick = (e) => {
         setAnchor(e.currentTarget)
@@ -81,18 +83,20 @@ function Navbar() {
                             Note de producție
                         </Button>
                     </Box>
-                    <Typography
-                        variant="subtitle1"
-                        component="div"
-                        sx={{ cursor: "pointer", fontSize: "1.2rem" }}
+                    <Button
+                        color="inherit"
                         onClick={handleClick}
                         aria-controls={isOpen ? "user-menu" : undefined}
                         aria-haspopup="true"
                         aria-expanded={isOpen ? "true" : undefined}
+                        sx={{
+                            fontSize: "1.2rem",
+                            textTransform: "none",
+                        }}
+                        endIcon={<ArrowDropDown />}
                     >
                         {user.firstName} {user.lastName}
-                        <ArrowDropDown />
-                    </Typography>
+                    </Button>
                     <Menu
                         id="user-menu"
                         anchorEl={anchor}
@@ -107,7 +111,9 @@ function Navbar() {
                             horizontal: "right",
                         }}
                     >
+                        <MenuItem onClick={() => { navigate(`/profile/${user.id}`); handleClose() }}>Vezi profilul</MenuItem>
                         <MenuItem onClick={handleLogout}>Delogare</MenuItem>
+
                     </Menu>
                 </Toolbar>
             </AppBar>

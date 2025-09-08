@@ -14,6 +14,7 @@ import ProtectedRoute from "./Routes/ProtectedRoute";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import ActivateAccount from "./Pages/ActivateAccount";
+import UserProfile from "./Pages/UserProfile";
 
 function App() {
 
@@ -38,12 +39,14 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
-              <Route path="/activate-account/:email" element={<ActivateAccount />}/>
+              <Route path="/activate-account/:id" element={<ActivateAccount />}/>
               <Route path="/clients" element={<ProtectedRoute><Client /></ProtectedRoute>} />
               <Route path="/requests" element={<ProtectedRoute><Request /></ProtectedRoute>} />
               <Route path="/offers" element={<ProtectedRoute><Offers /></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
               <Route path="/production-notes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>} />
+              <Route path="/profile/:id" element={<ProtectedRoute><UserProfile /></ProtectedRoute>}/>
+              <Route path="*" element={<div><h1>Unde ai ajung ba pula?</h1></div>}/>
             </Routes>
           </Box>
           <Footer />
