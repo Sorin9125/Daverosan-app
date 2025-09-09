@@ -6,13 +6,19 @@ const offerModel = require("./offer.js");
 const orderModel = require("./order.js");
 const productionNoteModel = require("./productionNote.js");
 
-clientModel.hasMany(requestModel);
+clientModel.hasMany(requestModel, {
+    onDelete: 'CASCADE',
+});
 requestModel.belongsTo(clientModel);
 
-requestModel.hasOne(offerModel);
+requestModel.hasOne(offerModel, {
+    onDelete: 'CASCADE',
+});
 offerModel.belongsTo(requestModel);
 
-offerModel.hasOne(orderModel);
+offerModel.hasOne(orderModel, {
+    onDelete: 'CASCADE',
+});
 orderModel.belongsTo(offerModel);
 
 orderModel.hasMany(productionNoteModel, {

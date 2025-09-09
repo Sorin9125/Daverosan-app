@@ -7,7 +7,7 @@ const clientController = {
             if (!(client.name && client.email)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-z ]{3,}$/gm).test(client.name)) {
+            if (!(/^[A-z\- ]{3,}$/gm).test(client.name)) {
                 return res.status(400).json({ message: "Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere" });
             }
             if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(client.email)) {
@@ -51,7 +51,7 @@ const clientController = {
             if (!(newClient.name && newClient.email)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
-            if (!(/^[A-z ]{3,}$/gm).test(newClient.name)) {
+            if (!(/^[A-z\- ]{3,}$/gm).test(newClient.name)) {
                 return res.status(400).json({ message: "Numele trebuie sa contina doar litere si sa aiba cel putin 3 caractere" });
             }
             if (!(/^[A-z0-9-_.]+@+[a-z]+.+[a-z]$/gm).test(newClient.email)) {
