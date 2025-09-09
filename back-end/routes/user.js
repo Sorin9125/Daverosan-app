@@ -12,6 +12,6 @@ router.get("/getCurrentUser", userController.getCurrentUser);
 router.get("/logoutUser", userController.logoutUser);
 router.post("/sendToken", userController.setResetToken);
 router.put("/resetPassword/:resetToken", userController.resetPassword);
-router.put("/activateAccount/:email", userController.activateAccount);
+router.put("/activateAccount/:id", userController.activateAccount);
 
 module.exports = router;

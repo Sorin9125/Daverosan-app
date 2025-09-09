@@ -91,7 +91,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      await mg.messages.create("daverosan.space", data);
+      // await mg.messages.create("daverosan.space", data);
       return res.status(200).json({
         id: createdUser.id,
         email: createdUser.email,
@@ -131,7 +131,7 @@ const userController = {
       return res.status(500).send("Erorae");
     }
   },
-  updateUser: async (req, res) => {
+  updateUser: async (req, res, next) => {
     try {
       const userId = req.params.id;
       let user = await userModel.findByPk(userId);
@@ -167,19 +167,45 @@ const userController = {
       if (!newUser.email.match(/^[A-z1-9]+@daverosan.ro$/gm)) {
         return res.status(400).json({ message: "Email-ul trebuie sa fie organizational!" });
       }
+      if(newUser.email != user.email && await userModel.findOne({
+        where: {
+          email: newUser.email,
+        }
+      })) {
+        return res.status(400).json({ message: "Exista deja un cont pe aceasta adresa de mail" });
+      }
       await user.update({
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
       });
-      return res.status(200).json({
-        message: "Utilizatorul a fost actualizat cu succes",
-        lastName: newUser.lastName,
-        firstName: newUser.firstName,
-        email: newUser.email,
-        id: user.id,
-        isVerified: user.isVerified,
-      });
+      req.user = user; 
+            jwt.sign(
+        { email: user.email },
+        process.env.JWT_SECRET,
+        (err, token) => {
+          if (err) {
+            console.error(err);
+            return res.status(400).json({ message: "Eroare la generarea jwt" })
+          }
+          res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: process.env.COOKIE_AGE,
+            secure: (process.env.SITE_MODE != "dev"),
+            sameSite: process.env.SITE_MODE == "dev" ? "lax" : "none"
+          })
+          return res.status(200).json({
+            user: {
+              id: user.id,
+              firstName: newUser.firstName,
+              lastName: newUser.lastName,
+              email: newUser.email,
+              isVerified: user.isVerified,
+            },
+            message: "Utilizatorul a fost actualizat cu succes",
+          });
+        }
+      )
     } catch (err) {
       console.log(err);
       return res.status(500).send("Eroare!");
@@ -407,7 +433,7 @@ const userController = {
   },
   activateAccount: async (req, res) => {
     try {
-      const id = req.params.email
+      const id = req.params.id
       const { code } = req.body;
       const user = await userModel.findByPk(id);
       if (user.verificationCode != code) {
@@ -434,7 +460,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      await mg.messages.create("daverosan.space", data);
+      // await mg.messages.create("daverosan.space", data);
       jwt.sign(
         { email: user.email },
         process.env.JWT_SECRET,
@@ -463,7 +489,7 @@ const userController = {
       console.log(err);
       return res.status(500).send("Eroare");
     }
-  }
+  },
 };
 
 module.exports = userController;

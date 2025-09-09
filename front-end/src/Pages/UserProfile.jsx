@@ -43,12 +43,18 @@ function UserProfile() {
                 return toast.error("Schimba semaforul");
             }
             const response = await userApi.updateUser(id, formData);
-            setUser((prev) => ({
+            console.log(response.data);
+            setUser({
+                firstName: response.data.user.firstName,
+                lastName: response.data.user.lastName,
+                email: response.data.user.email,
+                id: response.data.user.id,
+                isVerified: response.data.user.isVerified,
+            })
+            setFormData((prev) => ({
                 ...prev,
-                firstName: response.data.firstName,
-                lastName: response.data.lastName,
-                email: response.data.email,
-            }));
+                password: "",
+            }))
             setIsEditing(!isEditing);
             toast.success(response.data.message);
         } catch (err) {

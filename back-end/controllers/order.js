@@ -91,7 +91,7 @@ const orderController = {
             if (!(/^[0-9\,.]{1,}$/).test(newOrder.quantity)) {
                 return res.status(400).json({ message: "Intrduceti o cantitate valida" });
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]{1,}$/).test(newOrder.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(newOrder.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             if (!(/^[A-z0-9-]{1,}$/).test(newOrder.number)) {

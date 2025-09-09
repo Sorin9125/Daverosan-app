@@ -80,7 +80,7 @@ const offerController = {
             if (!(/^[0-9.]{1,}$/).test(newOffer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]{1,}$/).test(newOffer.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(newOffer.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await offer.update(newOffer);
