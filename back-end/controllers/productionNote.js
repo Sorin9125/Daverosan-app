@@ -164,7 +164,7 @@ const productionNoteController = {
                     if (!(/^[A-z0-9\-,.!@#$%^&*()/ ]{1,}$/).test(productionNote.reper)) {
                         return res.status(400).json({ message: "Introduceti o denumire valida" });
                     }
-                    if (!(/^[0-9A-z.,/ ]{1,}$/).test(productionNote.scheme)) {
+                    if (!(/^[0-9A-z,.\/\- ]{1,}$/).test(productionNote.scheme)) {
                         return res.status(400).json({ message: "Introduceti un desen valid" });
                     }
                     if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
