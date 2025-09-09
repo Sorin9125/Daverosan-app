@@ -31,6 +31,10 @@ const productionNoteModel = db.define("productionNote", {
         allowNull: false,
         defaultValue: false
     },
+    observations: {
+        type: DataTypes.STRING(5000),
+        allowNull: true,
+    }
 },
     {
         tableName: "production-note",

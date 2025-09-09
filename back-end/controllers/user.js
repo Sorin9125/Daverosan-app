@@ -91,7 +91,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      // await mg.messages.create("daverosan.space", data);
+      await mg.messages.create("daverosan.space", data);
       return res.status(200).json({
         id: createdUser.id,
         email: createdUser.email,
@@ -460,7 +460,7 @@ const userController = {
 						</body>
 					</html>`,
       }
-      // await mg.messages.create("daverosan.space", data);
+      await mg.messages.create("daverosan.space", data);
       jwt.sign(
         { email: user.email },
         process.env.JWT_SECRET,

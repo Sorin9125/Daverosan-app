@@ -46,7 +46,7 @@ function App() {
               <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
               <Route path="/production-notes" element={<ProtectedRoute><ProductionNotes /></ProtectedRoute>} />
               <Route path="/profile/:id" element={<ProtectedRoute><UserProfile /></ProtectedRoute>}/>
-              <Route path="*" element={<div><h1>Unde ai ajung ba pula?</h1></div>}/>
+              <Route path="*" element={<div><h1>Error 404: Page not found</h1></div>}/>
             </Routes>
           </Box>
           <Footer />

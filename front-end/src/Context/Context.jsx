@@ -11,9 +11,7 @@ function Context({ children }) {
       try {
         const response = await userApi.getCurrentUser();
         setUser(response.data);
-        console.log("Am pus user-ul pisco pasta");
       } catch  {
-        console.log("Am dat eroare si ti-am tras la muie");
         setUser(null);
       } finally {
         setLoading(false);

@@ -3,7 +3,7 @@ import { autoTable } from 'jspdf-autotable'
 import { Button } from "@mui/material"
 import DownloadIcon from '@mui/icons-material/Download';
 
-function ExportTable({ title, columns, data, fileName }) {
+function ExportTable({ title, columns, data, fileName, extraInfo }) {
     const exportPDF = () => {
         const doc = new jsPDF({
             orientation: "landscape",
@@ -27,6 +27,22 @@ function ExportTable({ title, columns, data, fileName }) {
         });
 
         doc.setFont(undefined, "normal");
+
+
+        if (extraInfo && extraInfo.length > 0) {
+            const extraFontSize = 12;
+            doc.setFontSize(extraFontSize);
+            doc.setFont(undefined, "normal");
+
+            titleY += 5; 
+
+            for (let infoLine of extraInfo) {
+                doc.text(infoLine, 40, titleY);
+                titleY += extraFontSize + 2; 
+            }
+
+            titleY += 5; 
+        }
 
         autoTable(doc, {
             startY: titleY + 20,

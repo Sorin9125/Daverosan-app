@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
 
 app.post("/api/reset", async (req, res) => {
     try {
-        await db.sync({ force: true });
+        await db.sync({ alter: true });
         res.status(200).send("Database reset succeeded");
     } catch (err) {
         console.log(err);

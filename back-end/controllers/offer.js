@@ -25,7 +25,7 @@ const offerController = {
             if (!(/^[0-9.]{1,}$/).test(offer.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
             }
-            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]{1,}$/).test(offer.description)) {
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(offer.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await request.createOffer(offer);

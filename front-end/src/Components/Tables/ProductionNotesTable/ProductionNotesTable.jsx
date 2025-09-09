@@ -12,15 +12,26 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
 
     const filteredProductionNotes = productionNotes.filter((productionNote) => {
         const term = searchTerm.toLowerCase();
+        const statusLabel = productionNote.isFinished ? "Finalizata" : "Nefinalizata";
+        const topLevelMatch = Object.entries(productionNote).some(([key, value]) => {
+            if (typeof value === "string" || typeof value === "number") {
+                return value.toString().toLowerCase().includes(term);
+            }
+            return false;
+        });
 
-        const matchesText =
-            Object.values(productionNote).some((value) =>
-                value?.toString().toLowerCase().includes(term)
-            ) ||
-            productionNote.order.number.toLowerCase().includes(term);
-        return matchesText;
+        const orderMatch =
+            productionNote.order &&
+            Object.values(productionNote.order).some(
+                (val) => val && val.toString().toLowerCase().includes(term)
+            );
+
+        const statusMatch = statusLabel.toLowerCase().includes(term);
+
+        return topLevelMatch || orderMatch || statusMatch;
     }
     );
+
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProductionNotes.length) : 0;
@@ -52,6 +63,10 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         status: productionNote.isFinished ? "Finalizata" : "Nefinalizata",
     }));
 
+    const extraInfo = [
+        `Termen de finalizare: ${new Date(filteredProductionNotes[0]?.order.deadline).toLocaleDateString("en-GB")}`
+    ]
+
     return (
         <>
             <Box sx={{
@@ -63,7 +78,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                 <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
             </Box>
 
-            <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} />
+            <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} extraInfo={extraInfo} />
 
             <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
