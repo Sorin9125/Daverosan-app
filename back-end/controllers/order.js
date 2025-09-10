@@ -104,8 +104,10 @@ const orderController = {
             if (new Date(newOrder.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum termini inainte sa incepi" });
             }
-            newOrder.remainingQuantity = newOrder.quantity; 
-            await order.update(newOrder);
+            console.log("Comanda initiala este " + order);
+            newOrder.remainingQuantity = parseFloat(order.remainingQuantity) + (parseFloat(newOrder.quantity) - parseFloat(order.quantity)); 
+            const updatedOrder =  await order.update(newOrder);
+            console.log("Comanda actualizata este "  + updatedOrder);
             return res.status(200).json({ message: `Comanda cu id-ul ${orderId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);
