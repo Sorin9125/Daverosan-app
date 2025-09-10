@@ -32,7 +32,6 @@ const offerController = {
             await request.update({
                 isOffered: true,
             });
-            await request.save()
             return res.status(200).json({ message: `Oferta pentru cererea cu id-ul ${requestId} fost creata cu succes` });
         } catch (err) {
             console.log(err);
@@ -84,7 +83,6 @@ const offerController = {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
             await offer.update(newOffer);
-            await offer.save();
             const order = await orderModel.findOne({
                 where: {
                     offerId: offerId,
@@ -94,7 +92,6 @@ const offerController = {
                 await order.update({
                     unit: newOffer.unit
                 })
-                await order.save();
             }
             return res.status(200).json({ message: `Oferta cu id-ul ${offerId} a fost actualizata cu succes` });
         } catch (err) {

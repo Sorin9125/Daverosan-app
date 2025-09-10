@@ -73,7 +73,6 @@ const productionNoteController = {
                 return res.status(400).json({ message: "Introduceti o cantintate valida" })
             }
             await productionNote.update(newProductionNote);
-            await productionNote.save();
             return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);
@@ -92,7 +91,6 @@ const productionNoteController = {
                 await order.update({
                     remainingQuantity: order.remainingQuantity + productioNote.weight * productioNote.quantity,
                 })
-                await order.save();
             }
             await productionNoteModel.destroy({
                 where: {

@@ -328,7 +328,6 @@ const userController = {
       }
       const resetToken = uuidv4();
       user.update({ resetToken });
-      user.save();
       const data = {
         from: "Daverosan IT support <noreply@daverosan.space>",
         to: email,

@@ -38,7 +38,6 @@ const orderController = {
             await offer.update({
                 isAccepted: true,
             });
-            await offer.save();
             order.remainingQuantity = order.quantity;
             order.unit = offer.unit;
             await offer.createOrder(order);
@@ -105,8 +104,8 @@ const orderController = {
             if (new Date(newOrder.deadline).getTime() < new Date(request.sentAt).getTime()) {
                 return res.status(400).json({ message: "Cum termini inainte sa incepi" });
             }
+            newOrder.remainingQuantity = newOrder.quantity; 
             await order.update(newOrder);
-            await order.save();
             return res.status(200).json({ message: `Comanda cu id-ul ${orderId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);

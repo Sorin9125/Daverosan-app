@@ -8,21 +8,41 @@ const productionNoteModel = require("./productionNote.js");
 
 clientModel.hasMany(requestModel, {
     onDelete: 'CASCADE',
+    hooks: true,
+    foreignKey: {
+        allowNull: false,
+        onDelete: 'CASCADE'
+    }
 });
 requestModel.belongsTo(clientModel);
 
 requestModel.hasOne(offerModel, {
     onDelete: 'CASCADE',
+    hooks: true,
+    foreignKey: {
+        allowNull: false,
+        onDelete: 'CASCADE'
+    }
 });
 offerModel.belongsTo(requestModel);
 
 offerModel.hasOne(orderModel, {
     onDelete: 'CASCADE',
+    hooks: true,
+    foreignKey: {
+        allowNull: false,
+        onDelete: 'CASCADE'
+    }
 });
 orderModel.belongsTo(offerModel);
 
 orderModel.hasMany(productionNoteModel, {
     onDelete: 'CASCADE',
+    hooks: true,
+    foreignKey: {
+        allowNull: false,
+        onDelete: 'CASCADE'
+    }
 });
 productionNoteModel.belongsTo(orderModel);
 
