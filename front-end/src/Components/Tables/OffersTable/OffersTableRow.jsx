@@ -29,6 +29,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                     {offer.id}
                 </TableCell>
+                <TableCell align="left">{offer.number}</TableCell>
                 <TableCell align="left">{offer.type === "total" ? parseFloat(offer.value) + " total" : parseFloat(offer.value) + "/" + offer.unit}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
@@ -76,7 +77,7 @@ function OffersTableRow({ offer, fetchOffers }) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                     <Collapse in={openOrders} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>

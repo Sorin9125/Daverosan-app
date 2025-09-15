@@ -25,11 +25,14 @@ const orderController = {
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(order.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
-            if (!(/^[A-z0-9-]{1,}$/).test(order.number)) {
+            if (!(/^[A-z0-9- ]{1,}$/).test(order.number)) {
                 return res.status(400).json({ message: "Introduceti un numar de comanda valid" });
             }
             if (!(/^[0-9.]{1,}$/).test(order.value)) {
                 return res.status(400).json({ message: "Introduceti o valoare valida" });
+            }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{0,}$/).test(order.observations)) {
+                return res.status(400).json({ message: "Introduceti observatii valide" })
             }
             const request = await requestModel.findByPk(offer.requestId);
             if (new Date(order.deadline).getTime() < new Date(request.sentAt).getTime()) {
@@ -93,11 +96,14 @@ const orderController = {
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(newOrder.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
-            if (!(/^[A-z0-9-]{1,}$/).test(newOrder.number)) {
+            if (!(/^[A-z0-9- ]{1,}$/).test(newOrder.number)) {
                 return res.status(400).json({ message: "Introduceti un numar de comanda valid" });
             }
             if (!(/^[0-9.]{1,}$/).test(newOrder.value)) {
                 return res.status(400).send({ message: "Introduceti o valoare valida" });
+            }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{0,}$/).test(newOrder.observations)) {
+                return res.status(400).json({ message: "Introduceti observatii valide" })
             }
             const offer = await offerModel.findByPk(order.offerId);
             const request = await requestModel.findByPk(offer.requestId);
@@ -105,9 +111,9 @@ const orderController = {
                 return res.status(400).json({ message: "Cum termini inainte sa incepi" });
             }
             console.log("Comanda initiala este " + order);
-            newOrder.remainingQuantity = parseFloat(order.remainingQuantity) + (parseFloat(newOrder.quantity) - parseFloat(order.quantity)); 
-            const updatedOrder =  await order.update(newOrder);
-            console.log("Comanda actualizata este "  + updatedOrder);
+            newOrder.remainingQuantity = parseFloat(order.remainingQuantity) + (parseFloat(newOrder.quantity) - parseFloat(order.quantity));
+            const updatedOrder = await order.update(newOrder);
+            console.log("Comanda actualizata este " + updatedOrder);
             return res.status(200).json({ message: `Comanda cu id-ul ${orderId} a fost actualizata cu succes` });
         } catch (err) {
             console.log(err);
@@ -139,17 +145,26 @@ const orderController = {
     getOrderProductionNotes: async (req, res) => {
         try {
             const orderId = req.params.id;
-            const orderProductionNotes = await orderModel.findByPk(orderId, {
+            const order = await orderModel.findByPk(orderId, {
                 include: [productionNoteModel]
             })
-            if (!orderProductionNotes) {
+            if (!order) {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu exista` });
             }
-            const productionNotes = orderProductionNotes.productionNotes;
-            if (!productionNotes) {
+            if (!order.productionNotes) {
                 return res.status(400).json({ message: `Comanda cu id-ul ${orderId} nu are note de productie` });
             }
-            return res.status(200).json(productionNotes);
+            const productionNotesOrder = order.productionNotes.map((note) => ({
+                ...note.toJSON(),
+                order: {
+                    number: order.number,
+                    unit: order.unit,
+                    observations: order.observations,
+                    deadline: order.deadline,
+                },
+            }));
+
+            return res.status(200).json(productionNotesOrder);
         } catch (err) {
             console.log(err);
             return res.status(500).send(`Eroare`);

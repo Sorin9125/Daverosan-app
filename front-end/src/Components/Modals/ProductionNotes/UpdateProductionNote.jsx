@@ -1,9 +1,9 @@
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
+import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextareaAutosize, InputLabel, FormControl, Box } from "@mui/material"
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import productionNoteAPI from "../../../Utils/ProductionNotes";
 
-function UpdateProductionNote({ productionNote, fetchProductionNotes, selectedOrder }) {
+function UpdateProductionNote({ productionNote, fetchProductionNotes }) {
     const [open, setOpen] = useState(false);
     const [formData, setFromData] = useState(productionNote)
 
@@ -26,7 +26,7 @@ function UpdateProductionNote({ productionNote, fetchProductionNotes, selectedOr
         try {
             const response = await productionNoteAPI.updateProductionNote(formData, productionNote.id);
             toast.success(response.data.message);
-            fetchProductionNotes(selectedOrder);
+            fetchProductionNotes(productionNote.order.api);
             handleClose();
         } catch (err) {
             toast.error(err.response.data.message);
@@ -155,6 +155,48 @@ function UpdateProductionNote({ productionNote, fetchProductionNotes, selectedOr
                                 }
                             }}
                         />
+                        <FormControl fullWidth variant="outlined" margin="dense">
+                            <InputLabel
+                                sx={{
+                                    position: 'relative',
+                                    transform: 'none',
+                                    fontSize: '1.1rem',
+                                    color: 'primary.main',
+                                    mb: 1,
+                                }}
+                            >
+                                Observații
+                            </InputLabel>
+                            <Box sx={{
+                                width: '100%',
+                                border: '1px solid rgba(0,0,0,0.23)',
+                                borderRadius: 1,
+                                backgroundColor: '#fff',
+                                maxHeight: 150,
+                                overflowY: 'auto',
+                                padding: '0 14px',
+                                boxSizing: 'border-box',
+                            }}>
+                                <TextareaAutosize
+                                    minRows={3}
+                                    name="observations"
+                                    placeholder="Observații..."
+                                    value={formData.observations}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: '100%',
+                                        fontSize: '1.1rem',
+                                        color: '#000',
+                                        padding: '12.5px 0',
+                                        border: 'none',
+                                        outline: 'none',
+                                        resize: 'none',
+                                        backgroundColor: 'transparent',
+                                        fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                                    }}
+                                />
+                            </Box>
+                        </FormControl>
                         {
                             productionNote.order.unit === "buc" ? (
                                 <></>

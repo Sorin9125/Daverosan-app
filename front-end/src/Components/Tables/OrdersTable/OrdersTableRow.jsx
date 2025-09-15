@@ -13,6 +13,7 @@ function OrdersTableRow({ order, fetchOrders }) {
     const fetchProductionNotes = async () => {
         try {
             const response = await orderAPI.getOrderProductionNotes(order.id);
+            console.log(response.data);
             setData(response.data);
         } catch (err) {
             toast.error(err.response.data.message);
@@ -41,6 +42,16 @@ function OrdersTableRow({ order, fetchOrders }) {
                 }}>
                     <Tooltip title={order.description} placement="top-start">
                         <span style={{ display: "block", width: "100%" }}>{order.description}</span>
+                    </Tooltip>
+                </TableCell>
+                <TableCell align="left" sx={{
+                    maxWidth: 300,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}>
+                    <Tooltip title={order.observations} placement="top-start">
+                        <span style={{ display: "block", width: "100%" }}>{order.observations}</span>
                     </Tooltip>
                 </TableCell>
                 <TableCell align="center">{order.isCompleted ? "Finalizată" : ((order.quantity - order.remainingQuantity) / order.quantity * 100).toFixed(2) + "%"}</TableCell>
@@ -78,7 +89,7 @@ function OrdersTableRow({ order, fetchOrders }) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={13}>
                     <Collapse in={openProductionNotes} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -92,8 +103,8 @@ function OrdersTableRow({ order, fetchOrders }) {
                                         <TableCell sx={{ fontWeight: "bold" }}>Desen</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Greutate</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Total unitar</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-                                        
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -106,7 +117,8 @@ function OrdersTableRow({ order, fetchOrders }) {
                                             <TableCell>{productionNote.reper}</TableCell>
                                             <TableCell>{productionNote.scheme}</TableCell>
                                             <TableCell>{productionNote.quantity}</TableCell>
-                                            <TableCell>{productionNote.order?.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
+                                            <TableCell>{order.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
+                                            <TableCell>{productionNote.quantity * productionNote.weight + " " + order.unit}</TableCell>
                                             <TableCell>{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
                                             
                                         </TableRow>

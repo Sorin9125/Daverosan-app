@@ -50,7 +50,7 @@ function OrdersTable({ orders, fetchOrders }) {
         { header: "ID", accessor: "id" },
         { header: "Numar de comanda", accessor: "number" },
         { header: "Valoare", accessor: "value" },
-        { header: "Cantitate", accessor: "quantity" },
+        { header: "Cantitate totală", accessor: "quantity" },
         { header: "Termen de finalizare", accessor: "deadline" },
         { header: "Data finalizare", accessor: "finishedDate" },
         { header: "Descriere", accessor: "description" },
@@ -91,10 +91,11 @@ function OrdersTable({ orders, fetchOrders }) {
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Număr de comandă</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Valoare</TableCell>
-                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate totală</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Dată finalizare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Obsevații</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Client</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Note de producție</TableCell>

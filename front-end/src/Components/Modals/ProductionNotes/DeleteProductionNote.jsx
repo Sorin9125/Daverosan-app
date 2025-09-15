@@ -3,7 +3,7 @@ import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import productionNotesAPI from "../../../Utils/ProductionNotes";
 
-function DeleteProductionNote({ productionNote, fetchProductionNotes, selectedOrder }) {
+function DeleteProductionNote({ productionNote, fetchProductionNotes }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = (e) => {
@@ -20,7 +20,7 @@ function DeleteProductionNote({ productionNote, fetchProductionNotes, selectedOr
         try {
             const response = await productionNotesAPI.deleteProductionNote(productionNote.id);
             toast.success(response.data.message);
-            fetchProductionNotes(selectedOrder);
+            fetchProductionNotes(productionNote.order.number);
             handleClose();
         } catch (err) {
             toast.error(err.response.data.message);

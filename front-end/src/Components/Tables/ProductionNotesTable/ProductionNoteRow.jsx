@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { toast } from "react-toastify";
-import { TableRow, TableCell, Box, Button } from "@mui/material";
+import { TableRow, TableCell, Box, Button, Tooltip } from "@mui/material";
 import UpdateProductionNote from "../../Modals/ProductionNotes/UpdateProductionNote"
 import DeleteProductionNote from "../../Modals/ProductionNotes/DeleteProductionNote";
 import productionNotesAPI from "../../../Utils/ProductionNotes";
 
-function ProductionNotesRow({ productionNote, fetchProductionNotes, selectedOrder }) {
+function ProductionNotesRow({ productionNote, fetchProductionNotes }) {
 
     const finishProductionNote = async (id) => {
         try {
@@ -31,6 +31,17 @@ function ProductionNotesRow({ productionNote, fetchProductionNotes, selectedOrde
                 <TableCell align="left">{productionNote.scheme}</TableCell>
                 <TableCell align="left">{productionNote.quantity}</TableCell>
                 <TableCell align="center">{productionNote.order.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
+                <TableCell align="center">{productionNote.quantity * productionNote.weight + " " + productionNote.order.unit}</TableCell>
+                <TableCell align="left" sx={{
+                    maxWidth: 300,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}>
+                    <Tooltip title={productionNote.observations} placement="top-start">
+                        <span style={{ display: "block", width: "100%" }}>{productionNote.observations}</span>
+                    </Tooltip>
+                </TableCell>
                 <TableCell align="center">{productionNote.isFinished ? "Finalizată" : "Nefinalizată"}</TableCell>
                 <TableCell align="center">
                     {!productionNote.isFinished ? (
@@ -63,8 +74,14 @@ function ProductionNotesRow({ productionNote, fetchProductionNotes, selectedOrde
                 <TableCell align="center">{productionNote.order.number}</TableCell>
                 <TableCell align="center">
                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
-                        <UpdateProductionNote productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder} />
-                        <DeleteProductionNote productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} />
+                        {productionNote.isFinished ? "Nota de producție este finalizată" :
+                            <>
+                                <UpdateProductionNote productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} />
+                                <DeleteProductionNote productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} />
+                            </>
+                        }
+
+
                     </Box>
                 </TableCell>
             </TableRow>

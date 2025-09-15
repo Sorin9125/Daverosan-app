@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, TextareaAutosize, FormControl, Box } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, TextareaAutosize, FormControl, Box, TextField } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import requestApi from "../../../Utils/Request";
@@ -9,6 +9,7 @@ function CreateRequest({ clientId }) {
     const [formData, setFromData] = useState({
         description: "",
         sentAt: new Date(),
+        number: "",
     })
 
     const handleClickOpen = (e) => {
@@ -71,6 +72,36 @@ function CreateRequest({ clientId }) {
                 <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Creează cerere de ofertă</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <form onSubmit={createRequest} id="creation-form">
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="number"
+                            name="number"
+                            label="Număr de identificare"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {
+                                        position: 'relative',
+                                        transform: 'none',
+                                        fontSize: '1.1rem',
+                                        color: 'primary.main',
+                                        mb: 1,
+                                    },
+                                },
+                                input: {
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
+                            }}
+                        />
                         <FormControl fullWidth variant="outlined" margin="dense">
                             <InputLabel
                                 sx={{
@@ -113,31 +144,31 @@ function CreateRequest({ clientId }) {
                                 />
                             </Box>
                         </FormControl>
-                            <DatePicker
-                                label="Data când a fost primită"
-                                onChange={(date) => handleChange({ target: { name: 'sentAt', value: date.format('YYYY-MM-DD') } })}
-                                slotProps={{
-                                    textField: {
-                                        fullWidth: true,
-                                        required: true,
-                                        variant: 'outlined',
-                                        sx: {
-                                            '& .MuiInputLabel-root': {
-                                                position: 'relative',
-                                                transform: 'none',
-                                                fontSize: '1.1rem',
-                                                color: 'primary.main',
-                                                mb: 1,
-                                            },
-                                            '& .MuiOutlinedInput-input': {
-                                                color: '#000',
-                                                fontSize: '1.1rem',
-                                                padding: '12.5px 14px',
-                                            },
+                        <DatePicker
+                            label="Data când a fost primită"
+                            onChange={(date) => handleChange({ target: { name: 'sentAt', value: date.format('YYYY-MM-DD') } })}
+                            slotProps={{
+                                textField: {
+                                    fullWidth: true,
+                                    required: true,
+                                    variant: 'outlined',
+                                    sx: {
+                                        '& .MuiInputLabel-root': {
+                                            position: 'relative',
+                                            transform: 'none',
+                                            fontSize: '1.1rem',
+                                            color: 'primary.main',
+                                            mb: 1,
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: '#000',
+                                            fontSize: '1.1rem',
+                                            padding: '12.5px 14px',
                                         },
                                     },
-                                }}
-                            />
+                                },
+                            }}
+                        />
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2 }}>

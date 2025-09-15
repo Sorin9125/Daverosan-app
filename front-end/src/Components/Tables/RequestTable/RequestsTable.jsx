@@ -50,6 +50,7 @@ function RequestsTable({ requests, fetchRequests }) {
 
     const columns = [
         { header: "ID", accessor: "id" },
+        { header: "Numar de identificare", accessor: "number"},
         { header: "Descriere", accessor: "description" },
         { header: "Data primita", accessor: "sentAt" },
         { header: "Status", accessor: "status" },
@@ -58,6 +59,7 @@ function RequestsTable({ requests, fetchRequests }) {
 
     const exportData = filteredRequests.map((request) => ({
         id: request.id,
+        number: request.number,
         description: request.description,
         sentAt: new Date(request.sentAt).toLocaleDateString("en-GB"),
         status: request.isOffered ? "Oferta trimisa" : "Oferta netrimisa",
@@ -83,6 +85,7 @@ function RequestsTable({ requests, fetchRequests }) {
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Număr de identificare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Dată primită</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Status</TableCell>

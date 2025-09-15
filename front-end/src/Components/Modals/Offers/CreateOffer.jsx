@@ -12,6 +12,7 @@ function CreateOffer({ requestID, fetchRequests }) {
         unit: "buc",
         description: "",
         type: "total",
+        number: " ",
     });
 
     const handleClickOpen = (e) => {
@@ -104,6 +105,36 @@ function CreateOffer({ requestID, fetchRequests }) {
                                 <MenuItem value="unit">Pe unitate</MenuItem>
                             </Select>
                         </FormControl>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="number"
+                            name="number"
+                            label="Număr de identificare"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {
+                                        position: 'relative',
+                                        transform: 'none',
+                                        fontSize: '1.1rem',
+                                        color: 'primary.main',
+                                        mb: 1,
+                                    },
+                                },
+                                input: {
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
+                            }}
+                        />
                         <TextField
                             autoFocus
                             required

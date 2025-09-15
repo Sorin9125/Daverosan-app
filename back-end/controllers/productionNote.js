@@ -23,6 +23,9 @@ const productionNoteController = {
             if (!(/^[0-9.]{1,}$/).test(productionNote.quantity)) {
                 return res.status(400).json({ message: "Introduceti o cantitate valida" });
             }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{0,}$/).test(productionNote.observations)) {
+                return res.status(400).json({ message: "Introduceti observatii valide" })
+            }
             await order.createProductionNote(productionNote);
             return res.status(200).json({ message: "Nota de productie a fost creata cu succes" });
         } catch (err) {
@@ -32,11 +35,9 @@ const productionNoteController = {
     },
     getAllProductionNotes: async (req, res) => {
         try {
-            const orderNumber = req.params.orderNumber;
             const productionNotes = await productionNoteModel.findAll({
                 include: {
                     model: orderModel,
-                    where: { number: orderNumber },
                     attributes: ["number", "unit", "deadline"],
                 }
             });
@@ -71,6 +72,9 @@ const productionNoteController = {
             }
             if (!(/^[0-9.]{1,}/).test(newProductionNote.weight)) {
                 return res.status(400).json({ message: "Introduceti o cantintate valida" })
+            }
+            if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{0,}$/).test(newProductionNote.observations)) {
+                return res.status(400).json({ message: "Introduceti observatii valide" })
             }
             await productionNote.update(newProductionNote);
             return res.status(200).json({ message: `Nota de productie cu id-ul ${productionNoteId} a fost actualizata cu succes` });
@@ -150,13 +154,11 @@ const productionNoteController = {
                         scheme: row[2],
                         quantity: row[3],
                         weight: row[4],
+                        observations: row[5],
                     };
                     productionNote.orderId = orderId;
                     const order = await orderModel.findByPk(orderId);
-                    if (order.unit === "buc") {
-                        productionNote.weight = 1;
-                    }
-                    if (!(productionNote.reper && productionNote.scheme && productionNote.weight && productionNote.quantity)) {
+                    if (!(productionNote.reper && productionNote.scheme && productionNote.quantity)) {
                         return res.status(400).josn({ message: "Completeaza toate campurile printule" });
                     }
                     if (!(/^[A-z0-9\-,.!@#$%^&*()/ ]{1,}$/).test(productionNote.reper)) {
@@ -165,11 +167,11 @@ const productionNoteController = {
                     if (!(/^[0-9A-z,.\/\- ]{1,}$/).test(productionNote.scheme)) {
                         return res.status(400).json({ message: "Introduceti un desen valid" });
                     }
-                    if (!(/^[0-9]{1,}/).test(productionNote.weight)) {
-                        return res.status(400).json({ message: "Introduceti o greutate valida" });
-                    }
-                    if (!(/^[0-9]{1,}$/).test(productionNote.quantity)) {
+                    if (!(/^[0-9.]{1,}$/).test(productionNote.quantity)) {
                         return res.status(400).json({ message: "Introduceti o cantitate valida" });
+                    }
+                    if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{0,}$/).test(productionNote.observations)) {
+                        return res.status(400).json({ message: "Introduceti observatii valide" })
                     }
                     productionNotes.push(productionNote);
                 }

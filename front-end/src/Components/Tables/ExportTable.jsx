@@ -3,7 +3,7 @@ import { autoTable } from 'jspdf-autotable'
 import { Button } from "@mui/material"
 import DownloadIcon from '@mui/icons-material/Download';
 
-function ExportTable({ title, columns, data, fileName, extraInfo }) {
+function ExportTable({ title, columns, data, fileName, aboveTableInfo, belowTableInfo }) {
     const exportPDF = () => {
         const doc = new jsPDF({
             orientation: "landscape",
@@ -29,19 +29,19 @@ function ExportTable({ title, columns, data, fileName, extraInfo }) {
         doc.setFont(undefined, "normal");
 
 
-        if (extraInfo && extraInfo.length > 0) {
+        if (aboveTableInfo && aboveTableInfo.length > 0) {
             const extraFontSize = 12;
             doc.setFontSize(extraFontSize);
             doc.setFont(undefined, "normal");
 
-            titleY += 5; 
+            titleY += 5;
 
-            for (let infoLine of extraInfo) {
+            for (let infoLine of aboveTableInfo) {
                 doc.text(infoLine, 40, titleY);
-                titleY += extraFontSize + 2; 
+                titleY += extraFontSize + 2;
             }
 
-            titleY += 5; 
+            titleY += 5;
         }
 
         autoTable(doc, {
@@ -52,6 +52,22 @@ function ExportTable({ title, columns, data, fileName, extraInfo }) {
             headStyles: { fillColor: [41, 128, 185], textColor: 255 },
             alternateRowStyles: { fillColor: [240, 240, 240] },
         });
+
+
+        let finalY = doc.lastAutoTable.finalY || titleY + 20;
+
+        if (belowTableInfo && belowTableInfo.length > 0) {
+            const extraFontSize = 12;
+            doc.setFontSize(extraFontSize);
+            doc.setFont(undefined, "normal");
+
+            finalY += 10;
+
+            for (let infoLine of belowTableInfo) {
+                doc.text(infoLine, 40, finalY);
+                finalY += extraFontSize + 2;
+            }
+        }
 
         doc.save(fileName);
     };

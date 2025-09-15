@@ -9,7 +9,7 @@ const orderModel = db.define("order", {
     },
     number: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
     },
     quantity: {
         type: DataTypes.DECIMAL(10, 5),
@@ -17,7 +17,7 @@ const orderModel = db.define("order", {
     },
     remainingQuantity: {
         type: DataTypes.DECIMAL(10, 5),
-        allowNull:false,
+        allowNull: false,
     },
     unit: {
         type: DataTypes.ENUM("buc", "kg"),
@@ -37,12 +37,17 @@ const orderModel = db.define("order", {
         allowNull: false,
     },
     value: {
-        type: DataTypes.DECIMAL(10,5),
+        type: DataTypes.DECIMAL(10, 5),
         allowNull: false,
     },
     finishDate: {
         type: DataTypes.DATE,
         defaultValue: null,
+    },
+    observations: {
+        type: DataTypes.STRING(5000),
+        allowNull: false,
+        defaultValue: "",
     }
 },
     {

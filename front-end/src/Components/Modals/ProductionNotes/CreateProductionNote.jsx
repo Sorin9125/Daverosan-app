@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, FormControl, Box, TextField, Select, MenuItem, Typography } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, InputLabel, FormControl, Box, TextField, Select, MenuItem, Typography, TextareaAutosize } from "@mui/material";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ function CreateProductionNote({ order }) {
         scheme: "",
         quantity: "",
         weight: 1,
+        observations: ""
     })
     const [createType, setCreateType] = useState("manually");
     const [selectedFile, setSelectedFile] = useState(null);
@@ -211,6 +212,50 @@ function CreateProductionNote({ order }) {
                                             }
                                         }}
                                     />
+                                    { order.observations == "" ? 
+                                        <FormControl fullWidth variant="outlined" margin="dense">
+                                            <InputLabel
+                                                sx={{
+                                                    position: 'relative',
+                                                    transform: 'none',
+                                                    fontSize: '1.1rem',
+                                                    color: 'primary.main',
+                                                    mb: 1,
+                                                }}
+                                            >
+                                                Observații
+                                            </InputLabel>
+                                            <Box sx={{
+                                                width: '100%',
+                                                border: '1px solid rgba(0,0,0,0.23)',
+                                                borderRadius: 1,
+                                                backgroundColor: '#fff',
+                                                maxHeight: 150,
+                                                overflowY: 'auto',
+                                                padding: '0 14px',
+                                                boxSizing: 'border-box',
+                                            }}>
+                                                <TextareaAutosize
+                                                    minRows={3}
+                                                    name="observations"
+                                                    placeholder="Observații..."
+                                                    value={formData.observations}
+                                                    onChange={handleChange}
+                                                    style={{
+                                                        width: '100%',
+                                                        fontSize: '1.1rem',
+                                                        color: '#000',
+                                                        padding: '12.5px 0',
+                                                        border: 'none',
+                                                        outline: 'none',
+                                                        resize: 'none',
+                                                        backgroundColor: 'transparent',
+                                                        fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                                                    }}
+                                                />
+                                            </Box>
+                                        </FormControl> : <></>
+                                    }
                                     {
                                         order.unit === "buc" ? (
                                             <></>
@@ -246,7 +291,7 @@ function CreateProductionNote({ order }) {
                                                     },
                                                 }}
                                             />
-                                    )
+                                        )
                                     }
                                 </form>
                                 <DialogActions sx={{ px: 3, pb: 2 }}>

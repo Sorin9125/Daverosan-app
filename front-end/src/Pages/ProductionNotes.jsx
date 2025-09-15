@@ -10,7 +10,7 @@ function ProductionNotes() {
     const [productionNotesData, setProductionNotesData] = useState([]);
     const [ordersData, setOrdersData] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState("");
-
+    const order = ordersData
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -24,20 +24,24 @@ function ProductionNotes() {
     }, []);
 
     const fetchProductionNotes = useCallback(() => {
-        if (selectedOrder) {
-            const getProductionNotes = async () => {
-                try {
-                    const response = await productionNotesAPI.getAllProductionNotes(selectedOrder);
-                    setProductionNotesData(response.data);
-                } catch (err) {
-                    console.error(err);
-                }
+        const getProductionNotes = async () => {
+            try {
+                const response = selectedOrder
+                    ? await ordersAPI.getOrderProductionNotes(selectedOrder)
+                    : await productionNotesAPI.getAllProductionNotes();
+
+                setProductionNotesData(response.data)
+            } catch (err) {
+                console.error(err.response.data.message);
             }
-            getProductionNotes();
         }
+        getProductionNotes();
+
     }, [selectedOrder]);
 
-    useEffect(fetchProductionNotes, [fetchProductionNotes]);
+    useEffect(() => {
+        fetchProductionNotes()
+    }, [fetchProductionNotes]);
 
     return (
         <>
@@ -53,13 +57,18 @@ function ProductionNotes() {
             <SelectSearch selectedItem={selectedOrder} setSelectedItem={setSelectedOrder} labelName={"Numărul de comandă"}>
                 {
                     ordersData.map((order) => (
-                        <MenuItem key={order.id} value={order.number}>
+                        <MenuItem key={order.id} value={order.id}>
                             {order.number}
                         </MenuItem>
                     ))
                 }
             </SelectSearch>
-            <ProductionNotesTable productionNotes={productionNotesData} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder}/>
+            {
+                selectedOrder ?
+                    <ProductionNotesTable productionNotes={productionNotesData} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder}/> :
+                    <ProductionNotesTable productionNotes={productionNotesData} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder}/>
+
+            }
         </>
 
     )

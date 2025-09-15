@@ -2,24 +2,29 @@ const { DataTypes } = require('sequelize');
 const db = require("../config/db");
 
 const requestModel = db.define("request", {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        sentAt : {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING(5000),
-            allowNull: false,
-        },
-        isOffered: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        }
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    sentAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.STRING(5000),
+        allowNull: false,
+    },
+    number: {
+        type: DataTypes.STRING(5000),
+        allowNull: false,
+        defaultValue: ""
+    },
+    isOffered: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    }
 },
     {
         freezeTableName: true,

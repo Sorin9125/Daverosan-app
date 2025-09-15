@@ -27,6 +27,11 @@ const offerModel = db.define("offer", {
         type: DataTypes.ENUM("total", "unit"),
         allowNull: false,
     },
+    number: {
+        type: DataTypes.STRING(5000),
+        allowNull: false,
+        defaultValue: ""
+    },
     isAccepted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

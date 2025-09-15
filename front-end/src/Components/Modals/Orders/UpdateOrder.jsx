@@ -199,6 +199,48 @@ function UpdateOrder({ order, fetchOrders }) {
                                 />
                             </Box>
                         </FormControl>
+                        <FormControl fullWidth variant="outlined" margin="dense">
+                            <InputLabel
+                                sx={{
+                                    position: 'relative',
+                                    transform: 'none',
+                                    fontSize: '1.1rem',
+                                    color: 'primary.main',
+                                    mb: 1,
+                                }}
+                            >
+                                Observații
+                            </InputLabel>
+                            <Box sx={{
+                                width: '100%',
+                                border: '1px solid rgba(0,0,0,0.23)',
+                                borderRadius: 1,
+                                backgroundColor: '#fff',
+                                maxHeight: 150,
+                                overflowY: 'auto',
+                                padding: '0 14px',
+                                boxSizing: 'border-box',
+                            }}>
+                                <TextareaAutosize
+                                    minRows={3}
+                                    name="observations"
+                                    placeholder="Observații..."
+                                    value={formData.observations}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: '100%',
+                                        fontSize: '1.1rem',
+                                        color: '#000',
+                                        padding: '12.5px 0',
+                                        border: 'none',
+                                        outline: 'none',
+                                        resize: 'none',
+                                        backgroundColor: 'transparent',
+                                        fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                                    }}
+                                />
+                            </Box>
+                        </FormControl>
                         <DatePicker
                             label="Termen de finalizare"
                             value={dayjs(formData.deadline)}

@@ -9,7 +9,6 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
-
     const filteredProductionNotes = productionNotes.filter((productionNote) => {
         const term = searchTerm.toLowerCase();
         const statusLabel = productionNote.isFinished ? "Finalizata" : "Nefinalizata";
@@ -19,7 +18,6 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
             }
             return false;
         });
-
         const orderMatch =
             productionNote.order &&
             Object.values(productionNote.order).some(
@@ -32,6 +30,13 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
     }
     );
 
+    const totalQuantity = () => {
+        let totalQuantity = 0;
+        filteredProductionNotes.forEach((productionNote) => {
+            totalQuantity += productionNote.weight * productionNote.quantity;
+        });
+        return totalQuantity;
+    }
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProductionNotes.length) : 0;
@@ -51,6 +56,8 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         { header: "Desen", accessor: "scheme" },
         { header: "cantitate", accessor: "quantity" },
         { header: "Greutate", accessor: "weight" },
+        { header: "Total unitar", accessor: "total" },
+        { header: "Observatii", accessor: "observations" },
         { header: "Status", accessor: "status" },
     ]
 
@@ -61,10 +68,17 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         quantity: parseFloat(productionNote.quantity),
         weight: productionNote.order.unit === "buc" ? "Comanda este in bucati" : parseFloat(productionNote.weight),
         status: productionNote.isFinished ? "Finalizata" : "Nefinalizata",
+        total: productionNote.quantity * productionNote.weight + " " + productionNote.order.unit,
+        observations: productionNote.observations,
     }));
 
-    const extraInfo = [
-        `Termen de finalizare: ${new Date(filteredProductionNotes[0]?.order.deadline).toLocaleDateString("en-GB")}`
+    const aboveTableInfo = [
+        `Termen de finalizare: ${new Date(filteredProductionNotes[0]?.order.deadline).toLocaleDateString("en-GB")}`,
+        `Cantitate totala: ${totalQuantity()}`
+    ]
+
+    const belowTableInfo = [
+        `Cerinte calitate: ${filteredProductionNotes?.order?.observations ? filteredProductionNotes?.order?.observations : ""}`
     ]
 
     return (
@@ -78,7 +92,14 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                 <FieldSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} setPage={setPage} />
             </Box>
 
-            <ExportTable data={exportData} columns={columns} fileName={`nota-de-productie-comanda-${selectedOrder}`} title={`Nota de productie\nComanda ${selectedOrder}`} extraInfo={extraInfo} />
+            <ExportTable
+                data={exportData}
+                columns={columns}
+                fileName={selectedOrder ? `nota-de-productie-comanda-${filteredProductionNotes[0]?.order.number}` : "note-de-productie"}
+                title={selectedOrder ? `Nota de productie\nComanda ${filteredProductionNotes[0]?.order.number}` : "Note de productie"}
+                aboveTableInfo={selectedOrder ? aboveTableInfo : ""}
+                belowTableInfo={selectedOrder ? belowTableInfo:  ""}
+            />
 
             <TableContainer component={Paper} sx={{ borderRadius: "0 12px 0 0", boxShadow: 3 }}>
                 <Table aria-label="collapsible table">
@@ -89,6 +110,8 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Desen</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Cantitate</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Greutate</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "bold" }}>Total unitar</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Observații</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Status</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Acțiuni</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "bold" }}>Comandă</TableCell>
@@ -100,7 +123,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
                             ? filteredProductionNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : filteredProductionNotes
                         ).map((productionNote) => (
-                            <ProductionNotesRow key={productionNote.id} productionNote={productionNote} fetchProductionNotes={fetchProductionNotes} selectedOrder={selectedOrder} />
+                            <ProductionNotesRow key={productionNote.id} productionNote={productionNote} fetchProductionNotes={fetchProductionNotes}/>
                         ))}
                         {
                             emptyRows > 0 && (

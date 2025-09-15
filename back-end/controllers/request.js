@@ -9,11 +9,15 @@ const requestController = {
                 return res.status(400).josn({ message: `Clientul cu id-ul ${clientId} nu exista` });
             }
             const request = req.body;
+            console.log(request)
             if (!(request.sentAt && request.description)) {
                 return res.status(400).json({ message: "Completeaza toate campurile printule" });
             }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]+$/gm).test(request.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
+            }
+            if (!(/^[A-z0-9- ]{0,}$/).test(request.number)) {
+                return res.status(400).json({ message: "Introduceti un numar de identificare valid" });
             }
             await client.createRequest(request);
             return res.status(200).json({ message: `Cererea clientului ${client.name} a fost creata cu succes` });
@@ -52,6 +56,9 @@ const requestController = {
             }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+= ]+$/gm).test(newRequest.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
+            }
+            if (!(/^[A-z0-9- ]{0,}$/).test(newRequest.number)) {
+                return res.status(400).json({ message: "Introduceti un numar de identificare valid" });
             }
             await request.update(newRequest);
             return res.status(200).json({ message: `Cererea de oferta cu id-ul ${requestId} a fost actualizata cu succes` });

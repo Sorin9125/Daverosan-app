@@ -28,6 +28,9 @@ const offerController = {
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(offer.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
             }
+            if (!(/^[A-z0-9- ]{0,}$/).test(offer.number)) {
+                return res.status(400).json({ message: "Introduceti un numar de identificare valid" });
+            }
             await request.createOffer(offer);
             await request.update({
                 isOffered: true,
@@ -81,6 +84,9 @@ const offerController = {
             }
             if (!(/^[A-Za-z0-9\-_!@#$%<>?\/":;|.,+=() ]{1,}$/).test(newOffer.description)) {
                 return res.status(400).json({ message: "Introduceti o descriere valida" });
+            }
+            if (!(/^[A-z0-9- ]{0,}$/).test(newOffer.number)) {
+                return res.status(400).json({ message: "Introduceti un numar de identificare valid" });
             }
             await offer.update(newOffer);
             const order = await orderModel.findOne({

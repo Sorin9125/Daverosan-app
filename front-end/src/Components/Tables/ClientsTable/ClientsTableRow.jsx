@@ -139,6 +139,7 @@ function ClientsTableRow({ client, fetchClients }) {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Număr de identificare</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Dată primită</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
@@ -153,6 +154,7 @@ function ClientsTableRow({ client, fetchClients }) {
                         <TableCell component="th" scope="row">
                           {request.id}
                         </TableCell>
+                        <TableCell align="left">{request.number}</TableCell>
                         <TableCell align="left" sx={{
                           maxWidth: 300,
                           whiteSpace: "nowrap",
@@ -180,6 +182,7 @@ function ClientsTableRow({ client, fetchClients }) {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Număr de identificare</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Valoare (euro)</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                       <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
@@ -193,6 +196,7 @@ function ClientsTableRow({ client, fetchClients }) {
                         "&:hover": { backgroundColor: "action.hover" },
                       }}>
                         <TableCell>{offer.id}</TableCell>
+                        <TableCell>{offer.number}</TableCell>
                         <TableCell>{offer.type === "total" ? parseFloat(offer.value) + " total" : `${parseFloat(offer.value)}/${offer.unit}`}</TableCell>
                         <TableCell align="left" sx={{
                           maxWidth: 300,

@@ -9,7 +9,7 @@ const productionNoteModel = db.define("productionNote", {
     },
     reper: {
         type: DataTypes.STRING,
-        allowNull:false,
+        allowNull: false,
     },
     port: {
         type: DataTypes.STRING,

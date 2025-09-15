@@ -29,6 +29,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                 <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
                     {request.id}
                 </TableCell>
+                <TableCell align="left">{request.number}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
                     whiteSpace: "nowrap",
@@ -75,7 +76,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
                     <Collapse in={openOffers} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -85,6 +86,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                                        <TableCell sx={{ fontWeight: "bold" }}>Număr de identificare</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Valoare (euro)</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                                         <TableCell sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
@@ -98,6 +100,7 @@ function RequestsTableRow({ request, fetchRequests }) {
                                             "&:hover": { backgroundColor: "action.hover" },
                                         }}>
                                             <TableCell>{data.id}</TableCell>
+                                            <TableCell>{data.number}</TableCell>
                                             <TableCell>{data.type === "total" ? parseFloat(data.value) + " total" : parseFloat(data.value) + "/" + data.unit}</TableCell>
                                             <TableCell align="left" sx={{
                                                 maxWidth: 300,

@@ -17,8 +17,8 @@ const productionNotesAPI = {
         });
         return response;
     },
-    getAllProductionNotes: async (orderNumber) => {
-        const response = await axios.get(`${BACKEND_URL}/productionNote/getAllProductionNotes/${orderNumber}`, {
+    getAllProductionNotes: async () => {
+        const response = await axios.get(`${BACKEND_URL}/productionNote/getAllProductionNotes/`, {
             withCredentials: true,
         });
         return response;

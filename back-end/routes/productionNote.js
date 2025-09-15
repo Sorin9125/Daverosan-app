@@ -4,7 +4,7 @@ const { productionNoteController } = require("../controllers");
 const uploadExcel = require("../middlewares/upload");
 
 router.post("/createProductionNote/:id", productionNoteController.createProductionNote);
-router.get("/getAllProductionNotes/:orderNumber", productionNoteController.getAllProductionNotes);
+router.get("/getAllProductionNotes/", productionNoteController.getAllProductionNotes);
 router.put("/updateProductionNote/:id", productionNoteController.updateProductionNote);
 router.delete("/deleteProductionNote/:id", productionNoteController.deleteProductionNote);
 router.put("/finishProductionNote/:id", productionNoteController.finishProductionNote)

@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, FormControl, InputLabel, TextareaAutosize, Box } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, FormControl, InputLabel, TextareaAutosize, Box, TextField } from "@mui/material";
 import { useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import requestApi from "../../../Utils/Request";
@@ -70,6 +70,37 @@ function UpdateRequest({ request, fetchRequests }) {
                 <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem", pb: 1 }}>Actualizează cererea de ofertă</DialogTitle>
                 <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <form onSubmit={updateRequest} id="update-form">
+                        <TextField
+                            autoFocus
+                            value={formData.number}
+                            margin="dense"
+                            id="number"
+                            name="number"
+                            label="Număr de identificare"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            onChange={handleChange}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {
+                                        position: 'relative',
+                                        transform: 'none',
+                                        fontSize: '1.1rem',
+                                        color: 'primary.main',
+                                        mb: 1,
+                                    },
+                                },
+                                input: {
+                                    inputProps: { step: "any" },
+                                    sx: {
+                                        color: '#000',
+                                        fontSize: '1.1rem',
+                                        padding: '12.5px 14px',
+                                    },
+                                },
+                            }}
+                        />
                         <FormControl fullWidth variant="outlined" margin="dense">
                             <InputLabel
                                 sx={{

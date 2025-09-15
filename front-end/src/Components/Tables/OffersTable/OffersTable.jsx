@@ -46,6 +46,7 @@ function OffersTable({ offers, fecthOffers }) {
 
     const columns = [
         { header: "ID", accessor: "id" },
+        { header: "Numar de identificare", accessor: "number" },
         { header: "Valoare (euro)", accessor: "value" },
         { header: "Descriere", accessor: "description"},
         { header: "Termen de finalizare", accessor: "deadline" },
@@ -55,6 +56,7 @@ function OffersTable({ offers, fecthOffers }) {
 
     const exportData = filteredOffers.map((offer) => ({
         id: offer.id,
+        number: offer.number,
         value: offer.type === "total" ? parseFloat(offer.value) + " total" : parseFloat(offer.value) + "/" + offer.unit,
         description: offer.description,
         deadline: new Date(offer.deadline).toLocaleDateString("en-GB"),
@@ -81,6 +83,7 @@ function OffersTable({ offers, fecthOffers }) {
                     <TableHead>
                         <TableRow sx={{ backgroundColor: "grey.100" }}>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>ID</TableCell>
+                            <TableCell align="left" sx={{ fontWeight: "bold" }}>Număr de identificare</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Valoare (euro)</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Descriere</TableCell>
                             <TableCell align="left" sx={{ fontWeight: "bold" }}>Termen de finalizare</TableCell>
