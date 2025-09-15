@@ -31,7 +31,7 @@ function ProductionNotesRow({ productionNote, fetchProductionNotes }) {
                 <TableCell align="left">{productionNote.scheme}</TableCell>
                 <TableCell align="left">{productionNote.quantity}</TableCell>
                 <TableCell align="center">{productionNote.order.unit === "buc" ? "Comanda este în bucăți" : parseFloat(productionNote.weight)}</TableCell>
-                <TableCell align="center">{productionNote.quantity * productionNote.weight + " " + productionNote.order.unit}</TableCell>
+                <TableCell align="center">{parseFloat(productionNote.quantity * productionNote.weight).toFixed(2) + " " + productionNote.order.unit}</TableCell>
                 <TableCell align="left" sx={{
                     maxWidth: 300,
                     whiteSpace: "nowrap",

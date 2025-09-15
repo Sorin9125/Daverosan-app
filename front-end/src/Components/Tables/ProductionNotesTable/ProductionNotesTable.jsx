@@ -33,7 +33,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
     const totalQuantity = () => {
         let totalQuantity = 0;
         filteredProductionNotes.forEach((productionNote) => {
-            totalQuantity += productionNote.weight * productionNote.quantity;
+            totalQuantity += parseFloat(productionNote.weight * productionNote.quantity).toFixed(2);
         });
         return totalQuantity;
     }
