@@ -68,7 +68,7 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
         quantity: parseFloat(productionNote.quantity),
         weight: productionNote.order.unit === "buc" ? "Comanda este in bucati" : parseFloat(productionNote.weight),
         status: productionNote.isFinished ? "Finalizata" : "Nefinalizata",
-        total: productionNote.quantity * productionNote.weight + " " + productionNote.order.unit,
+        total: parseFloat(productionNote.quantity * productionNote.weight).toFixed(2) + " " + productionNote.order.unit,
         observations: productionNote.observations,
     }));
 
