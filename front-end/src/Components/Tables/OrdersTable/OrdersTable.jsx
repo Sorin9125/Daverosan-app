@@ -50,10 +50,11 @@ function OrdersTable({ orders, fetchOrders }) {
         { header: "ID", accessor: "id" },
         { header: "Numar de comanda", accessor: "number" },
         { header: "Valoare", accessor: "value" },
-        { header: "Cantitate totală", accessor: "quantity" },
+        { header: "Cantitate totala", accessor: "quantity" },
         { header: "Termen de finalizare", accessor: "deadline" },
         { header: "Data finalizare", accessor: "finishedDate" },
         { header: "Descriere", accessor: "description" },
+        { header: "Observatii", accessor: "observations" },
         { header: "Status", accessor: "status" },
         { header: "Client", accessor: "clientName" },
     ]
@@ -68,6 +69,7 @@ function OrdersTable({ orders, fetchOrders }) {
         description: order.description,
         status: order.isComplteted ? "Finalizata" : `${((order.quantity - order.remainingQuantity) / order.quantity * 100).toFixed(2)} %`,
         clientName: order.offer.request.client.name,
+        observations: order.observations,
     }));
 
     return (
@@ -123,9 +125,9 @@ function OrdersTable({ orders, fetchOrders }) {
             <Box
                 sx={{
                     borderTop: "1px solid",
-                    borderColor: "divider",         
+                    borderColor: "divider",
                     backgroundColor: "background.paper",
-                    borderRadius: "0 0 12px 12px",    
+                    borderRadius: "0 0 12px 12px",
                     display: "flex",
                     justifyContent: "flex-start",
                 }}

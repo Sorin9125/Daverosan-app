@@ -212,7 +212,7 @@ function CreateProductionNote({ order }) {
                                             }
                                         }}
                                     />
-                                    { order.observations == "" ? 
+                                    {order.observations == "" ?
                                         <FormControl fullWidth variant="outlined" margin="dense">
                                             <InputLabel
                                                 sx={{
@@ -334,8 +334,9 @@ function CreateProductionNote({ order }) {
                                     <Typography>
                                         Fișierul trebuie să fie de tip excel și să aibă următoarea structură:
                                         începând din celula A1 pe prima linie să fie în această oridine
-                                        coloanele Reper, Port, Desen, Cantitate și Greutate. Coloanele care
-                                        au nevoie de o valoare pe fiecare linie sunt Reper, Desen și Cantitate
+                                        coloanele Reper, Port, Desen, Cantitate, Greutate și Observații. Pe prima
+                                        linie se va trece titlul coloanei. Coloanele care au nevoie de o valoare pe
+                                        fiecare linie sunt Reper, Desen și Cantitate
                                     </Typography>
                                     <label htmlFor="file-upload">
                                         <Button

@@ -30,14 +30,6 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
     }
     );
 
-    const totalQuantity = () => {
-        let totalQuantity = 0;
-        filteredProductionNotes.forEach((productionNote) => {
-            totalQuantity += parseFloat(productionNote.weight * productionNote.quantity).toFixed(2);
-        });
-        return totalQuantity;
-    }
-
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProductionNotes.length) : 0;
 
@@ -74,11 +66,11 @@ function ProductionNotesTable({ productionNotes, fetchProductionNotes, selectedO
 
     const aboveTableInfo = [
         `Termen de finalizare: ${new Date(filteredProductionNotes[0]?.order.deadline).toLocaleDateString("en-GB")}`,
-        `Cantitate totala: ${totalQuantity()}`
+        `Cantitate totala: ${parseFloat(filteredProductionNotes[0]?.order.quantity)} ${filteredProductionNotes[0]?.order.unit}`
     ]
 
     const belowTableInfo = [
-        `Cerinte calitate: ${filteredProductionNotes?.order?.observations ? filteredProductionNotes?.order?.observations : ""}`
+        `Cerinte calitate: ${filteredProductionNotes[0]?.order.observations ? filteredProductionNotes[0]?.order.observations : ""}`
     ]
 
     return (

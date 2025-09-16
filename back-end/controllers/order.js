@@ -161,6 +161,7 @@ const orderController = {
                     unit: order.unit,
                     observations: order.observations,
                     deadline: order.deadline,
+                    quantity: order.quantity
                 },
             }));
 
